@@ -1,0 +1,23 @@
+<template>
+  <div class="p-1 shadow-xl bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 rounded-2xl">
+    <a class="block p-6 bg-white sm:p-8 rounded-xl" href="">
+      <div class="mt-16 sm:pr-8">
+        <h5 class="text-xl font-bold text-gray-900">Chemie</h5>
+
+        <p class="mt-2 text-sm text-gray-500">
+          Welches Metall leitet Wärme am besten?
+        </p>
+      </div>
+    </a>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Question"
+}
+</script>
+
+<style scoped>
+
+</style>
