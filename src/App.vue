@@ -1,26 +1,34 @@
+<!--MainTemplate for all sites with Navigation and Footer-->
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <NavBar />
+  <Footer />
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script type="text/javascript">
+import NavBar from "@/components/NavBar.vue";
+import Footer from "@/components/Footer";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
+    Footer,
+    NavBar,
+  },
+  methods: {
+    checkStatus() {
+      if (localStorage.getItem('token') != null) {
+        this.$store.isLoggedIn = true;
+        console.log("check store is" + this.$store.isLoggedIn)
+      }
+    }
+  },
+  beforeMount() {
+    if (localStorage.getItem('token') != null) {
+      this.$store.isLoggedIn = true;
+      console.log("updated store is" + this.$store.isLoggedIn)
+    } else {
+      this.$store.isLoggedIn = false;
+      console.log("updated store is" + this.$store.isLoggedIn)
+    }
   }
-}
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

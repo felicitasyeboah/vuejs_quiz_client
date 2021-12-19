@@ -1,0 +1,175 @@
+<template>
+  <section class="bg-white">
+    <div class="max-w-screen-xl px-4 py-16 mx-auto sm:px-6 lg:px-8 sm:py-24">
+      <div class="max-w-xl mx-auto text-center">
+        <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">
+          Read trusted reviews from our customers
+        </h2>
+
+        <p class="max-w-lg mx-auto mt-4 text-gring-offset-warm-gray-500">
+          Das beste Spiel seit geschnitten Brot. Habe meine Familie verlassen und spiele es
+          Tag und Nacht. Nie war ich glücklicher. Dagegen ist Heroin nichts!. Aspernatur
+          praesentium natus sapiente commodi. Aliquid sunt tempore ist.
+        </p>
+      </div>
+
+      <div
+          class="grid grid-cols-1 gap-8 pt-16 mt-16 border-t border-gray-100  sm:grid-cols-2 lg:grid-cols-3 sm:gap-16"
+      >
+        <blockquote
+            class="flex flex-col items-center justify-between text-center  sm:items-start sm:text-left"
+        >
+          <h5 class="text-xl font-medium text-gray-700">
+            "Das Leben ist kein Ponyhof, aber das Spiel hier schon!"
+          </h5>
+
+          <footer class="flex items-center mt-6 text-gray-500">
+            <img
+                src="https://www.hyperui.dev/photos/man-5.jpeg"
+                alt=""
+                class="object-cover w-12 h-12 rounded-full"
+            />
+
+            <div class="ml-3 text-left">
+              <p class="text-sm font-medium text-gray-700">Barry Blabla</p>
+
+              <p class="mt-1 text-xs text-gray-500">
+                Digital Marketing at Studio
+              </p>
+            </div>
+          </footer>
+        </blockquote>
+
+        <blockquote
+            class="flex flex-col items-center justify-between text-center  sm:items-start sm:text-left"
+        >
+          <h5 class="text-xl font-medium text-gray-700">
+            "Fettes Fleisch gibt fette Brühe"
+          </h5>
+
+          <footer class="flex items-center mt-8 text-gray-500">
+            <img
+                src="https://www.hyperui.dev/photos/man-5.jpeg"
+                alt=""
+                class="object-cover w-12 h-12 rounded-full"
+            />
+
+            <div class="ml-3 text-left">
+              <p class="text-sm font-medium text-gray-700">Barry Scott</p>
+
+              <p class="mt-1 text-xs text-gray-500">
+                Digital Marketing at Studio
+              </p>
+            </div>
+          </footer>
+        </blockquote>
+
+        <blockquote
+            class="flex flex-col items-center justify-between text-center  sm:items-start sm:text-left"
+        >
+          <h5 class="text-xl font-medium text-gray-700">
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit"
+          </h5>
+
+          <footer class="flex items-center mt-8 text-gray-500">
+            <img
+                src="https://www.hyperui.dev/photos/man-5.jpeg"
+                alt=""
+                class="object-cover w-12 h-12 rounded-full"
+            />
+
+            <div class="ml-3 text-left">
+              <p class="text-sm font-medium text-gray-700">Barry Scott</p>
+
+              <p class="mt-1 text-xs text-gray-500">
+                Digital Marketing at Studio
+              </p>
+            </div>
+          </footer>
+        </blockquote>
+
+        <blockquote
+            class="flex flex-col items-center justify-between text-center  sm:items-start sm:text-left"
+        >
+          <h5 class="text-xl font-medium text-gray-700">
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit"
+          </h5>
+
+          <footer class="flex items-center mt-8 text-gray-500">
+            <img
+                src="https://www.hyperui.dev/photos/man-5.jpeg"
+                alt=""
+                class="object-cover w-12 h-12 rounded-full"
+            />
+
+            <div class="ml-3 text-left">
+              <p class="text-sm font-medium text-gray-700">Barry Scott</p>
+
+              <p class="mt-1 text-xs text-gray-500">
+                Digital Marketing at Studio
+              </p>
+            </div>
+          </footer>
+        </blockquote>
+
+        <blockquote
+            class="flex flex-col items-center justify-between text-center  sm:items-start sm:text-left"
+        >
+          <h5 class="text-xl font-medium text-gray-700">
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit"
+          </h5>
+
+          <footer class="flex items-center mt-8 text-gray-500">
+            <img
+                src="https://www.hyperui.dev/photos/man-5.jpeg"
+                alt=""
+                class="object-cover w-12 h-12 rounded-full"
+            />
+
+            <div class="ml-3 text-left">
+              <p class="text-sm font-medium text-gray-700">Grand-Duc Jean</p>
+
+              <p class="mt-1 text-xs text-gray-500">
+                Digital Marketing at Studio
+              </p>
+            </div>
+          </footer>
+        </blockquote>
+
+        <blockquote
+            class="flex flex-col items-center justify-between text-center  sm:items-start sm:text-left"
+        >
+          <h5 class="text-xl font-medium text-gray-700">
+            "Best game ever"
+          </h5>
+
+          <footer class="flex items-center mt-8 text-gray-500">
+            <img
+                src="https://www.hyperui.dev/photos/man-5.jpeg"
+                alt=""
+                class="object-cover w-12 h-12 rounded-full"
+            />
+
+            <div class="ml-3 text-left">
+              <p class="text-sm font-medium text-gray-700">Enitram</p>
+
+              <p class="mt-1 text-xs text-gray-500">
+                Digital Marketing at Studio
+              </p>
+            </div>
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+export default {
+  name: "Testimonials"
+}
+</script>
+
+<style scoped>
+
+</style>
