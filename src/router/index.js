@@ -9,6 +9,7 @@ import Game from "@/views/Game";
 import NotFound from "@/views/NotFound";
 import Login from "@/views/Login";
 import Highscore from "@/views/Highscore";
+import Upload from "@/views/Upload";
 
 
 const routes = [
@@ -26,6 +27,11 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/upload',
+        name: 'Upload',
+        component: Upload
     },
     {
         path: '/about',

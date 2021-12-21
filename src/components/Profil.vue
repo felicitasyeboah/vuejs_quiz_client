@@ -2,10 +2,7 @@
   <!--  Source: https://github.com/tailwindtoolbox/Profile-Card-->
   <div v-show="!showStats">
     <body class="body-bg3 font-sans antialiased text-gray-900 leading-normal tracking-wider bg-cover">
-
-
     <div class="max-w-4xl flex items-center h-auto lg:h-screen flex-wrap mx-auto my-32 lg:my-0">
-
       <!--Main Col-->
       <div id="profile"
            class="w-full lg:w-3/5 rounded-lg lg:rounded-l-lg lg:rounded-r-none shadow-2xl bg-white opacity-75 mx-6 lg:mx-0">
@@ -14,7 +11,6 @@
           <!-- Image for mobile view-->
           <div class="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center"
                style="background-image: url('../assets/bg3.jpg')"></div>
-
           <h1 class="text-3xl font-bold pt-8 lg:pt-0">{{ userName }}</h1>
           <div class="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-green-500 opacity-25"></div>
           <p class="pt-4 text-base font-bold flex items-center justify-center lg:justify-start">
@@ -117,8 +113,6 @@ export default {
     this.userName = localStorage.getItem('userName')
     axios.get('http://localhost:8080/playedGames').then(resp => {
       console.log((resp.data))
-      var newData = resp.data;
-      console.log(newData[1])
       // const obj =;
     }).catch(e => {
       console.log('Error', e);

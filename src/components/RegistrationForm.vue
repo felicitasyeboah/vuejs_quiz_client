@@ -1,7 +1,7 @@
 <template>
-  <body class="body-bg min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
+  <body className="body-bg min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
   <Header></Header>
-  <main class="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
+  <main className="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
     <form @submit.prevent="handleSubmit" v-show="!regSuccess">
       <section>
         <h3 class="font-bold text-2xl">Welcome to Quizzler</h3>
@@ -14,8 +14,9 @@
       <div v-if="passwordError" class="error">{{ passwordError }}</div>
       <div class="flex items-center justify-between">
         <input id="terms" name="terms" type="checkbox"
-               class="h-4 w-4 text-green-300 focus:ring-green-500 border-green-200 rounded" v-model="terms" required>
-        <label for="terms" class="ml-1 block text-sm text-gray-900">
+               class="h-4 w-4 text-green-300 focus:ring-green-500 border-green-200 rounded" v-model="terms"
+               required>
+        <label htmlFor="terms" class="ml-1 block text-sm text-gray-900">
           Accept terms and conditions
         </label>
       </div>

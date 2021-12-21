@@ -11,9 +11,9 @@
       <input type="text" v-model="userName" required>
       <label class="text-green-800">Password</label>
       <input type="password" v-model="password" required>
-      <div className="submit">
+      <div class="submit">
         <button
-            className="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+            class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
             type="submit">Sign In
         </button>
       </div>
@@ -21,13 +21,13 @@
     <div v-show="isLoggedIn" class="alert alert-success" role="alert">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
-    <!--    Nur zu Testzwecken-->
-    <!--    <p>{{ jwt }}</p>-->
-    <!--    <button @click="getUser">Get User</button>-->
-    <!--    <button @click="getToken">Get Token</button>-->
-    <!--    <button @click="getName">Get Name</button>-->
-    <!--    <button @click="logout">Delete Token</button>-->
-    <!--    <button @click="name">Give Name</button>-->
+    Nur zu Testzwecken
+    <p>{{ jwt }}</p>
+    <button @click="getUser">Get User</button>
+    <button @click="getToken">Get Token</button>
+    <button @click="getName">Get Name</button>
+    <button @click="logout">Delete Token</button>
+    <button @click="name">Give Name</button>
     <div v-show="!isLoggedIn">
       <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
         <p class="text-black">Don't have an account?
