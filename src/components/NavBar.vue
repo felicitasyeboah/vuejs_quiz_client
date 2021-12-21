@@ -19,6 +19,7 @@
           <!--          <a @click="checkS">check</a>-->
           <span v-if="isLoggedIn"> |  <router-link to="/highscore">Highscore</router-link></span>
           <span v-if="isLoggedIn"> |  <router-link to="/game">Game</router-link></span>
+          <span v-if="isLoggedIn"> |  <router-link to="/upload">Upload</router-link></span>
           <span v-if="isLoggedIn"> |  <router-link to="/user">Profil</router-link></span>
           <span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span>
           <span v-else> |
