@@ -68,6 +68,14 @@ form {
     border-radius : 10px;
     }
 
+.center {
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    height          : 200px;
+    border          : 3px solid green;
+    }
+
 label {
     color          : white;
     display        : inline-block;
@@ -76,6 +84,16 @@ label {
     text-transform : uppercase;
     letter-spacing : 1px;
     font-weight    : bold;
+    }
+
+.between {
+    display         : flex;
+    justify-content : space-between;
+    }
+
+.even {
+    display         : flex;
+    justify-content : space-evenly;
     }
 
 input[type="checkbox"] {

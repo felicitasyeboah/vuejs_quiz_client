@@ -1,7 +1,7 @@
 <template>
-  <body className="body-bg min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
+  <body class="body-bg min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
   <Header></Header>
-  <main className="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
+  <main class="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
     <form @submit.prevent="handleSubmit" v-show="!regSuccess">
       <section>
         <h3 class="font-bold text-2xl">Welcome to Quizzler</h3>
