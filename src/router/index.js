@@ -3,13 +3,14 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-import SignupForm from "../views/Registration";
+// import RegistrationForm from "../views/Registration";
 import User from "@/views/user/User";
 import Game from "@/views/Game";
 import NotFound from "@/views/NotFound";
 import Login from "@/views/Login";
 import Highscore from "@/views/Highscore";
 import Upload from "@/views/Upload";
+import RegistrationForm from "@/components/RegistrationForm";
 
 
 const routes = [
@@ -21,7 +22,7 @@ const routes = [
     {
         path: '/register',
         name: 'Registration',
-        component: SignupForm
+        component: RegistrationForm
     },
     {
         path: '/login',
@@ -53,6 +54,16 @@ const routes = [
         name: 'Game',
         component: Game
     },
+
+    // {
+    //     path: '/steps',
+    //     component: Steps,
+    //     children: [
+    //         { path: '1', component: StepOne, name: 'StepOne' },
+    //         { path: '2', component: StepTwo, name: 'StepTwo' },
+    //         { path: '3', component: StepThree, name: 'StepThree' }
+    //     ],
+    // },
     {
         path: '/:catchAll(.*)',
         name: 'NotFound',
