@@ -4,7 +4,7 @@
   <Footer />
 </template>
 
-<script type="text/javascript">
+<script>
 import NavBar from "@/components/NavBar.vue";
 import Footer from "@/components/Footer";
 
@@ -21,13 +21,18 @@ export default {
       }
     }
   },
+
   beforeMount() {
+    this.$store.commit('initializeStore');
     if (localStorage.getItem('token') != null) {
       this.$store.isLoggedIn = true;
-      console.log("updated store is" + this.$store.isLoggedIn)
+      this.$store.isAuthenticated = true;
+      console.log("auth" + this.$store.isAuthenticated)
     } else {
       this.$store.isLoggedIn = false;
+      this.$store.isAuthenticated = false;
       console.log("updated store is" + this.$store.isLoggedIn)
+      console.log("auth:" + this.$store.isAuthenticated)
     }
   }
 };

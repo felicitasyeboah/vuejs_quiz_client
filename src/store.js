@@ -4,13 +4,30 @@ import Vuex from 'vuex'
 export default new Vuex.Store({
         state: {
             status: '',
-            token: localStorage.getItem('token') || '',
-            isLoggedIn: false,
-            user: window.localStorage.getItem('userName'),
+            token: localStorage.getItem('token'),
+            user: localStorage.getItem('userName'),
+            isAuthenticated: false,
         },
         mutations: {
+            initializeStore(state) {
+                if (localStorage.getItem('token')) {
+                    state.token = localStorage.getItem('token')
+                    state.isAuthenticated = true
+                    state.userName = localStorage.getItem('userName')
+                    state.image = localStorage.getItem('currentImage')
+                } else {
+                    state.userName = ''
+                    state.image = ''
+                    state.token = ''
+                    state.isAuthenticated = false
+                }
+            },
             changeStatus(state, isLoggedIn) {
-                state.isLoggedIn = isLoggedIn
+                state.isAuthenticated = isLoggedIn
+            },
+            setToken(state, token) {
+                state.token = token
+                state.isAuthenticated = true
             }
         },
         actions: {
@@ -18,7 +35,9 @@ export default new Vuex.Store({
             logout() {
                 localStorage.removeItem('token')
                 localStorage.removeItem('userName')
+                localStorage.removeItem('currentImage')
                 this.isLoggedIn = false;
+                this.state.isAuthenticated = false;
                 console.log("ausgeloggt")
             },
         },
@@ -31,7 +50,7 @@ export default new Vuex.Store({
 // },
             getters: {
                 getStatus: state => {
-                    return state.isLoggedIn
+                    return state.isAuthenticated
                 },
                 getName: getters => {
                     return getters.getName()
