@@ -1,6 +1,6 @@
 <template>
-  <div class="submit">
-    <label>File
+  <div class="submit shadow-inner">
+    <label class="text-black pr-3.5">Upload your image:
       <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
     </label>
 

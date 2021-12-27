@@ -2,6 +2,10 @@
   <body class="body-bg2 min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
   <Header></Header>
   <main class="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
+    <div v-show="errortext" class="alert alert-danger" role="alert">
+      <h1 class="text-2xl text-red-500">{{ errortext }}</h1>
+    </div>
+
     <form @submit.prevent="login" v-show="!isLoggedIn">
       <section>
         <h3 class="font-bold text-2xl">Welcome to Superquiz!</h3>
@@ -21,6 +25,7 @@
     <div v-show="isLoggedIn" class="alert alert-success" role="alert">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
+
     Nur zu Testzwecken
     <p>{{ jwt }}</p>
     <button @click="getUser">Get User</button>
@@ -36,7 +41,7 @@
           </router-link>
         </p>
       </div>
-      Is loggedin: {{ isLoggedIn }}
+      Is loggedin: {{ isAuthenticated }}
     </div>
   </main>
   </body>
@@ -59,6 +64,8 @@ export default {
       token: null,
       logSuccess: false,
       isLoggedIn: this.$store.isLoggedIn,
+      isAuthenticated: this.$store.state.isAuthenticated,
+      errortext: '',
     }
   },
   watch() {
@@ -90,6 +97,7 @@ export default {
           })
           .catch((err) => {
             console.log("AXIOS ERROR: ", err);
+            this.errortext = err.message;
           })
     },
     getUser() {

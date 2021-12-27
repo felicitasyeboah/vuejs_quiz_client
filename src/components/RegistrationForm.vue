@@ -76,6 +76,10 @@ export default {
         axios.post(reg_url, postData, axiosConfig)
             .then((res) => {
               console.log("RESPONSE RECEIVED: ", res);
+              this.currentImage = res.data.profileImage;
+              localStorage.setItem('currentImage', this.currentImage)
+              console.log(localStorage.getItem('currentImage'))
+
               this.info = res;
               this.regSuccess = true;
             })
