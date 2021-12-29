@@ -50,7 +50,7 @@
 <script>
 
 import axios from 'axios';
-import {login_url} from '@/assets/constants';
+import {LOGIN_URL} from '@/assets/constants';
 import Header from "@/components/Header";
 
 export default {
@@ -74,7 +74,7 @@ export default {
   methods: {
     // Sends data with axios, saves token and username in localstorage
     login() {
-      console.log(this.userName, this.password, login_url)
+      console.log(this.userName, this.password, LOGIN_URL)
       var postData = {
         userName: this.userName,
         password: this.password
@@ -85,7 +85,7 @@ export default {
           "Access-Control-Allow-Origin": "*",
         }
       };
-      axios.post(login_url, postData, axiosConfig)
+      axios.post(LOGIN_URL, postData, axiosConfig)
           .then((res) => {
             console.log("RESPONSE RECEIVED: ", res);
             this.jwt = res.data.token;

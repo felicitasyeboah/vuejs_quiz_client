@@ -21,7 +21,10 @@
               type="submit" @click.prevent="next()">Next
           </button>
           <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
-            <p class="text-black">Already a user? <a href="/login" class="font-bold hover:underline">Log in</a>.</p>
+            <p class="text-black">Already a user?
+            <p class="text-black">Already a user?
+              <router-link to="/login" class="font-bold hover:underline">Log in</router-link>
+            </p>
           </div>
         </div>
       </div>
@@ -104,7 +107,7 @@
 
 <script>
 import axios from 'axios';
-import {reg_url} from '@/assets/constants';
+import {REG_URL} from '@/assets/constants';
 import Header from "@/components/Header";
 
 
@@ -144,7 +147,7 @@ export default {
     },
     //Registration - checks input and if valid, sends it to the registration server.
     handleSubmit() {
-      console.log(this.userName, this.password, this.userImage, reg_url)
+      console.log(this.userName, this.password, this.userImage, REG_URL)
       var postData = {
         userName: this.userName,
         password: this.password,
@@ -156,7 +159,7 @@ export default {
           "Access-Control-Allow-Origin": "*",
         }
       };
-      axios.post(reg_url, postData, axiosConfig)
+      axios.post(REG_URL, postData, axiosConfig)
           .then((res) => {
             console.log("RESPONSE RECEIVED: ", res);
             this.info = res;

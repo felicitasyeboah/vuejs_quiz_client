@@ -32,7 +32,9 @@
       Thank you for registering. Your registration was successful. You may now login.
     </div>
     <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
-      <p class="text-black">Already a user? <a href="/login" class="font-bold hover:underline">Log in</a>.</p>
+      <p class="text-black">Already a user?
+        <router-link to="/login" class="font-bold hover:underline">Log in</router-link>
+      </p>
     </div>
   </main>
   </body>
@@ -40,7 +42,7 @@
 
 <script>
 import axios from 'axios';
-import {reg_url} from '@/assets/constants';
+import {REG_URL} from '@/assets/constants';
 import Header from "@/components/Header";
 
 export default {
@@ -62,7 +64,7 @@ export default {
       this.passwordError = this.password.length > 5 ?
           '' : 'Password must be at least 6 characters long'
       if (!this.passwordError) {
-        console.log(this.userName, this.password, reg_url)
+        console.log(this.userName, this.password, REG_URL)
         var postData = {
           userName: this.userName,
           password: this.password
@@ -73,7 +75,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           }
         };
-        axios.post(reg_url, postData, axiosConfig)
+        axios.post(REG_URL, postData, axiosConfig)
             .then((res) => {
               console.log("RESPONSE RECEIVED: ", res);
               this.currentImage = res.data.profileImage;

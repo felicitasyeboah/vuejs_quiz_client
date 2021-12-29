@@ -33,7 +33,7 @@
 <script>
 import axios from "axios";
 import Header from "@/components/Header";
-import {image_root} from "@/assets/constants";
+import {IMAGE_ROOT} from "@/assets/constants";
 
 
 export default {
@@ -60,7 +60,7 @@ export default {
 
         //push the values into separate arrays
         this.usernames.push(resp.data[i].user.userName);
-        this.images.push(image_root + resp.data[i].user.profileImage);
+        this.images.push(IMAGE_ROOT + resp.data[i].user.profileImage);
         this.scores.push(resp.data[i].userScore);
 
         // Format date to day.month.year

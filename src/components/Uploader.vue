@@ -30,7 +30,7 @@
 <script>
 
 import axios from "axios";
-import {upload_url} from "@/assets/constants";
+import {UPLOAD_URL} from "@/assets/constants";
 
 export default {
   name: "Uploader",
@@ -54,7 +54,7 @@ export default {
           // "Access-Control-Allow-Origin": "*",
         }
       };
-      axios.post(upload_url, formData, axiosConfig)
+      axios.post(UPLOAD_URL, formData, axiosConfig)
           .then((res) => {
             console.log("RESPONSE RECEIVED: ", res);
             this.info = res;

@@ -1,19 +1,17 @@
 <template>
 
-
-  <Question></Question>
+  <GameContent></GameContent>
 
 </template>
 
 <script>
-import Question from "@/components/Question";
+// import Question from "@/components/Question";
+import GameContent from "@/components/GameContent";
 
 export default {
   name: "Game",
-  components: {Question}
+  components: {GameContent}
 }
 </script>
 
-<style scoped>
 
-</style>

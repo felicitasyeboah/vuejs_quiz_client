@@ -76,7 +76,7 @@
 <script>
 
 import axios from "axios";
-import {image_root} from "@/assets/constants";
+import {IMAGE_ROOT} from "@/assets/constants";
 
 export default {
   name: "Profil",
@@ -92,13 +92,13 @@ export default {
     this.userName = localStorage.getItem('userName')
     // Checks if theres a current Profil-Image saved in localStorage - if not, gets a random pic (bis wir eine Schnittstelle zum Abfragen haben)
     if ('currentImage' in localStorage) {
-      this.userImage = image_root + localStorage.getItem('currentImage');
+      this.userImage = IMAGE_ROOT + localStorage.getItem('currentImage');
       console.log("bild aus localstorage" + this.userImage)
     } else {
       this.randomNumber = Math.floor(Math.random() * (13 - 1 + 1)) + 1;
       this.currentImage = "default" + this.randomNumber + ".png"
       localStorage.setItem('currentImage', this.currentImage)
-      this.userImage = image_root + localStorage.getItem('currentImage');
+      this.userImage = IMAGE_ROOT + localStorage.getItem('currentImage');
       console.log(this.userImage)
     }
 
