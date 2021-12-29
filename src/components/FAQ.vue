@@ -9,11 +9,10 @@
       </h3>
       <div
           class="w-full px-6 py-6 mx-auto mt-10 bg-white border border-gray-200 rounded-lg sm:px-8 md:px-12 sm:py-8 sm:shadow lg:w-5/6 xl:w-2/3">
-        <h3 class="text-lg font-bold text-grey-500 sm:text-xl md:text-2xl">How does it work?</h3>
-        <p class="mt-2 text-base text-gray-600 sm:text-lg md:text-normal">
-          Our platform works with your content to provides insights and metrics on how you can grow your business and
-          scale your infastructure.
-        </p>
+        <h3 class="text-lg font-bold text-grey-500 sm:text-xl md:text-2xl">What categories are there?</h3>
+        <div class="mt-2 text-base text-gray-600 sm:text-lg md:text-normal" v-for="entry in categories" :key="entry">
+          {{ entry }}
+        </div>
       </div>
       <div
           class="w-full px-6 py-6 mx-auto mt-10 bg-white border border-gray-200 rounded-lg sm:px-8 md:px-12 sm:py-8 sm:shadow lg:w-5/6 xl:w-2/3">
@@ -58,8 +57,9 @@ export default {
   beforeMount() {
     axios.get('http://localhost:8080/category').then(resp => {
       console.log((resp.data))
-      var newData = resp.data;
-      console.log(newData)
+      for (var i = 0; i < resp.data.length; i++) {
+        this.categories.push(resp.data[i].categoryName);
+      }
       // const obj =;
     }).catch(e => {
       console.log('Error', e);

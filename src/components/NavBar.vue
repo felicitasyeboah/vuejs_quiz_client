@@ -3,7 +3,7 @@
   <nav class="Vdark-2 shadow-xl">
     <section class="w-full px-8 text-gray-700 bg-white">
       <div class="relative flex items-center h-16 justify-between">
-        <a href="#_"
+        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
            class="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
           <span class="mx-auto text-xl font-black leading-none text-gray-900 select-none">superquiz<span
               class="text-green-600">.</span></span>
@@ -61,7 +61,7 @@ export default {
     // LogginStatus testweise checken, da es nicht ging.. wie es sollte
     // checkS() {
     //   this.$store.commit('changeStatus', false)
-    //   console.log(this.$store.isLoggedIn)
+    //   console.log(this.$store.isAuthenticated)
     // }
   },
 }

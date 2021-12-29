@@ -1,75 +1,75 @@
 <template>
   <div v-show="!showStats">
-    <body class="body-bg2  pt-12 md:pt-20 pb-6 px-2 md:px-0 flex justify-center">
+    <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 md:px-0 flex justify-center">
 
-    <div class="rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 bg-white">
+      <div class="rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 bg-white">
 
-      <div class="flex justify-center -mt-8">
-        <img :src="userImage" class="rounded-full border-solid border-white scale-55 pt-10">
-      </div>
-      <div class="text-center px-3 pb-6 pt-2">
-        <h3 class="text-black text-sm bold font-sans text-2xl">{{ userName }}</h3>
+        <div class="flex justify-center -mt-8">
+          <img :src="userImage" alt="userimage" class="rounded-full border-solid border-white scale-55 pt-10">
+        </div>
+        <div class="text-center px-3 pb-6 pt-2">
+          <h3 class="text-black text-sm bold font-sans text-2xl">{{ userName }}</h3>
 
 
-        <p class="mt-2 font-sans font-light text-black">Hello, i'm from another the other side!</p>
-      </div>
+          <p class="mt-2 font-sans font-light text-black">Hello, i'm from another the other side!</p>
+        </div>
 
-      <div class="text-center">
-        <h2>
-          <button @click="changeStats"
-                  class="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full mb-4 ">
-            Show Stats
-          </button>
-        </h2>
-        <p></p>
+        <div class="text-center">
+          <h2>
+            <button @click="changeStats"
+                    class="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full mb-4 ">
+              Show Stats
+            </button>
+          </h2>
+          <p></p>
+        </div>
       </div>
     </div>
-    </body>
   </div>
 
 
   <div v-show="showStats">
-    <body class="body-bg2  pt-12 md:pt-20 pb-6 px-2 md:px-0 flex justify-center">
-    <main class="bg-gray-900 max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl"><h1
-        class="text-2xl text-white font-extrabold">Your stats:</h1>
-      <section class="text-white ">
-        <div class=" px-4 py-16 mx-auto sm:px-6 lg:px-8 ">
-          <ul class="border border-white sm:grid sm:grid-cols-2 lg:grid-cols-3">
-            <li class="p-8 border border-white">
-              <p class="text-3xl font-extrabold">50</p>
-              <p class="mt-1 text-xl font-medium">Websites live</p>
-            </li>
-            <li class="p-8 border border-white">
-              <p class="text-3xl font-extrabold">190k+</p>
-              <p class="mt-1 text-xl font-medium">Impressions</p>
-            </li>
-            <li class="p-8 border border-white">
-              <p class="text-3xl font-extrabold">$150k+</p>
-              <p class="mt-1 text-xl font-medium">Client profits</p>
-            </li>
-            <li class="p-8 border border-white">
-              <p class="text-3xl font-extrabold">10</p>
-              <p class="mt-1 text-xl font-medium">New staff</p>
-            </li>
-            <li class="p-8 border border-white">
-              <p class="text-3xl font-extrabold">1</p>
-              <p class="mt-1 text-xl font-medium">New office</p>
-            </li>
-            <li class="p-8 border border-white">
-              <p class="text-3xl font-extrabold">6</p>
-              <p class="mt-1 text-xl font-medium">New tech stacks</p>
-            </li>
-          </ul>
-          <div class="flex justify-end">
-            <button @click="changeStats"
-                    class="max-w-md bg-green-700 hover:bg-green-900 text-white shadow-lg font-bold py-2 px-4 pb-2.5">
-              Back to profile
-            </button>
+    <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 md:px-0 flex justify-center">
+      <main class="bg-gray-900  mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl"><h1
+          class="text-2xl text-white font-extrabold">Your stats:</h1>
+        <section class="text-white ">
+          <div class=" px-4 py-16 mx-auto sm:px-6 lg:px-8 ">
+            <ul class="border border-white sm:grid sm:grid-cols-2 lg:grid-cols-3">
+              <li class="le p-8 border border-white">
+                <p class="text-3xl font-extrabold">50</p>
+                <p class="mt-1 text-xl font-medium">Websites live</p>
+              </li>
+              <li class="le p-8 border border-white">
+                <p class="text-3xl font-extrabold">190k+</p>
+                <p class="mt-1 text-xl font-medium">Impressions</p>
+              </li>
+              <li class="le p-8 border border-white">
+                <p class="text-3xl font-extrabold">$150k+</p>
+                <p class="mt-1 text-xl font-medium">Client profits</p>
+              </li>
+              <li class="le p-8 border border-white">
+                <p class="text-3xl font-extrabold">10</p>
+                <p class="mt-1 text-xl font-medium">New staff</p>
+              </li>
+              <li class="le p-8 border border-white">
+                <p class="text-3xl font-extrabold">1</p>
+                <p class="mt-1 text-xl font-medium">New office</p>
+              </li>
+              <li class="le p-8 border border-white">
+                <p class="text-3xl font-extrabold">6</p>
+                <p class="mt-1 text-xl font-medium">New tech stacks</p>
+              </li>
+            </ul>
+            <div class="flex justify-end">
+              <button @click="changeStats"
+                      class="max-w-md bg-green-700 hover:bg-green-900 text-white shadow-lg font-bold py-2 px-4 pb-2.5">
+                Back to profile
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
-    </main>
-    </body>
+        </section>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -120,7 +120,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

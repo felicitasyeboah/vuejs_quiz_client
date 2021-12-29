@@ -180,3 +180,31 @@ input {
 .user a {
     text-decoration : none;
     }
+
+.le {
+    background : #555555;
+    }
+
+/*Highscore*/
+#table {
+    display               : grid;
+    grid-template-columns : repeat(4, 1fr);
+    }
+
+ul {
+    list-style-type  : none;
+    width            : max-content;
+    background-color : #333333;
+    }
+
+li {
+
+    list-style   : none;
+    margin-right : 10px;
+    padding      : 5px 10px;
+    background   : #fff;
+    }
+
+#number1 {
+    display : inline;
+    }
