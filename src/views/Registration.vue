@@ -1,16 +1,13 @@
 <template>
-
-
-  <RegistrationForm>
-  </RegistrationForm>
+  <RegisterUser></RegisterUser>
 
 </template>
 
 <script>
-import RegistrationForm from "@/components/RegistrationForm";
+import RegisterUser from "@/components/RegisterUser";
 
 export default {
-  components: {RegistrationForm},
+  components: {RegisterUser},
   data() {
     return {}
   }

@@ -44,22 +44,20 @@ export default new Vuex.Store({
         computed: {
             getName() {
                 return this.$store.getters.getName()
-            },
+            }
+        },
 //     printToken() {
 //     console.log(localStorage.getItem('token'))
 // },
-            getters: {
-                getStatus: state => {
-                    return state.isAuthenticated
-                },
-                getName: getters => {
-                    return getters.getName()
-                },
-                //     getToken: state => {
-                //         return localStorage.getItem('token')
-                // }
-
-            }
+        getters: {
+            getStatus: state => {
+                return state.isAuthenticated
+            },
+            getName: getters => {
+                return getters.getName()
+            },
         }
+
+
     }
 )

@@ -3,7 +3,7 @@ import App from './App.vue'
 import './index.css';
 import router from './router'
 import axios from "axios";
-import store from './store'
+import store from './vuex/store'
 
 createApp(App).use(router).use(store).mount('#app')
 

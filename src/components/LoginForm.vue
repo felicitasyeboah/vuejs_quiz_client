@@ -25,9 +25,6 @@
     <div v-show="isLoggedIn" class="alert alert-success" role="alert">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
-
-    Nur zu Testzwecken
-    <p>{{ jwt }}</p>
     <button @click="getUser">Get User</button>
     <button @click="getToken">Get Token</button>
     <button @click="getName">Get Name</button>
@@ -41,7 +38,6 @@
           </router-link>
         </p>
       </div>
-      Is loggedin: {{ isAuthenticated }}
     </div>
   </main>
   </body>
@@ -60,7 +56,6 @@ export default {
       userName: '',
       user: this.$store.user,
       password: '',
-      jwt: null,
       token: null,
       logSuccess: false,
       isLoggedIn: this.$store.isLoggedIn,
@@ -71,6 +66,8 @@ export default {
   watch() {
     this.logSuccess = this.isLoggedIn;
   },
+
+  // TODO: Methode in store auslagern
   methods: {
     // Sends data with axios, saves token and username in localstorage
     login() {
@@ -88,8 +85,6 @@ export default {
       axios.post(LOGIN_URL, postData, axiosConfig)
           .then((res) => {
             console.log("RESPONSE RECEIVED: ", res);
-            this.jwt = res.data.token;
-            this.$store.commit('changeStatus', true)
             const obj = JSON.parse(res.config.data);
             localStorage.setItem('token', res.data.token)
             localStorage.setItem('userName', obj.userName)
@@ -100,36 +95,16 @@ export default {
             this.errortext = err.message;
           })
     },
-    getUser() {
-      const instance = axios.create({
-        baseURL: 'http://localhost:8080/',
-        timeout: 1000,
-        headers: {'Authorization': 'Bearer ' + localStorage.getItem('token')}
-      });
-
-      instance.get('/user')
-          .then(response => {
-            console.log(response);
-            return response.data;
-          })
-    },
     getToken() {
       console.log(localStorage.getItem('token'));
     },
     getName() {
       console.log(localStorage.getItem('userName'));
     },
-    name() {
-      this.$store.dispatch('giveName');
-      this.$store.getName();
-    },
     logout() {
       this.$store.dispatch('logout')
       this.$router.push('/login')
-
-
     }
-
   }
 }
 </script>

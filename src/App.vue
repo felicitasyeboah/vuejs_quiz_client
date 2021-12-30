@@ -12,14 +12,7 @@ export default {
   components: {
     Footer,
     NavBar,
-  },
-  methods: {
-    checkStatus() {
-      if (localStorage.getItem('token') != null) {
-        this.$store.isLoggedIn = true;
-        console.log("check store is" + this.$store.isLoggedIn)
-      }
-    }
+
   },
 
   beforeMount() {
@@ -27,12 +20,10 @@ export default {
     if (localStorage.getItem('token') != null) {
       this.$store.isLoggedIn = true;
       this.$store.isAuthenticated = true;
-      console.log("auth" + this.$store.isAuthenticated)
     } else {
       this.$store.isLoggedIn = false;
       this.$store.isAuthenticated = false;
       console.log("updated store is" + this.$store.isLoggedIn)
-      console.log("auth:" + this.$store.isAuthenticated)
     }
   }
 };

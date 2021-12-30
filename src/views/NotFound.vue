@@ -1,15 +1,12 @@
 <template>
-  <h2 class="ueber">404</h2>
-  <h3>That page does not exist</h3>
+  <Error></Error>
 </template>
 
 <script>
-export default {}
+import Error from "@/components/Error";
+
+export default {
+  components: {Error}
+}
 </script>
 
-<style>
-.ueber {
-  color     : #ff0062;
-  font-size : 126px
-  }
-</style>

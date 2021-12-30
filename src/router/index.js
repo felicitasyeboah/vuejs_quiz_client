@@ -1,16 +1,13 @@
-// Ensures that the current, displayed view is synchronised with the content of the browser address line.
-
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/About.vue'
-// import RegistrationForm from "../views/Registration";
 import User from "@/views/user/User";
 import Game from "@/views/Game";
 import NotFound from "@/views/NotFound";
 import Login from "@/views/Login";
 import Highscore from "@/views/Highscore";
 import Upload from "@/views/Upload";
-import RegistrationForm from "@/components/RegistrationForm";
+import RegisterUser from "@/components/RegisterUser";
 
 
 const routes = [
@@ -22,7 +19,7 @@ const routes = [
     {
         path: '/register',
         name: 'Registration',
-        component: RegistrationForm
+        component: RegisterUser
     },
     {
         path: '/login',
@@ -54,16 +51,6 @@ const routes = [
         name: 'Game',
         component: Game
     },
-
-    // {
-    //     path: '/steps',
-    //     component: Steps,
-    //     children: [
-    //         { path: '1', component: StepOne, name: 'StepOne' },
-    //         { path: '2', component: StepTwo, name: 'StepTwo' },
-    //         { path: '3', component: StepThree, name: 'StepThree' }
-    //     ],
-    // },
     {
         path: '/:catchAll(.*)',
         name: 'NotFound',
@@ -77,4 +64,3 @@ const router = createRouter({
 })
 
 export default router
-
