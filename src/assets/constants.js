@@ -5,7 +5,10 @@ export const IMAGE_ROOT = 'http://localhost:8080/files/';
 export const WEBSOCKET_URL = 'http://localhost:8080/websocket/';
 export const STOMP_VERSION = "1.2"
 export const WEBSOCKET_IP = 'http://192.168.178.47:8080/websocket'
-
+export const SERVER_ADRESS = "192.168.178.47:8080/";
+export const WS_URL = "ws://" + "192.168.178.47:8080";
+export const STOMP_TOPIC = "/user/topic/game"
+export const STOMP_ENDPOINT = "/websocket"
 
 
 
