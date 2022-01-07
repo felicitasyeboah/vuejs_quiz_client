@@ -1,18 +1,21 @@
 <template>
- <WebSock></WebSock>
+  <!--<WebSock></WebSock>-->
+  <WebSocketwithSock></WebSocketwithSock>
 
 </template>
 
 <script>
 // import Question from "@/components/Question";
 // import GameContent from "@/components/GameContent";
-// import WebSocket from "@/components/WebSocket";
-import WebSock from "@/components/WebSock";
+//import WebSock from "@/components/WebSock";
+//import WebSocketwithSock from "@/components/WebSock";
+import WebSocketwithSock from "@/components/WebSocketwithSock";
+//import WebSocket from "@/components/WebSocket";
 
 
 export default {
   name: "Game",
-  components: {WebSock}
+  components: {WebSocketwithSock}
 }
 </script>
 
