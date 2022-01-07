@@ -1,7 +1,7 @@
 <template>
 
   <div class="content" id="websocket">
-    <div>&nbsp;</div>
+    <div>connected: {{ connected }}</div>
     <div class="row">
       <div class="col">
         <div class="form-group">
@@ -17,7 +17,7 @@
             class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
             @click="connect">Create connection
         </button>
-
+        TIME {{ timer }}
         <button
             class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
             @click="disconnect">Close connection
@@ -33,22 +33,32 @@
         WEBSOCKET WITH SOCK
       </div>
     </div>
-
-    <div v-for="item in received_messages" :key="item">
-      {{ item }}
-    </div>
+    {{ status }}
+    <div v-if="!oppfound">Gegner wird gesucht</div>
+    <div v-else>Gegner GEFUNDEN!</div>
+    {{ oppfound }}
+    <ul>
+      <li v-for="message in messages" v-bind:key="message">{{ message }}</li>
+    </ul>
 
   </div>
-
 </template>
 
 <script>
 
 import Stomp from "stompjs";
-//
-import SockJS from 'sockjs-client';
-import {STOMP_ENDPOINT, WEBSOCKET_IP, WS_URL} from "@/assets/constants";
 
+import SockJS from 'sockjs-client';
+import {
+  CONNECTED,
+  DISCONNECT,
+  MESSAGE,
+  RESULT_MESSAGE,
+  START_TIMER_MESSAGE,
+  STOMP_ENDPOINT,
+  WEBSOCKET_IP,
+  WS_URL
+} from "@/assets/constants";
 
 export default {
   name: "WebSocketwithSock",
@@ -60,20 +70,43 @@ export default {
       setConnected: false,
       ws_url: WEBSOCKET_IP,
       ws_ip: WS_URL + STOMP_ENDPOINT,
-      status: "disconnected",
       msg: "token:" + this.token,
       stompClient: null,
       header: {token: localStorage.getItem('token')},
       connection: null,
-      connected: false
+      status: "Wird gesucht",
+      oppfound: false,
+      connected: false,
+      timer: 0,
+      list2: [],
+      messages: []
     }
   },
   created() {
-    console.log("oncreated")
     onmessage = function (message) {
-      alert("nachricht da" + message)
+      switch (message.command) {
+        case CONNECTED:
+          this.connected = true;
+          break;
+        case MESSAGE:
+          if (message.headers.type === START_TIMER_MESSAGE) {
+            alert("ES GEHT LOS")
+          }
+          if (message.headers.type === RESULT_MESSAGE)
+            alert("Spiel zu ENDE")
+          console.log(message.headers.type)
+          break
+        case DISCONNECT:
+          this.connected = false;
+          break
+        default:
+          break;
+      }
+      if (message.body) {
+        console.log(message.body)
+      }
+      console.log(message.command)//MESSAGE
     }
-
   },
   methods: {
     connect() {
@@ -91,17 +124,6 @@ export default {
             this.connected = false;
           }
       );
-
-    },
-
-    handleNewMessage(event) {
-      let data = event.data;
-      data = data.split(/\r?\n/);
-      for (let i = 0; i < data.length; i++) {
-        let msg = JSON.parse(data[i]);
-        this.messages.push(msg);
-        console.log(this.messages)
-      }
     },
     sendToken() {
       const body = {
@@ -120,29 +142,5 @@ export default {
 
   }
 }
-
-// callback: function(message) {
-//   // called when the client receives a STOMP message from the server
-//   if (message.body) {
-//     alert("got message with body " + message.body)
-//   } else {
-//     alert("got empty message");
-//   }
-// },
-// sendAnswer() {
-//   var body = {
-//     'answer': "answer"
-//   }
-//   this.stompClient.send("/app/game", {}, JSON.stringify(body));
-// },
-//
-
-//   this.setConnected = false
-//   console.log("Disconnected");
-// },
-
-
-
-
 </script>
 
