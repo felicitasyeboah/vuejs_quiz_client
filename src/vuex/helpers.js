@@ -1,5 +1,8 @@
 import {mapGetters} from 'vuex'
 
 export const authComputed = {
-    ...mapGetters(['getStatus'])
+    ...mapGetters(['getStatus']),
+}
+export const getConnected = {
+    ...mapGetters(['getIsConnected']),
 }
