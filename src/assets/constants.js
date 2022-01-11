@@ -1,4 +1,5 @@
 export const REG_URL = 'http://localhost:8080/auth/register';
+export const ROOT_URL = 'http://localhost:8080/';
 export const LOGIN_URL = 'http://localhost:8080/auth/login';
 export const UPLOAD_URL = 'http://localhost:8080/upload';
 export const IMAGE_ROOT = 'http://localhost:8080/files/';

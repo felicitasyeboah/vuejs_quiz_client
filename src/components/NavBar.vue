@@ -13,9 +13,8 @@
         <span v-else class="italic text-left">Welcome   <span
             v-if="!this.$store.state.user">unbekannter User</span></span>
         <div class="text-right">
-          <router-link to="/"> Home</router-link>
-          |
-          <router-link to="/about">About</router-link>
+
+        <router-link to="/about">About</router-link>
           |
 
           <span v-if="this.$store.state.user"> |  <router-link to="/highscore">Highscore</router-link></span>

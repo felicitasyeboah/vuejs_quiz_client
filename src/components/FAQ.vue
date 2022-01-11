@@ -65,11 +65,8 @@ export default {
   // Get categories
   beforeMount() {
     axios.get('http://localhost:8080/category').then(resp => {
-      console.log((resp.data))
+      this.categories = resp.data
       this.isLoading = false
-      for (var i = 0; i < resp.data.length; i++) {
-        this.categories.push(resp.data[i].categoryName);
-      }
       // const obj =;
     }).catch(e => {
       console.log('Error', e);

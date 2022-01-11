@@ -3,90 +3,78 @@
   <div>
     <div class="flex justify-center">
       <div class=" relative justify-center mt-6">
-        <div v-if="!this.$store.state.isConnected">
-          Ready to play?
-
-          <button
-              class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-              @click="connect">READY
-          </button>
-          <button
-              class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-              @click="sendToken">Find opponent
-          </button>
+        <!--        <div v-if="!this.$store.state.isConnected">-->
+        <div v-if="!this.gamestart">
         </div>
         <div v-else class="absolute flex top-0 right-0 p-3 space-x-1">
-
-          <h1 class="text-4xl">TIME {{ timer }}</h1>
-
+          {{ this.$store.state.question.category }}
         </div>
-        {{ this.$store.state.question.category }}
         <p class="bg-white px-12 py-8 rounded-lg w-80"> {{ this.$store.state.question.text }}
         </p>
-
-
-        {{ question.text }}
-
-
+        <button
+            class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+            @click="connect">READY
+        </button>
+        <button
+            class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+            @click="sendToken">Send Token
+        </button>
+        <button
+            class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+            @click="disconnect">Close connection
+        </button>
       </div>
     </div>
   </div>
+  <div v-show="gamestart">
+    <h1 class="submit object-center text-8xl text-red-900 font-light p-4.5">{{ timer }}</h1>
+    <div class="container container max-w-xl m-auto flex flex-wrap flex-col md:flex-row items-center justify-start">
 
+      <div id="answer1" ref="answer1case" class="w-full lg:w-1/2 p-3"
+           v-on:click="sendAnswerText(this.$store.getters.getAnswer1)">
+        <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
 
-  <div class="container container max-w-xl m-auto flex flex-wrap flex-col md:flex-row items-center justify-start">
+          <div
+              class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+            <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer1 }}</div>
 
-    <div id="answer1" class="w-full lg:w-1/2 p-3" v-on:click="sendAnswer">
-      <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
-
-        <div class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-          <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer1 }}</div>
-
+          </div>
         </div>
       </div>
-    </div>
-    <div id="answer2" class="w-full lg:w-1/2 p-3" v-on:click="reply_click(this.id)">
-      <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
+      <div id="answer2" class="w-full lg:w-1/2 p-3" v-on:click="sendAnswerText(this.$store.getters.getAnswer2)">
+        <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
 
-        <div class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-          <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer2 }}</div>
+          <div
+              class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+            <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer2 }}</div>
 
+          </div>
         </div>
       </div>
-    </div>
-    <div id="answer3" class="w-full lg:w-1/2 p-3" v-on:click="checkAnswer">
-      <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
+      <div id="answer3" class="w-full lg:w-1/2 p-3" v-on:click="sendAnswerText(this.$store.getters.getAnswer3)">
+        <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
 
-        <div class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-          <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer3 }}</div>
+          <div
+              class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+            <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer3 }}</div>
 
+          </div>
         </div>
       </div>
-    </div>
-    <div id="answer4" class="w-full lg:w-1/2 p-3" v-on:click="checkAnswer">
-      <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
-        <div class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-          <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer4 }}</div>
+      <div id="answer4" ref="answer2case" class="w-full lg:w-1/2 p-3"
+           v-on:click="sendAnswerText(this.$store.getters.getAnswer4)">
+        <div class="flex flex-col lg:flex-row rounded overflow-hidden h-auto lg:h-32 border shadow shadow-lg">
+          <div
+              class="bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+            <div class="text-black font-bold text-xl mb-2 leading-tight">{{ this.$store.getters.getAnswer4 }}</div>
 
+          </div>
         </div>
+
       </div>
 
+
     </div>
-    <button
-        class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-        @click="connect">Create connection
-    </button>
-    <button
-        class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-        @click="changeQuestion">ChangeQuestion
-    </button>
-    <button
-        class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-        @click="disconnect">Close connection
-    </button>
-    <button
-        class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-        @click="sendToken">Send Token
-    </button>
   </div>
 </template>
 
@@ -135,8 +123,9 @@ export default {
         answer4: null,
         correctAnswer: null,
       },
+      gamestart: false,
+      ganswer2: null,
       received_messages: [],
-      send_message: null,
       token: localStorage.getItem('token'),
       setConnected: false,
       ws_url: WEBSOCKET_IP,
@@ -151,7 +140,7 @@ export default {
       timer: this.$store.getters.getTimer,
       list2: [],
       messages: [],
-
+      givenAnswer: "",
     }
   },
 
@@ -208,6 +197,7 @@ export default {
       const messageType = message.headers.type;
       // if (messageUtils.isKnowMessageType(message.data)) {
       if (messageCommand === MESSAGE) {
+
         const msg = JSON.parse(message.body);
         switch (messageType) {
           case START_TIMER_MESSAGE:
@@ -223,6 +213,7 @@ export default {
             this.setTimer(msg.timeLeft)
             break
           case GAME_MESSAGE:
+            this.gamestart = true;
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
             //     "answer4":"Marie Curie","correctAnswer":3,"user":{"userName":"Martine",
@@ -286,11 +277,19 @@ export default {
       alert(currentID);
 
     },
+    sendAnswerText(value) {
+      this.givenAnswer = value;
 
-    reply_click: function (clicked_id) {
-      alert(clicked_id);
+      console.log(this.givenAnswer)
+      const body = {
+        'answer': this.givenAnswer,
+        "time needed": this.timer
+      };
+      console.log(JSON.stringify(body))
+      this.stompClient.send("/app/game", {}, JSON.stringify(body));
 
     },
+
 
     changeQuestion() {
       this.$store.commit('setQuestionText', "Hier kommt die Frage..");

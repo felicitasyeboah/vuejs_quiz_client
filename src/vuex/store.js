@@ -13,6 +13,7 @@ export default new Vuex.Store({
                 correctanswer: null,
             },
             isConnected: false,
+            currentUserImage: '',
             status: '',
             token: localStorage.getItem('token'),
             user: localStorage.getItem('userName'),
@@ -25,10 +26,8 @@ export default new Vuex.Store({
                     state.token = localStorage.getItem('token')
                     state.isAuthenticated = true
                     state.userName = localStorage.getItem('userName')
-                    state.image = localStorage.getItem('currentImage')
                 } else {
                     state.userName = ''
-                    state.image = ''
                     state.token = ''
                     state.isAuthenticated = false
                 }
@@ -40,18 +39,7 @@ export default new Vuex.Store({
                 state.token = token
                 state.isAuthenticated = true
             },
-            setSocketClient: (state, value) => {
-                state.socket.socketClient = value
-            },
-            setStompClient: (state, value) => {
-                state.socket.stompClient = value;
-            },
-            setStompHeaders: (state, value) => {
-                state.socket.stompHeaders = value;
-            },
-            setSocketOnline: (state, value) => {
-                state.socket.online = value;
-            },
+
             setSocketIsConnected: (state, value) => {
                 state.isConnected = value;
 
@@ -81,13 +69,15 @@ export default new Vuex.Store({
             setCorrectAnswer: (state, value) => {
                 state.question.correctanswer = value;
             },
+            setUserImage: (state, value) => {
+                state.currentUserImage = value;
+            },
         },
         actions: {
             // The current token in localstorage is deleted. Username in localstorage is deleted.
             logout() {
                 localStorage.removeItem('token')
                 localStorage.removeItem('userName')
-                localStorage.removeItem('currentImage')
                 this.isLoggedIn = false;
                 this.state.isAuthenticated = false;
                 console.log("ausgeloggt")
@@ -109,26 +99,14 @@ export default new Vuex.Store({
             getName: getters => {
                 return getters.getName()
             },
-            getSocket: state => {
-                return state.socket;
-            },
-            getSocketClient: state => {
-                return state.socket.socketClient;
-            },
-            getStompClient: state => {
-                return state.socket.stompClient;
-            },
-            getStompHeaders: state => {
-                return state.socket.stompHeaders;
+            getUserImage: state => {
+                return state.currentUserImage;
             },
             getSocketOnline: state => {
                 return Number(state.socket.online);
             },
             getIsConnected: state => {
                 return Boolean(state.isConnected);
-            },
-            getSocketUserName: state => {
-                return String(state.socket.userName);
             },
             getTimer: state => {
                 return Number(state.timeLeft);
