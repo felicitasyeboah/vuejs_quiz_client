@@ -1,4 +1,5 @@
 <template>
+  <!--  https://tailwind-elements.com/docs/standard/components/charts/ nochmal anschauen-->
   <div class="body-bg2 min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0">
     <Header />
 

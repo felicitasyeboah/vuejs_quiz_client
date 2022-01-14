@@ -18,7 +18,12 @@
           class="bg-yellow-300 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
         Grats
       </span>
-              <div v-show="newhighscore" class="font-extrabold pl-6"> NEW HIGHSCORE: {{ yourscore }}</div>
+              <div v-show="newhighscore" class="font-extrabold pl-6"><span
+                  class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-600 text-white rounded">New</span>HIGHSCORE:
+                                                                                                                                                                  {{
+                  yourscore
+                                                                                                                                                                  }}
+              </div>
 
               <div v-show="!newhighscore" class="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider">
                 Another great victory
