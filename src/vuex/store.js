@@ -12,13 +12,23 @@ export default new Vuex.Store({
                 answer4: null,
                 correctanswer: null,
             },
+            userScore: 0,
+            oppScore: 0,
+            oppName: "Player2",
             isConnected: false,
             currentUserImage: '',
             status: '',
             token: localStorage.getItem('token'),
             user: localStorage.getItem('userName'),
             isAuthenticated: false,
-            timeLeft: 0
+            timeLeft: 0,
+            StartTimeLeft: 0,
+            oppImage: '',
+            winner: '',
+            newHighscore: false,
+            currentUser: '',
+            result: 0,
+
         },
         mutations: {
             initializeStore(state) {
@@ -48,6 +58,9 @@ export default new Vuex.Store({
                 state.timeLeft = integer;
 
             },
+            setStartTimer: (state, integer) => {
+                state.StartTimeLeft = integer;
+            },
             setQuestionText: (state, value) => {
                 state.question.text = value;
             },
@@ -71,6 +84,30 @@ export default new Vuex.Store({
             },
             setUserImage: (state, value) => {
                 state.currentUserImage = value;
+            },
+            setUserScore: (state, value) => {
+                state.userScore = value;
+            },
+            setOpponentScore: (state, value) => {
+                state.oppScore = value;
+            },
+            setOpponentName: (state, value) => {
+                state.oppName = value;
+            },
+            setOpponentImage: (state, value) => {
+                state.oppImage = value;
+            },
+            setWinner: (state, value) => {
+                state.winner = value;
+            },
+            setHighscore: (state, bool) => {
+                state.newHighscore = bool;
+            },
+            setUserName: (state, value) => {
+                state.currentUser = value;
+            },
+            setResult: (state, value) => {
+                state.result = value;
             },
         },
         actions: {
@@ -111,6 +148,9 @@ export default new Vuex.Store({
             getTimer: state => {
                 return Number(state.timeLeft);
             },
+            getStartTimer: state => {
+                return Number(state.StartTimeLeft);
+            },
             getQuestionText: state => {
                 return String(state.question.text)
             },
@@ -131,7 +171,25 @@ export default new Vuex.Store({
             },
             getCorrectAnswer: state => {
                 return String(state.question.correctanswer)
-            }
+            },
+            getUserScore: state => {
+                return Number(state.userScore)
+            },
+            getOpponentScore: state => {
+                return Number(state.oppScore)
+            },
+            getOpponentName: state => {
+                return String(state.oppName)
+            },
+            getCurrentUser: state => {
+                return String(state.currentUser)
+            },
+            getWinner: state => {
+                return String(state.winner)
+            },
+            getResult: state => {
+                return Number(state.result)
+            },
         }
 
     }

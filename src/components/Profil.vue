@@ -10,9 +10,9 @@
 
         <div class="rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 bg-white">
 
-          <div class="flex justify-center -mt-8">
+          <div class="flex justify-center -mt-8 ">
             <img :src="this.imageRoot+this.userImage" alt="userimage"
-                 class="rounded-full border-solid border-white scale-55 pt-10">
+                 class="rounded-full border-solid border-white scale-55 pt-10 h-1/2">
           </div>
           <div class="text-center px-3 pb-6 pt-2">
             <h3 class="text-black text-sm bold font-sans text-2xl">{{ userName }}</h3>
@@ -34,7 +34,7 @@
 
 
     <div v-show="showStats">
-      <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 md:px-0 flex justify-center">
+      <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 flex justify-center">
         <main class="bg-white  p-8 md:p-12 my-10 rounded-lg shadow-2xl">
           <h1 class="text-3xl submit object-center">Last played games:</h1>
           <div class="border-2">
@@ -42,7 +42,8 @@
               <h2 class="text-xl font-sans"> {{ dates[index] }}</h2>
               <h2 class="text-xl font-bold"> You vs. {{ game.opponent.userName }}</h2>
 
-              <img v-bind:src="this.imageRoot+game.opponent.profileImage" alt="picture text" class="max-h-38">
+              <img v-bind:src="this.imageRoot+game.opponent.profileImage" alt="picture text"
+                   class=" rounded object-cover h-96 w-96">
               <h2 class="text-red-900">
                 Opponents Score: {{ game.opponentScore }}</h2>
 

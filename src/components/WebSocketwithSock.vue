@@ -5,7 +5,9 @@
   <!--        src="../assets/question1.jpg"-->
   <!--        alt="fragenbild"-->
   <!--    />-->
-
+  <!--Connected: {{$store.state.isConnected}}-->
+  <!--  Ready to play {{$store.state.isReady}} {{readyToPlay}}-->
+  <!--  OppFound: {{$store.state.oppfound}} {{oppfound}}-->
   <div class="w-full body-bg2 min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
     <div class="w-full sm:max-w-md p-5 mx-auto">
 
@@ -34,19 +36,19 @@
         </div>
       </div>
 
+
       <!--      Looking for other players-->
-      <div v-if="step === 1">
-        <div class="container">
+      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container">
 
-          <h2 class="mb-6 text-center text-5xl font-extrabold">{{ this.step2msg }}</h2>
-          <div class="between">
-            <button
-                class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-                @click="sendToken">Yes, please
-            </button>
+        <h2 class="mb-6 text-center text-5xl font-extrabold">{{ this.step2msg }}</h2>
+        <div class="between">
+          <button
+              class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+              @click="sendToken">Yes, please
+          </button>
 
 
-            <button
+          <button
                 class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
                 @click="disconnect"> No way
             </button>
@@ -58,20 +60,25 @@
                 <p class="w-1/3 text-center text-white">Please wait</p></div>
               <div v-show="oppfound">
                 <h2 class="text-center text-white text-xl font-semibold">Match found! Get ready!</h2>
-                <p class="w-1/3 text-center text-white">{{ starttimer }}</p>
+                <p class="w-1/3 text-center text-white">{{ this.$store.getters.getStartTimer }}</p>
               </div>
             </div>
 
           </div>
-        </div>
+
       </div>
     </div>
     <!--      Main game-->
-    <div v-if="$store.getters.getIsConnected">
+    <div v-if="$store.getters.getIsConnected && this.readyToPlay">
 
 
-      <div class="score text-xl text-gray-700 text-right pr-3.5">Your score: {{ score }}</div>
-      <div class="score text-xl text-gray-700 text-right pr-3.5">{{ oppname }}: {{ oppscore }}</div>
+      <div class="score text-xl text-gray-700 text-right pr-3.5">Your score: {{
+          this.$store.getters.getUserScore
+                                                                 }}
+      </div>
+      <div class="score text-xl text-gray-700 text-right pr-3.5">{{ this.$store.getters.getOpponentName }}:
+                                                                 {{ this.$store.getters.getOpponentScore }}
+      </div>
       <div class="flex items-center justify-center">
         <div class="bg-slate-800 flex flex-col items-center pb-3.5">
           <div class="italic">
@@ -85,28 +92,33 @@
         {{ this.$store.state.question.text }}
       </div>
 
+      <div id="questionsandanswers">
+
+        <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
+        <div
+            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+            v-on:click="sendAnswerText(this.$store.getters.getAnswer1)">A. {{ this.$store.getters.getAnswer1 }}
+        </div>
+        <div
+            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+            v-on:click="sendAnswerText(this.$store.getters.getAnswer2)">B. {{ this.$store.getters.getAnswer2 }}
+        </div>
+        <div
+            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+            v-on:click="sendAnswerText(this.$store.getters.getAnswer3)">C. {{ this.$store.getters.getAnswer3 }}
+        </div>
+        <div
+            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+            v-on:click="sendAnswerText(this.$store.getters.getAnswer4)">D. {{ this.$store.getters.getAnswer4 }}
+        </div>
+        <div class="center">
+          <button
+              class="text-right bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+              @click="checkWinner"> Leave game
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="time pb-3.5" id="clock">{{ timer }}</div>
-    <div
-        class="answer mb-6 p-3 text-center font-thin text-4xl w-1/2 h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-        v-on:click="sendAnswerText(this.$store.getters.getAnswer1)">A. {{ this.$store.getters.getAnswer1 }}
-    </div>
-    <div
-        class="answer mb-6 p-3 text-center font-thin text-4xl w-1/2 h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-        v-on:click="sendAnswerText(this.$store.getters.getAnswer2)">B. {{ this.$store.getters.getAnswer2 }}
-    </div>
-    <div
-        class="answer mb-6 p-3 text-center font-thin text-4xl w-1/2 h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-        v-on:click="sendAnswerText(this.$store.getters.getAnswer3)">C. {{ this.$store.getters.getAnswer3 }}
-    </div>
-    <div
-        class="answer mb-6 p-3 text-center font-thin text-4xl w-1/2 h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-        v-on:click="sendAnswerText(this.$store.getters.getAnswer4)">D. {{ this.$store.getters.getAnswer4 }}
-    </div>
-    <button
-        class="text-right bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-        @click="disconnect"> Leave game
-    </button>
   </div>
 
 </template>
@@ -158,6 +170,7 @@ export default {
       //   correctAnswer: null,
       // },
       step: 0,
+      readyToPlay: false,
       loading: false,
       step2msg: "Ready to look for another player?",
       received_messages: [],
@@ -170,12 +183,15 @@ export default {
       header: {token: localStorage.getItem('token')},
       connection: null,
       status: "Wird gesucht",
-      oppfound: true,
+      oppfound: false,
       connected: this.$store.state.isConnected,
       timer: this.$store.getters.getTimer,
       list2: [],
       messages: [],
       givenAnswer: "",
+      currentUser: this.$store.state.user,
+      resultMsg: null,
+      startTimer: 3,
     }
   },
 
@@ -231,18 +247,42 @@ export default {
           }
       );
     },
+    checkWinner() {
+      console.log("current User:" + this.currentUser)
+      console.log("winner" + this.$store.getters.getWinner)
+      console.log(this.$store.getters.getOpponentName)
+      if (this.$store.getters.getWinner === this.$store.getters.getOpponentName) {
+        this.resultMsg = "You lost";
+        this.$store.commit('setResult', 2);
+        this.goToResult();
+      } else if (this.$store.getters.getWinner === this.currentUser) {
+        this.resultMsg = "You have won";
+        this.$store.commit('setResult', 1);
+        this.goToResult();
+      } else {
+        this.resultMsg = "Draw";
+        this.$store.commit('setResult', 3);
+        this.goToResult();
+      }
+    },
+
     msgHandler(message) {
       const messageCommand = message.command;
       const messageType = message.headers.type;
-      // if (messageUtils.isKnowMessageType(message.data)) {
       if (messageCommand === MESSAGE) {
 
         const msg = JSON.parse(message.body);
         switch (messageType) {
           case START_TIMER_MESSAGE:
-            this.timer = msg.timeLeft
+
+
             // {"timeLeft":2,"type":"START_TIMER_MESSAGE"}
-            this.$store.commit('setTimer', msg.timeLeft);
+            this.$store.commit('setStartTimer', msg.timeLeft);
+            this.startTimer = msg.timeLeft;
+            if (this.startTimer === 0) {
+              this.oppfound = true;
+              this.readyToPlay = true;
+            }
             break;
           case QUESTION_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
@@ -254,6 +294,7 @@ export default {
           case GAME_MESSAGE:
             this.gamestart = true;
             this.loading = false;
+
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
             //     "answer4":"Marie Curie","correctAnswer":3,"user":{"userName":"Martine",
@@ -261,7 +302,11 @@ export default {
             //   "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             //   "userScore":0,"opponentScore":0,"type":"GAME_MESSAGE"}
             console.log("GAME_MESSAGE erhalten")
-
+            this.$store.commit('setUserName', msg.user.userName);
+            this.$store.commit('setOpponentImage', msg.opponent.profileImage);
+            this.$store.commit('setOpponentName', msg.opponent.userName);
+            this.$store.commit('setOpponentScore', msg.opponentScore);
+            this.$store.commit('setUserScore', msg.userScore);
             this.$store.commit('setQuestionText', msg.question);
             this.$store.commit('setCategory', msg.category);
             this.$store.commit('setAnswer1', msg.answer1);
@@ -289,9 +334,20 @@ export default {
             console.log("SCORE_TIMER_MESSAGE")
             break
           case RESULT_MESSAGE:
-            // Messagebody:{"isHighScore":false,"user":{"userName":"Martine","profileImage":"default10.png"}
-            // ,"opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
-            //  "userScore":0,"opponentScore":0,"type":"RESULT_MESSAGE"}
+            console.log("winner is" + msg.winner.userName);
+            console.log("highscore" + msg.isHighScore)
+            // Messagebody:{"isHighScore":false,"winner":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},
+            //   "user":{"userName":"Martine","profileImage":"default10.png"},
+            //   "opponent":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},"" +
+            //   "userScore":745,"opponentScore":919,"type":"RESULT_MESSAGE"}
+            try {
+              this.$store.commit('setWinner', msg.winner.userName);
+            } catch (error) {
+              this.$store.commit('setWinner', "none");
+            }
+            this.$store.commit('setHighscore', msg.isHighScore);
+            this.checkWinner();
+            this.goToResult();
             console.log("RESULT_MESSAGE erhalten")
             break
         }
@@ -356,6 +412,11 @@ export default {
       this.$store.commit('setQuestion', value);
       this.question.text = this.$store.getters.getQuestionText()
     },
+    goToResult() {
+      this.$router.push('/result');
+      this.disconnect();
+
+    }
   }
 }
 </script>
@@ -387,6 +448,9 @@ export default {
   font-family : "Oxygen", sans-serif;
   }
 
+.center {
+  border : none
+  }
 
 * {
   box-sizing : border-box;
@@ -428,7 +492,6 @@ body {
 
 .cta span:nth-child(2) {
   transition   : 0.5s;
-  margin-right : 0px;
   }
 
 .cta:hover span:nth-child(2) {

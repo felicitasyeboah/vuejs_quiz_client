@@ -1,6 +1,6 @@
 <template>
-  <button @click="resultau">step</button>
-  <div v-if="result === 1">
+
+  <div v-if="$store.state.result==1">
 
     <div id="bodywinner" class="wrapper p-40  d-flex flex-column justify-content-center w-100 h-100 ">
 
@@ -18,14 +18,17 @@
           class="bg-yellow-300 text-teal-800 text-xs px-2 inline-block rounded-full  uppercase font-semibold tracking-wide">
         Grats
       </span>
-              <div v-show="newhighscore" class="font-extrabold pl-6"><span
+              <div v-show="this.$store.state.newhighscore" class="font-extrabold pl-6"><span
                   class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-600 text-white rounded">New</span>HIGHSCORE:
+
                                                                                                                                                                   {{
-                  yourscore
+                  this.$store.getters.getUserScore
                                                                                                                                                                   }}
+
               </div>
 
-              <div v-show="!newhighscore" class="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider">
+              <div v-show="!this.$store.state.newhighscore"
+                   class="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider">
                 Another great victory
               </div>
             </div>
@@ -34,11 +37,11 @@
 
             <div class="mt-1">
               Your score:
-              <span class="text-gray-600 text-sm">  {{ yourscore }} </span>
+              <span class="text-gray-600 text-sm">  {{ this.$store.getters.getUserScore }}</span>
             </div>
             <div class="mt-1">
-              Opponents score:
-              <span class="text-gray-600 text-sm">  {{ oppscore }} </span>
+              {{ this.$store.getters.getOpponentName }}
+              <span class="text-gray-600 text-sm">  {{ this.$store.getters.getOpponentScore }} </span>
             </div>
             <div class="mt-4">
               <span class="text-teal-600 text-md font-semibold"> <span class="text-sm text-gray-600"><button
@@ -55,7 +58,7 @@
       </div>
     </div>
   </div>
-  <div v-if="result === 2">
+  <div v-if="$store.state.result==2">
     <div id="bodyloser" class="wrapper p-60 d-flex flex-column justify-content-center w-100 h-100 ">
 
       <div
@@ -81,11 +84,11 @@
 
             <div class="mt-1">
               Your score:
-              <span class="text-gray-600 text-sm">  {{ yourscore }} </span>
+              <span class="text-gray-600 text-sm">  {{ this.$store.getters.getUserScore }} </span>
             </div>
             <div class="mt-1">
-              Opponents score:
-              <span class="text-gray-600 text-sm">  {{ oppscore }} </span>
+              {{ this.$store.getters.getOpponent }} score:
+              <span class="text-gray-600 text-sm">  {{ this.$store.getters.getOpponentScore }} </span>
             </div>
             <div class="mt-4">
               <span class="text-teal-600 text-md font-semibold"> <span class="text-sm text-gray-600"><button
@@ -103,7 +106,7 @@
 
   </div>
 
-  <div v-if="result === 3">
+  <div v-if="$store.state.result==3">
     <div id="bodydraw" class="wrapper p-40  d-flex flex-column justify-content-center w-100 h-100 ">
 
       <div
@@ -128,11 +131,11 @@
 
             <div class="mt-1">
               Your score:
-              <span class="text-gray-600 text-sm">  {{ yourscore }} </span>
+              <span class="text-gray-600 text-sm">  {{ this.$store.getters.getUserScore }} </span>
             </div>
             <div class="mt-1">
-              Opponents score:
-              <span class="text-gray-600 text-sm">  {{ oppscore }} </span>
+              {{ this.$store.getters.getOpponentName }}:
+              <span class="text-gray-600 text-sm">  {{ this.$store.getters.getOpponentScore }} </span>
             </div>
             <div class="mt-4">
               <span class="text-teal-600 text-md font-semibold"> <span class="text-sm text-gray-600"><button
@@ -173,7 +176,13 @@ export default {
     resultau() {
       this.result = this.result + 1;
       console.log(this.result);
+    },
+    goToGame() {
+      this.$router.push('/game');
+
+
     }
+
   }
 }
 </script>
