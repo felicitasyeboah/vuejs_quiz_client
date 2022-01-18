@@ -9,7 +9,7 @@
   <!--  Ready to play {{$store.state.isReady}} {{readyToPlay}}-->
   <!--  OppFound: {{$store.state.oppfound}} {{oppfound}}-->
   <div class="w-full body-bg2 min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
-    <div class="w-full sm:max-w-md p-5 mx-auto">
+    <div class="w-full p-5 mx-auto">
       User: {{ this.$store.getters.getUserScore }}
       Opponent: {{ this.$store.getters.getOpponentScore }}
 
@@ -97,21 +97,29 @@
       <div id="questionsandanswers">
 
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
-        <div
-            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-            v-on:click="sendAnswerText(this.$store.getters.getAnswer1)">A. {{ this.$store.getters.getAnswer1 }}
+        <div id="answer1" :class="{ activ: isActive1 }"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+             v-on:click="sendAnswerText(this.$store.getters.getAnswer1),isActive1=true">A. {{
+            this.$store.getters.getAnswer1
+                                                                                        }}
         </div>
-        <div
-            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-            v-on:click="sendAnswerText(this.$store.getters.getAnswer2)">B. {{ this.$store.getters.getAnswer2 }}
+        <div id="answer2" :class="{ activ: isActive2 }"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+             v-on:click="sendAnswerText(this.$store.getters.getAnswer2),isActive2=true">B. {{
+            this.$store.getters.getAnswer2
+                                                                                        }}
         </div>
-        <div
-            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-            v-on:click="sendAnswerText(this.$store.getters.getAnswer3)">C. {{ this.$store.getters.getAnswer3 }}
+        <div id="answer3" :class="{ activ: isActive3 }"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+             v-on:click="sendAnswerText(this.$store.getters.getAnswer3),isActive3=true">C. {{
+            this.$store.getters.getAnswer3
+                                                                                        }}
         </div>
-        <div
-            class="answer mb-6 p-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-            v-on:click="sendAnswerText(this.$store.getters.getAnswer4)">D. {{ this.$store.getters.getAnswer4 }}
+        <div id="answer4" :class="{ activ: isActive4 }"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
+             v-on:click="sendAnswerText(this.$store.getters.getAnswer4),isActive4=true">D. {{
+            this.$store.getters.getAnswer4
+                                                                                        }}
         </div>
         <div class="center">
           <button
@@ -194,6 +202,10 @@ export default {
       currentUser: this.$store.state.user,
       resultMsg: null,
       startTimer: 3,
+      isActive1: false,
+      isActive2: false,
+      isActive3: false,
+      isActive4: false,
     }
   },
 
@@ -294,11 +306,12 @@ export default {
             console.log("timeleft:" + msg.timeLeft);
             this.$store.commit('setTimer', msg.timeLeft);
             this.setTimer(msg.timeLeft)
+
             break
           case GAME_MESSAGE:
             this.gamestart = true;
             this.loading = false;
-
+            this.resetSelectedAnswer();
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
             //     "answer4":"Marie Curie","correctAnswer":3,"user":{"userName":"Martine",
@@ -328,6 +341,7 @@ export default {
             // alert("Spiel zu ENDE")
             break
           case SCORE_MESSAGE:
+
             // {"user":{"userName":"Martine","profileImage":"default10.png"},
             // "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             // "userScore":0,"opponentScore":0,"type":"SCORE_MESSAGE"}
@@ -388,9 +402,7 @@ export default {
       };
       console.log(JSON.stringify(body))
       this.stompClient.send("/app/game", {}, JSON.stringify(body));
-
     },
-
     sendToken() {
       const body = {
         'token': localStorage.getItem('token')
@@ -421,6 +433,12 @@ export default {
     goToResult() {
       this.$router.push('/result');
       this.disconnect();
+    },
+    resetSelectedAnswer() {
+      this.isActive1 = false;
+      this.isActive2 = false;
+      this.isActive3 = false;
+      this.isActive4 = false;
 
     }
   }
@@ -580,4 +598,10 @@ path.two {
     }
   }
 
+.activ {
+  background : var(--yellow);
+  color      : #fff;
+  font-size  : 30px;
+  }
 </style>
+
