@@ -10,11 +10,13 @@
   <!--  OppFound: {{$store.state.oppfound}} {{oppfound}}-->
   <div class="w-full body-bg2 min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
     <div class="w-full sm:max-w-md p-5 mx-auto">
+      User: {{ this.$store.getters.getUserScore }}
+      Opponent: {{ this.$store.getters.getOpponentScore }}
 
       <!--        PlayButton-->
 
       <div v-if="!$store.getters.getIsConnected">
-        <h2 class="mb-6 text-center text-5xl font-extrabold">Welcome.</h2>
+        <h2 class="mb-6 text-center text-5xl font-extrabold pt-10">Welcome.</h2>
 
         <div class="wrapper" @click="connect">
           <a class="cta" href="#">
@@ -40,7 +42,7 @@
       <!--      Looking for other players-->
       <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container">
 
-        <h2 class="mb-6 text-center text-5xl font-extrabold">{{ this.step2msg }}</h2>
+        <h2 class="mb-6 text-center text-5xl font-extrabold pt-52">{{ this.step2msg }}</h2>
         <div class="between">
           <button
               class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
@@ -56,11 +58,11 @@
                  class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
               <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
               <div v-show="!oppfound">
-                <h2 class="text-center text-white text-xl font-semibold">Looking for another player..</h2>
-                <p class="w-1/3 text-center text-white">Please wait</p></div>
+                <h2 class="text-center text-white text-3xl font-semibold">Looking for another player..</h2>
+                <p class=" text-center text-white">Please wait</p></div>
               <div v-show="oppfound">
-                <h2 class="text-center text-white text-xl font-semibold">Match found! Get ready!</h2>
-                <p class="w-1/3 text-center text-white">{{ this.$store.getters.getStartTimer }}</p>
+                <h2 class="text-center text-white text-3xl font-semibold">Match found! Get ready!</h2>
+                <p class=" text-center text-white center text-3xl">{{ this.startTimer }}</p>
               </div>
             </div>
 
@@ -274,18 +276,20 @@ export default {
         const msg = JSON.parse(message.body);
         switch (messageType) {
           case START_TIMER_MESSAGE:
-
+            this.oppfound = true;
 
             // {"timeLeft":2,"type":"START_TIMER_MESSAGE"}
-            this.$store.commit('setStartTimer', msg.timeLeft);
+            // this.$store.commit('setStartTimer', msg.timeLeft);
             this.startTimer = msg.timeLeft;
-            if (this.startTimer === 0) {
-              this.oppfound = true;
-              this.readyToPlay = true;
-            }
+
+            // if (this.startTimer === 0) {
+            //   this.oppfound = true;
+            //   this.readyToPlay = true;
+            // }
             break;
           case QUESTION_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
+            this.readyToPlay = true
             console.log("QUESTION_TIMER_MESSAGE erhalten")
             console.log("timeleft:" + msg.timeLeft);
             this.$store.commit('setTimer', msg.timeLeft);
@@ -345,6 +349,8 @@ export default {
             } catch (error) {
               this.$store.commit('setWinner', "none");
             }
+            this.$store.commit('setOpponentScore', msg.opponentScore);
+            this.$store.commit('setUserScore', msg.userScore);
             this.$store.commit('setHighscore', msg.isHighScore);
             this.checkWinner();
             this.goToResult();

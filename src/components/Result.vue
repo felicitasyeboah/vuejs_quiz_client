@@ -40,7 +40,7 @@
               <span class="text-gray-600 text-sm">  {{ this.$store.getters.getUserScore }}</span>
             </div>
             <div class="mt-1">
-              {{ this.$store.getters.getOpponentName }}
+              {{ this.$store.getters.getOpponentName }}:
               <span class="text-gray-600 text-sm">  {{ this.$store.getters.getOpponentScore }} </span>
             </div>
             <div class="mt-4">
@@ -86,10 +86,9 @@
               Your score:
               <span class="text-gray-600 text-sm">  {{ this.$store.getters.getUserScore }} </span>
             </div>
-            <div class="mt-1">
-              {{ this.$store.getters.getOpponent }} score:
-              <span class="text-gray-600 text-sm">  {{ this.$store.getters.getOpponentScore }} </span>
-            </div>
+            {{ this.$store.getters.getOpponentName }}:
+            <span class="text-gray-600 text-sm">  {{ this.$store.getters.getOpponentScore }} </span>
+          
             <div class="mt-4">
               <span class="text-teal-600 text-md font-semibold"> <span class="text-sm text-gray-600"><button
                   class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
