@@ -88,7 +88,7 @@
             </div>
             {{ this.$store.getters.getOpponentName }}:
             <span class="text-gray-600 text-sm">  {{ this.$store.getters.getOpponentScore }} </span>
-          
+
             <div class="mt-4">
               <span class="text-teal-600 text-md font-semibold"> <span class="text-sm text-gray-600"><button
                   class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
@@ -172,13 +172,8 @@ export default {
     }
   },
   methods: {
-    resultau() {
-      this.result = this.result + 1;
-      console.log(this.result);
-    },
-    goToGame() {
-      this.$router.push('/game');
-
+    playagain() {
+      this.$router.push('Game')
 
     }
 
