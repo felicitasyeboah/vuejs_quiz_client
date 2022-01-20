@@ -12,6 +12,8 @@
     --yellow    : #f3a823;
     --green     : #B3C6B8;
     --orange    : #E66301;
+    --red       : #e53e3e;
+    --fairgreen : #38a169;
     }
 
 button {
@@ -312,3 +314,20 @@ li {
     }
 
 /*Game*/
+.activ {
+    background : var(--yellow);
+    color      : #fff;
+    font-size  : 30px;
+    }
+
+
+.correct {
+    background : var(--fairgreen);
+    color      : #fff;
+    font-size  : 30px;
+    }
+
+.wrong {
+    background : var(--red);
+    color      : #fff;
+    }

@@ -21,8 +21,7 @@
         <div class="wrapper" @click="connect">
           <a class="cta" href="#">
             <span>PLAY</span><span>
-      <svg width="66px" height="43px" viewBox="0 0 66 43" version="1.1" xmlns="http://www.w3.org/2000/svg"
-           xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg width="66px" height="43px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg">
         <g id="arrow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <path class="one"
                 d="M40.1543933,3.89485454 L43.9763149,0.139296592 C44.1708311,-0.0518420739 44.4826329,-0.0518571125 44.6771675,0.139262789 L65.6916134,20.7848311 C66.0855801,21.1718824 66.0911863,21.8050225 65.704135,22.1989893 C65.7000188,22.2031791 65.6958657,22.2073326 65.6916762,22.2114492 L44.677098,42.8607841 C44.4825957,43.0519059 44.1708242,43.0519358 43.9762853,42.8608513 L40.1545186,39.1069479 C39.9575152,38.9134427 39.9546793,38.5968729 40.1481845,38.3998695 C40.1502893,38.3977268 40.1524132,38.395603 40.1545562,38.3934985 L56.9937789,21.8567812 C57.1908028,21.6632968 57.193672,21.3467273 57.0001876,21.1497035 C56.9980647,21.1475418 56.9959223,21.1453995 56.9937605,21.1432767 L40.1545208,4.60825197 C39.9574869,4.41477773 39.9546013,4.09820839 40.1480756,3.90117456 C40.1501626,3.89904911 40.1522686,3.89694235 40.1543933,3.89485454 Z"
@@ -40,7 +39,7 @@
 
 
       <!--      Looking for other players-->
-      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container">
+      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl">
 
         <h2 class="mb-6 text-center text-5xl font-extrabold pt-52">{{ this.step2msg }}</h2>
         <div class="between">
@@ -51,22 +50,22 @@
 
 
           <button
-                class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-                @click="disconnect"> No way
-            </button>
-            <div v-show="loading"
-                 class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
-              <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-              <div v-show="!oppfound">
-                <h2 class="text-center text-white text-3xl font-semibold">Looking for another player..</h2>
-                <p class=" text-center text-white">Please wait</p></div>
-              <div v-show="oppfound">
-                <h2 class="text-center text-white text-3xl font-semibold">Match found! Get ready!</h2>
-                <p class=" text-center text-white center text-3xl">{{ this.startTimer }}</p>
-              </div>
+              class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+              @click="disconnect"> No way
+          </button>
+          <div v-show="loading"
+               class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+            <div v-show="!oppfound">
+              <h2 class="text-center text-white text-3xl font-semibold">Looking for another player..</h2>
+              <p class=" text-center text-white">Please wait</p></div>
+            <div v-show="oppfound">
+              <h2 class="text-center text-white text-3xl font-semibold">Match found! Get ready!</h2>
+              <p class=" text-center text-white center text-3xl">{{ this.startTimer }}</p>
             </div>
-
           </div>
+
+        </div>
 
       </div>
     </div>
@@ -97,29 +96,33 @@
       <div id="questionsandanswers">
 
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
-        <div id="answer1" :class="{ activ: isActive1 }"
-             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-             v-on:click="sendAnswerText(this.$store.getters.getAnswer1),isActive1=true">A. {{
+        <div id="answer1"
+             :class="{ activ : active_el == 1}, {correct: checkready &&  correctanswer==1}, {wrong: checkready && (active_el ==1 && correctanswer!=1)}"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
+             @click="activate(1), sendAnswerText(this.$store.getters.getAnswer1)"> A. {{
             this.$store.getters.getAnswer1
-                                                                                        }}
+                                                                                   }}
         </div>
-        <div id="answer2" :class="{ activ: isActive2 }"
-             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-             v-on:click="sendAnswerText(this.$store.getters.getAnswer2),isActive2=true">B. {{
+        <div id="answer2"
+             :class="{ activ : active_el == 2}, {correct: checkready &&  correctanswer==2}, {wrong: checkready && (active_el ==2 && correctanswer!=2)}"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
+             @click="activate(2), sendAnswerText(this.$store.getters.getAnswer2)"> B. {{
             this.$store.getters.getAnswer2
-                                                                                        }}
+                                                                                   }}
         </div>
-        <div id="answer3" :class="{ activ: isActive3 }"
-             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-             v-on:click="sendAnswerText(this.$store.getters.getAnswer3),isActive3=true">C. {{
+        <div id="answer3"
+             :class="{ activ : active_el == 3}, {correct: checkready &&  correctanswer==3}, {wrong: checkready && (active_el ==3 && correctanswer!=3)}"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
+             @click="activate(3), sendAnswerText(this.$store.getters.getAnswer3)"> C. {{
             this.$store.getters.getAnswer3
-                                                                                        }}
+                                                                                   }}
         </div>
-        <div id="answer4" :class="{ activ: isActive4 }"
-             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 select-all cursor-pointer"
-             v-on:click="sendAnswerText(this.$store.getters.getAnswer4),isActive4=true">D. {{
+        <div id="answer4"
+             :class="{ activ : active_el == 4}, {correct: checkready &&  correctanswer==4}, {wrong: checkready && (active_el ==4 && correctanswer!=4)}"
+             class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
+             @click="activate(4), sendAnswerText(this.$store.getters.getAnswer4)"> D. {{
             this.$store.getters.getAnswer4
-                                                                                        }}
+                                                                                   }}
         </div>
         <div class="center">
           <button
@@ -202,10 +205,9 @@ export default {
       currentUser: this.$store.state.user,
       resultMsg: null,
       startTimer: 3,
-      isActive1: false,
-      isActive2: false,
-      isActive3: false,
-      isActive4: false,
+      checkready: false,
+      active_el: 0,
+      correctanswer: 2,
     }
   },
 
@@ -235,6 +237,24 @@ export default {
 
 
   methods: {
+
+    checkAnswer() {
+      this.checkready = true;
+      // console.log("answer" +this.correctanswer)
+      // console.log("answer" +this.answer2)
+      // console.log("activel" +this.active_el)
+      // if (this.correctanswer===this.active_el){
+      //   const bg= "background"+this.active_el
+      //   this.bg= "#869c7f";
+      //   console.log(this.bg)
+      // }
+      // else {
+      //   const bg= "background"+this.active_el
+      //   this.bg= "#f87413";
+      // }},
+    },
+
+
     stepsau() {
       this.step = this.step + 1;
       console.log(this.step);
@@ -301,6 +321,7 @@ export default {
             break;
           case QUESTION_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
+            this.checkready = false;
             this.readyToPlay = true
             console.log("QUESTION_TIMER_MESSAGE erhalten")
             console.log("timeleft:" + msg.timeLeft);
@@ -311,6 +332,7 @@ export default {
           case GAME_MESSAGE:
             this.gamestart = true;
             this.loading = false;
+
             this.resetSelectedAnswer();
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
@@ -330,7 +352,8 @@ export default {
             this.$store.commit('setAnswer2', msg.answer2);
             this.$store.commit('setAnswer3', msg.answer3);
             this.$store.commit('setAnswer4', msg.answer4);
-            this.$store.commit('setCorrectAnswer', msg.correctAnswer);
+            // this.$store.commit('setCorrectAnswer', msg.correctAnswer);
+            this.correctanswer = msg.correctAnswer;
 
 
             //
@@ -341,7 +364,7 @@ export default {
             // alert("Spiel zu ENDE")
             break
           case SCORE_MESSAGE:
-
+            this.checkready = true;
             // {"user":{"userName":"Martine","profileImage":"default10.png"},
             // "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             // "userScore":0,"opponentScore":0,"type":"SCORE_MESSAGE"}
@@ -367,7 +390,10 @@ export default {
             this.$store.commit('setUserScore', msg.userScore);
             this.$store.commit('setHighscore', msg.isHighScore);
             this.checkWinner();
-            this.goToResult();
+
+            setTimeout(() => {
+              this.goToResult();
+            }, 8000);
             console.log("RESULT_MESSAGE erhalten")
             break
         }
@@ -392,6 +418,14 @@ export default {
       var currentID = clicked.id
       alert(currentID);
 
+    },
+
+    activate: function (el) {
+      if (this.active_el == 0) {
+        console.log("activeel:" + this.active_el);
+        this.active_el = el;
+      }
+      console.log("bereits gesetzt")
     },
     sendAnswerText(value) {
       this.givenAnswer = value;
@@ -431,15 +465,13 @@ export default {
       this.question.text = this.$store.getters.getQuestionText()
     },
     goToResult() {
+
       this.$router.push('/result');
       this.disconnect();
     },
     resetSelectedAnswer() {
-      this.isActive1 = false;
-      this.isActive2 = false;
-      this.isActive3 = false;
-      this.isActive4 = false;
-
+      this.checkready = false;
+      this.active_el = 0;
     }
   }
 }
@@ -515,7 +547,7 @@ body {
   }
 
 .cta span:nth-child(2) {
-  transition   : 0.5s;
+  transition : 0.5s;
   }
 
 .cta:hover span:nth-child(2) {
@@ -602,6 +634,18 @@ path.two {
   background : var(--yellow);
   color      : #fff;
   font-size  : 30px;
+  }
+
+
+.correct {
+  background : var(--fairgreen);
+  color      : #fff;
+  font-size  : 30px;
+  }
+
+.wrong {
+  background : var(--red);
+  color      : #fff;
   }
 </style>
 
