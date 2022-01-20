@@ -375,7 +375,7 @@ export default {
             console.log("SCORE_TIMER_MESSAGE")
             break
           case RESULT_MESSAGE:
-            console.log("winner is" + msg.winner.userName);
+            console.log("winner is" + this.$store.getters.getWinner);
             console.log("highscore" + msg.isHighScore)
             // Messagebody:{"isHighScore":false,"winner":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},
             //   "user":{"userName":"Martine","profileImage":"default10.png"},
@@ -383,8 +383,9 @@ export default {
             //   "userScore":745,"opponentScore":919,"type":"RESULT_MESSAGE"}
             try {
               this.$store.commit('setWinner', msg.winner.userName);
-            } catch (error) {
+            } catch (JSONException) {
               this.$store.commit('setWinner', "none");
+              console.log("no winner")
             }
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
