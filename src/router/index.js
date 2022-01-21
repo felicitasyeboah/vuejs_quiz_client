@@ -9,13 +9,19 @@ import Highscore from "@/views/Highscore";
 import Upload from "@/views/Upload";
 import RegisterUser from "@/components/RegisterUser";
 import GameResult from "@/views/GameResult";
+import Disconnect from "@/views/Disconnect";
 
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'Home',
         component: Home
+    },
+    {
+        path: '/disconnect',
+        name: 'Disconnected',
+        component: Disconnect
     },
     {
         path: '/register',

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full body-bg2 min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+  <div class="w-full body-bg2 min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6">
     <div class=" p-5 ">
       User: {{ this.$store.getters.getUserScore }}
       Opponent: {{ this.$store.getters.getOpponentScore }}
@@ -7,9 +7,10 @@
       <!--        PlayButton-->
 
       <div v-if="!$store.getters.getIsConnected">
-        <h2 class="mb-6 text-center text-5xl font-extrabold pt-10">Welcome.</h2>
+        <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 lg:mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
+            id="welcome">Welcome.</h2>
 
-        <div class="wrapper" @click="connect">
+        <div id="wrap" @click="connect">
           <a class="cta" href="#">
             <span>PLAY</span><span>
       <svg width="66px" height="43px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg">
@@ -28,17 +29,15 @@
         </div>
       </div>
 
-
       <!--      Looking for other players-->
-      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl flex-auto">
 
+      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl flex-auto">
         <h2 class="mb-6 text-center text-5xl font-extrabold pt-10">{{ this.step2msg }}</h2>
         <div class="between">
           <button
               class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
               @click="sendToken">Yes, please
           </button>
-
 
           <button
               class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
@@ -55,15 +54,13 @@
               <p class=" text-center text-white center text-3xl">{{ this.startTimer }}</p>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
+
     <!--      Main game-->
+
     <div v-if="$store.getters.getIsConnected && this.readyToPlay">
-
-
       <div class="score text-xl text-gray-700 text-right pr-3.5">Your score: {{
           this.$store.getters.getUserScore
                                                                  }}
@@ -78,14 +75,10 @@
           </div>
         </div>
       </div>
-      <!--<img src="../assets/question2.jpg" class="object-cover h-48 w-96">-->
-      <!--            <img src="../assets/logowbg.png" class="w-1/4"></div>-->
       <div id="question" class="mb-12 text-center text-5xl">
         {{ this.$store.state.question.text }}
       </div>
-
       <div id="questionsandanswers">
-
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
         <div id="answer1"
              :class="{ activ : active_el == 1}, {correct: checkready &&  correctanswer==1}, {wrong: checkready && (active_el ==1 && correctanswer!=1)}"
@@ -127,18 +120,13 @@
 
 </template>
 
-
 <script>
-
 import Stomp from "stompjs";
-
 import SockJS from 'sockjs-client';
 import store from "../vuex/store";
 
-
 import {
-  CONNECTED,
-  DISCONNECT,
+  DISCONNECT_MESSAGE,
   GAME_MESSAGE,
   MESSAGE,
   QUESTION_TIMER_MESSAGE,
@@ -150,10 +138,6 @@ import {
   WEBSOCKET_IP,
   WS_URL
 } from "@/assets/constants";
-
-
-// import {messageUtils} from "@/utils";
-
 
 export default {
   computed: {
@@ -190,61 +174,21 @@ export default {
       oppfound: false,
       connected: this.$store.state.isConnected,
       timer: this.$store.getters.getTimer,
-      list2: [],
-      messages: [],
       givenAnswer: "",
       currentUser: this.$store.state.user,
       resultMsg: null,
       startTimer: 3,
       checkready: false,
       active_el: 0,
-      correctanswer: 2,
+      correctanswer: 0,
     }
   },
-
-  // this.stompClient.onmessage = function (message) {
-  //   this.messageHandler(message);
-  //   afterOnMessage(message);
-  // };
-  /* eslint-disable */
-
-
-
-  created() {
-
-    // {"category":"Wissenschaft","question":"Wie viel Meter legt man zurück, während man im Auto bei 120 km/h für drei " +
-    // "Sekunden auf sein Handy schaut?","answer1":"knapp 30 Meter","answer2":"ungefähr 15 Meter",
-    //     "answer3":"etwa 50 Meter","answer4":"rund 100 Meter","correctAnswer":4,
-    //     "user":{"userName":"Martine","profileImage":"default10.png"},
-    //   "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},"userScore":0,
-    //     "opponentScore":0,"type":"GAME_MESSAGE"}
-
-
-    // onmessage = function (message) {
-    //   this.stompClient.onmessage = this.handleMessage
-
-
-  },
-
 
   methods: {
 
     checkAnswer() {
       this.checkready = true;
-      // console.log("answer" +this.correctanswer)
-      // console.log("answer" +this.answer2)
-      // console.log("activel" +this.active_el)
-      // if (this.correctanswer===this.active_el){
-      //   const bg= "background"+this.active_el
-      //   this.bg= "#869c7f";
-      //   console.log(this.bg)
-      // }
-      // else {
-      //   const bg= "background"+this.active_el
-      //   this.bg= "#f87413";
-      // }},
     },
-
 
     stepsau() {
       this.step = this.step + 1;
@@ -257,10 +201,8 @@ export default {
       this.stompClient.connect(
           {},
           frame => {
-
             console.log(frame);
             this.$store.commit('setSocketIsConnected', true);
-
             console.log("store" + this.$store.getters.getIsConnected)
             console.log("Status:" + this.connected)
             this.updateSocketStatus(true)
@@ -295,16 +237,13 @@ export default {
       const messageCommand = message.command;
       const messageType = message.headers.type;
       if (messageCommand === MESSAGE) {
-
         const msg = JSON.parse(message.body);
         switch (messageType) {
           case START_TIMER_MESSAGE:
             this.oppfound = true;
-
             // {"timeLeft":2,"type":"START_TIMER_MESSAGE"}
             // this.$store.commit('setStartTimer', msg.timeLeft);
             this.startTimer = msg.timeLeft;
-
             // if (this.startTimer === 0) {
             //   this.oppfound = true;
             //   this.readyToPlay = true;
@@ -318,12 +257,14 @@ export default {
             console.log("timeleft:" + msg.timeLeft);
             this.$store.commit('setTimer', msg.timeLeft);
             this.setTimer(msg.timeLeft)
-
+            break
+          case DISCONNECT_MESSAGE:
+            alert("Error - There was a technical issue");
+            this.goToErrorPage()
             break
           case GAME_MESSAGE:
             this.gamestart = true;
             this.loading = false;
-
             this.resetSelectedAnswer();
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
@@ -345,14 +286,6 @@ export default {
             this.$store.commit('setAnswer4', msg.answer4);
             // this.$store.commit('setCorrectAnswer', msg.correctAnswer);
             this.correctanswer = msg.correctAnswer;
-
-
-            //
-            // this.question.category = msg.category;
-            // this.question.answer1= msg.answer1;
-            // console.log("HERE "+msg.category, msg.answer1, this.question.text, this.$store.getQuestion)
-
-            // alert("Spiel zu ENDE")
             break
           case SCORE_MESSAGE:
             this.checkready = true;
@@ -382,34 +315,14 @@ export default {
             this.$store.commit('setUserScore', msg.userScore);
             this.$store.commit('setHighscore', msg.isHighScore);
             this.checkWinner();
-
             setTimeout(() => {
               this.goToResult();
             }, 8000);
             console.log("RESULT_MESSAGE erhalten")
             break
         }
-        if (messageCommand === CONNECTED) {
-          console.log("CONNECTED NOW")
-
-        }
-        if (messageCommand === DISCONNECT) {
-          console.log("DISCONNECTED NOW")
-
-        }
-        if (message.body) {
-          console.log("Messagebody:" + message.body)
-          console.log("Time left:" + message.body.timeLeft)
-        }
         console.log(message.command)//MESSAGE
       }
-    },
-    sendAnswer: function (event) {
-
-      var clicked = event.target;
-      var currentID = clicked.id
-      alert(currentID);
-
     },
 
     activate: function (el) {
@@ -419,6 +332,7 @@ export default {
       }
       console.log("bereits gesetzt")
     },
+
     sendAnswerText(value) {
       this.givenAnswer = value;
       console.log(this.givenAnswer)
@@ -429,16 +343,17 @@ export default {
       console.log(JSON.stringify(body))
       this.stompClient.send("/app/game", {}, JSON.stringify(body));
     },
+
     sendToken() {
       const body = {
         'token': localStorage.getItem('token')
       };
       alert("send token")
       this.stompClient.send("/app/game", {}, JSON.stringify(body));
-
       this.loading = true;
       console.log(body)
     },
+
     disconnect() {
       this.stompClient.disconnect();
       this.updateSocketStatus(false)
@@ -452,15 +367,22 @@ export default {
       this.$store.commit('setTimer', value);
       this.timer = this.$store.getters.getTimer
     },
+
     setQuestionText: function (value) {
       this.$store.commit('setQuestion', value);
       this.question.text = this.$store.getters.getQuestionText()
     },
-    goToResult() {
 
+    goToResult() {
       this.$router.push('/result');
       this.disconnect();
     },
+
+    goToErrorPage() {
+      this.disconnect();
+      this.$router.push('/disconnect');
+    },
+
     resetSelectedAnswer() {
       this.checkready = false;
       this.active_el = 0;
@@ -469,64 +391,15 @@ export default {
 }
 </script>
 <style scoped>
-
-#clock {
-  font-family : "Orbitron", sans-serif;
-
-
-  color       : black;
-  text-shadow : 0 0 20px rgba(3, 201, 169, 1), 0 0 20px rgba(22, 160, 133, 1);
+span {
+  transform : skewX(15deg)
   }
 
-.time {
-  letter-spacing : 0.05em;
-  font-size      : 80px;
-
-  }
-
-.score {
-  font-family : "Orbitron", sans-serif;
-  }
-
-.answer {
-  font-family : "Oswald", sans-serif;
-  }
-
-#question {
-  font-family : "Oxygen", sans-serif;
-  }
-
-.center {
-  border : none
-  }
-
-* {
-  box-sizing : border-box;
-  }
-
-body {
-  height          : 100vh;
-  display         : flex;
-  justify-content : center;
-  align-items     : center;
-  }
-
-.wrapper {
-  display         : flex;
-  justify-content : center;
-  }
-
-.cta {
-  display         : flex;
-  padding         : 10px 45px;
-  text-decoration : none;
-  font-family     : "Poppins", sans-serif;
-  font-size       : 40px;
-  color           : white;
-  background      : darkgreen;
-  transition      : 1s;
-  box-shadow      : 6px 6px 0 black;
-  transform       : skewX(-15deg);
+span:nth-child(2) {
+  width       : 20px;
+  margin-left : 30px;
+  position    : relative;
+  top         : 12%;
   }
 
 .cta:focus {
@@ -545,81 +418,6 @@ body {
 .cta:hover span:nth-child(2) {
   transition   : 0.5s;
   margin-right : 45px;
-  }
-
-span {
-  transform : skewX(15deg)
-  }
-
-span:nth-child(2) {
-  width       : 20px;
-  margin-left : 30px;
-  position    : relative;
-  top         : 12%;
-  }
-
-/**************SVG****************/
-
-path.one {
-  transition : 0.4s;
-  transform  : translateX(-60%);
-  }
-
-path.two {
-  transition : 0.5s;
-  transform  : translateX(-30%);
-  }
-
-.cta:hover path.three {
-  animation : color_anim 1s infinite 0.2s;
-  }
-
-.cta:hover path.one {
-  transform : translateX(0%);
-  animation : color_anim 1s infinite 0.6s;
-  }
-
-.cta:hover path.two {
-  transform : translateX(0%);
-  animation : color_anim 1s infinite 0.4s;
-  }
-
-/* SVG animations */
-
-@keyframes color_anim {
-  0% {
-    fill : white;
-    }
-  50% {
-    fill : #FBC638;
-    }
-  100% {
-    fill : white;
-    }
-  }
-
-.loader {
-  border-top-color  : #3498db;
-  -webkit-animation : spinner 1.5s linear infinite;
-  animation         : spinner 1.5s linear infinite;
-  }
-
-@-webkit-keyframes spinner {
-  0% {
-    -webkit-transform : rotate(0deg);
-    }
-  100% {
-    -webkit-transform : rotate(360deg);
-    }
-  }
-
-@keyframes spinner {
-  0% {
-    transform : rotate(0deg);
-    }
-  100% {
-    transform : rotate(360deg);
-    }
   }
 
 </style>

@@ -58,6 +58,8 @@
       </div>
     </div>
   </div>
+
+
   <div v-if="$store.state.result==2">
     <div id="bodyloser" class="wrapper p-60 d-flex flex-column justify-content-center w-100 h-100 ">
 
@@ -104,7 +106,6 @@
 
 
   </div>
-
   <div v-if="$store.state.result==3">
     <div id="bodydraw" class="wrapper p-40  d-flex flex-column justify-content-center w-100 h-100 ">
 

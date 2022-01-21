@@ -5,6 +5,7 @@
       Please login.
     </span></div>
   <div v-else>
+
     <div v-show="!showStats">
       <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 md:px-0 flex justify-center">
 
@@ -26,40 +27,41 @@
                 Show Stats
               </button>
             </h2>
-            <p></p>
+
           </div>
         </div>
       </div>
     </div>
 
+    <transition name="fade">
+      <div v-show="showStats">
+        <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 flex justify-center">
+          <main class="bg-white  p-8 md:p-12 my-10 rounded-lg shadow-2xl">
+            <h1 class="text-3xl submit object-center">Last played games:</h1>
+            <div class="border-2">
+              <div class="pb-3.5 p-4 rounded submit content-center mb-20" v-for="(game, index) in playedgamelist">
+                <h2 class="text-xl font-sans"> {{ dates[index] }}</h2>
+                <h2 class="text-xl font-bold"> You vs. {{ game.opponent.userName }}</h2>
 
-    <div v-show="showStats">
-      <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 flex justify-center">
-        <main class="bg-white  p-8 md:p-12 my-10 rounded-lg shadow-2xl">
-          <h1 class="text-3xl submit object-center">Last played games:</h1>
-          <div class="border-2">
-            <div class="pb-3.5 p-4 rounded submit content-center mb-20" v-for="(game, index) in playedgamelist">
-              <h2 class="text-xl font-sans"> {{ dates[index] }}</h2>
-              <h2 class="text-xl font-bold"> You vs. {{ game.opponent.userName }}</h2>
-
-              <img v-bind:src="this.imageRoot+game.opponent.profileImage" alt="picture text"
+                <img v-bind:src="this.imageRoot+game.opponent.profileImage" alt="picture text"
                    class=" rounded object-cover h-96 w-96">
               <h2 class="text-red-900">
                 Opponents Score: {{ game.opponentScore }}</h2>
 
               Your score: {{ game.userScore }}
             </div>
-          </div>
+            </div>
 
-          <div class="flex justify-end">
-            <button @click="changeStats"
-                    class="max-w-md bg-green-700 hover:bg-green-900 text-white shadow-lg font-bold py-2 px-4 pb-2.5">
-              Back to profile
-            </button>
-          </div>
-        </main>
+            <div class="flex justify-end">
+              <button @click="changeStats"
+                      class="max-w-md bg-green-700 hover:bg-green-900 text-white shadow-lg font-bold py-2 px-4 pb-2.5">
+                Back to profile
+              </button>
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 
 

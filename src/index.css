@@ -313,7 +313,48 @@ li {
         }
     }
 
+/*DisconnectError*/
+
+#ohno {
+    font-family : "Oswald", sans-serif;
+    color       : white;
+    text-shadow : 0 0 20px rgba(3, 201, 169, 1), 0 0 20px rgba(22, 160, 133, 1);
+    }
+
+
 /*Game*/
+
+#clock {
+    font-family : "Orbitron", sans-serif;
+
+
+    color       : black;
+    text-shadow : 0 0 20px rgba(3, 201, 169, 1), 0 0 20px rgba(22, 160, 133, 1);
+    }
+
+.time {
+    letter-spacing : 0.05em;
+    font-size      : 80px;
+
+    }
+
+.score {
+    font-family : "Orbitron", sans-serif;
+    }
+
+.answer {
+    font-family : "Oswald", sans-serif;
+    }
+
+#question {
+    font-family : "Oxygen", sans-serif;
+    }
+
+.center {
+    border : none
+    }
+
+
 .activ {
     background : var(--yellow);
     color      : #fff;
@@ -330,4 +371,111 @@ li {
 .wrong {
     background : var(--red);
     color      : #fff;
+    }
+
+.wrapper {
+    display         : flex;
+    justify-content : center;
+    }
+
+#wrap {
+    display         : flex;
+    justify-content : center;
+    margin-top      : 3em;
+    }
+
+.cta {
+    display         : flex;
+    padding         : 10px 45px;
+    text-decoration : none;
+    font-family     : "Poppins", sans-serif;
+    font-size       : 40px;
+    color           : white;
+    background      : darkgreen;
+    transition      : 1s;
+    box-shadow      : 6px 6px 0 black;
+    transform       : skewX(-15deg);
+    }
+
+
+/**************SVG****************/
+
+path.one {
+    transition : 0.4s;
+    transform  : translateX(-60%);
+    }
+
+path.two {
+    transition : 0.5s;
+    transform  : translateX(-30%);
+    }
+
+.cta:hover path.three {
+    animation : color_anim 1s infinite 0.2s;
+    }
+
+.cta:hover path.one {
+    transform : translateX(0%);
+    animation : color_anim 1s infinite 0.6s;
+    }
+
+.cta:hover path.two {
+    transform : translateX(0%);
+    animation : color_anim 1s infinite 0.4s;
+    }
+
+/* SVG animations */
+
+@keyframes color_anim {
+    0% {
+        fill : white;
+        }
+    50% {
+        fill : #FBC638;
+        }
+    100% {
+        fill : white;
+        }
+    }
+
+.loader {
+    border-top-color  : #3498db;
+    -webkit-animation : spinner 1.5s linear infinite;
+    animation         : spinner 1.5s linear infinite;
+    }
+
+@-webkit-keyframes spinner {
+    0% {
+        -webkit-transform : rotate(0deg);
+        }
+    100% {
+        -webkit-transform : rotate(360deg);
+        }
+    }
+
+@keyframes spinner {
+    0% {
+        transform : rotate(0deg);
+        }
+    100% {
+        transform : rotate(360deg);
+        }
+    }
+
+
+/*Transitions*/
+.fade-enter-active,
+.fade-leave-active {
+    transition : opacity 0.5s ease;
+    }
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity : 0;
+    }
+
+#welcome {
+    font-size  : 8em;
+    margin-top : 1em;
+
     }
