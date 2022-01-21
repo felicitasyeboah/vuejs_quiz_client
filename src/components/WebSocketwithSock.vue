@@ -48,7 +48,12 @@
             <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
             <div v-show="!oppfound">
               <h2 class="text-center text-white text-3xl font-semibold">Looking for another player..</h2>
-              <p class=" text-center text-white">Please wait</p></div>
+              <p class=" text-center text-white">Please wait</p>
+              <button
+                  class="opacity-1 bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
+                  @click="disconnect">Abort
+              </button>
+            </div>
             <div v-show="oppfound">
               <h2 class="text-center text-white text-3xl font-semibold">Match found! Get ready!</h2>
               <p class=" text-center text-white center text-3xl">{{ this.startTimer }}</p>
