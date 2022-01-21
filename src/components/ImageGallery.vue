@@ -1,8 +1,8 @@
 <template>
   <div class="container flex flex-wrap mx-auto">
     <template v-if="!isLoading">
-      <div class="w-full p-2 rounded lg:w-1/3" v-for="image in upimages" :key="image.url">
-        <img v-bind:src="image.url" alt="picture text" class="max-h-28">
+      <div class="w-2/3 p-4 rounded xl:w-1/4 lg:w-1/3 md:w-1/3 sm:w-1/2" v-for="image in upimages" :key="image.url">
+        <img v-bind:src="image.url" alt="picture text">
       </div>
     </template>
     <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
