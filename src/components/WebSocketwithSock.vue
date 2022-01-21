@@ -1,15 +1,6 @@
 <template>
-  <!--  <a class="block overflow-hidden shadow-xl rounded-3xl" href="">-->
-  <!--    <img-->
-  <!--        class="object-cover w-full h-64"-->
-  <!--        src="../assets/question1.jpg"-->
-  <!--        alt="fragenbild"-->
-  <!--    />-->
-  <!--Connected: {{$store.state.isConnected}}-->
-  <!--  Ready to play {{$store.state.isReady}} {{readyToPlay}}-->
-  <!--  OppFound: {{$store.state.oppfound}} {{oppfound}}-->
   <div class="w-full body-bg2 min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
-    <div class="w-full p-5 mx-auto">
+    <div class=" p-5 ">
       User: {{ this.$store.getters.getUserScore }}
       Opponent: {{ this.$store.getters.getOpponentScore }}
 
@@ -39,9 +30,9 @@
 
 
       <!--      Looking for other players-->
-      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl">
+      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl flex-auto">
 
-        <h2 class="mb-6 text-center text-5xl font-extrabold pt-52">{{ this.step2msg }}</h2>
+        <h2 class="mb-6 text-center text-5xl font-extrabold pt-10">{{ this.step2msg }}</h2>
         <div class="between">
           <button
               class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
@@ -99,28 +90,28 @@
         <div id="answer1"
              :class="{ activ : active_el == 1}, {correct: checkready &&  correctanswer==1}, {wrong: checkready && (active_el ==1 && correctanswer!=1)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(1), sendAnswerText(this.$store.getters.getAnswer1)"> A. {{
+             @click="activate(1); sendAnswerText(this.$store.getters.getAnswer1)"> A. {{
             this.$store.getters.getAnswer1
                                                                                    }}
         </div>
         <div id="answer2"
              :class="{ activ : active_el == 2}, {correct: checkready &&  correctanswer==2}, {wrong: checkready && (active_el ==2 && correctanswer!=2)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(2), sendAnswerText(this.$store.getters.getAnswer2)"> B. {{
+             @click="activate(2); sendAnswerText(this.$store.getters.getAnswer2)"> B. {{
             this.$store.getters.getAnswer2
                                                                                    }}
         </div>
         <div id="answer3"
              :class="{ activ : active_el == 3}, {correct: checkready &&  correctanswer==3}, {wrong: checkready && (active_el ==3 && correctanswer!=3)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(3), sendAnswerText(this.$store.getters.getAnswer3)"> C. {{
+             @click="activate(3); sendAnswerText(this.$store.getters.getAnswer3)"> C. {{
             this.$store.getters.getAnswer3
                                                                                    }}
         </div>
         <div id="answer4"
              :class="{ activ : active_el == 4}, {correct: checkready &&  correctanswer==4}, {wrong: checkready && (active_el ==4 && correctanswer!=4)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(4), sendAnswerText(this.$store.getters.getAnswer4)"> D. {{
+             @click="activate(4); sendAnswerText(this.$store.getters.getAnswer4)"> D. {{
             this.$store.getters.getAnswer4
                                                                                    }}
         </div>
@@ -631,22 +622,5 @@ path.two {
     }
   }
 
-.activ {
-  background : var(--yellow);
-  color      : #fff;
-  font-size  : 30px;
-  }
-
-
-.correct {
-  background : var(--fairgreen);
-  color      : #fff;
-  font-size  : 30px;
-  }
-
-.wrong {
-  background : var(--red);
-  color      : #fff;
-  }
 </style>
 
