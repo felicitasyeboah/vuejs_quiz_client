@@ -7,6 +7,7 @@
   <div v-else>
 
     <div v-show="!showStats">
+
       <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 md:px-0 flex justify-center">
 
         <div class="rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 bg-white">
@@ -33,10 +34,13 @@
       </div>
     </div>
 
-    <transition name="fade">
+
       <div v-show="showStats">
         <div class="body-bg2  pt-12 md:pt-20 pb-6 px-2 flex justify-center">
           <main class="bg-white  p-8 md:p-12 my-10 rounded-lg shadow-2xl">
+            Average Score: {{ averageScore }}
+            Lost Games: {{ lostGames }}/20
+            Games won: {{ wonGames }}/20
             <h1 class="text-3xl submit object-center">Last played games:</h1>
             <div class="border-2">
               <div class="pb-3.5 p-4 rounded submit content-center mb-20" v-for="(game, index) in playedgamelist">
@@ -48,20 +52,21 @@
               <h2 class="text-red-900">
                 Opponents Score: {{ game.opponentScore }}</h2>
 
-              Your score: {{ game.userScore }}
-            </div>
-            </div>
+                Your score: {{ game.userScore }}
+              </div>
 
-            <div class="flex justify-end">
-              <button @click="changeStats"
-                      class="max-w-md bg-green-700 hover:bg-green-900 text-white shadow-lg font-bold py-2 px-4 pb-2.5">
-                Back to profile
-              </button>
+
+              <div class="flex justify-end">
+                <button @click="changeStats"
+                        class="max-w-md bg-green-700 hover:bg-green-900 text-white shadow-lg font-bold py-2 px-4 pb-2.5">
+                  Back to profile
+                </button>
+              </div>
             </div>
           </main>
         </div>
       </div>
-    </transition>
+
   </div>
 
 
@@ -91,6 +96,9 @@ export default {
       playedgamelist: [],
       imageRoot: IMAGE_ROOT,
       dates: [],
+      averageScore: 0,
+      lostGames: 0,
+      wonGames: 0,
 
     }
   },
@@ -98,7 +106,7 @@ export default {
     //Gets the current User-Picture
     this.userName = localStorage.getItem('userName')
     axios.get('http://localhost:8080/user').then(resp => {
-      //console.log(resp.data)
+      console.log(resp.data)
       this.$store.commit('setUserImage', resp.data.profileImage);
       this.userImage = resp.data.profileImage
     }).catch(e => {
@@ -108,14 +116,19 @@ export default {
 
 //Get played-games data for second page
     axios.get('http://localhost:8080/playedGames').then(resp => {
-      console.log((resp.data))
-      for (var i = 0; i < resp.data.length; i++) {
+      console.log(resp.data)
+      this.wonGames = resp.data.wonGames;
+      this.lostGames = resp.data.lostGames;
+      this.averageScore = resp.data.averageScore;
+      console.log()
+
+      for (var i = 0; i < resp.data.playedGames.length; i++) {
 
         //push the values into separate arrays
-        this.dates.push(this.formatDate(resp.data[i].timeStamp));
+        this.dates.push(this.formatDate(resp.data.playedGames[i].timeStamp));
       }
-
-      this.playedgamelist = resp.data;
+      console.log(this.dates)
+      this.playedgamelist = resp.data.playedGames;
       // const obj =;
     }).catch(e => {
       console.log('Error', e);
