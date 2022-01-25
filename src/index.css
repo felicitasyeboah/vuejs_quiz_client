@@ -323,6 +323,10 @@ li {
 
 
 /*Game*/
+.score {
+    font-family : "Orbitron", sans-serif;
+    }
+
 
 #clock {
     font-family : "Orbitron", sans-serif;
@@ -360,7 +364,6 @@ li {
     color      : #fff;
     font-size  : 30px;
     }
-
 
 .correct {
     background : var(--fairgreen);
@@ -477,5 +480,25 @@ path.two {
 #welcome {
     font-size  : 8em;
     margin-top : 1em;
+
+    }
+
+/*Highscore*/
+
+.firstrank {
+    color     : black;
+
+    font-size : 30px;
+    }
+
+.otherranks {
+    color     : darkgray;
+    font-size : 26px;
+    }
+
+/*Error messages*/
+.error-message {
+    font-size        : 3em;
+    background-color : red;
 
     }

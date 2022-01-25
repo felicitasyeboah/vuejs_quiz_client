@@ -1,39 +1,71 @@
 <template>
-  <!--  https://tailwind-elements.com/docs/standard/components/charts/ nochmal anschauen-->
-  <div class="body-bg2 min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0">
-    <Header />
 
-    <template v-if="!isLoading">
-      <main class="bg-white max-w-4xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
-        <h2 class="border-dashed font-serif text-3xl submit">Highscore</h2>
-        <div class="submit object-center">
-          <img v-bind:src=images[0] alt="userimage" class="rounded max-h-20 rounded-full bg-yellow-200 text-red-50 m-3"
-               id="number1">{{ usernames[0] }}
-          <div class="nav border-2" id="table">
-            <li>
-              <div class="m-10 font-mono text-xl" v-for="entry in places" :key="entry">{{ entry }}</div>
-            </li>
-            <li>
-              <div class="m-10 font-mono text-xl" v-for="entry in usernames" :key="entry">{{ entry }}</div>
-            </li>
-            <li>
-              <div class="m-10 font-mono text-xl font-extrabold" v-for="entry in scores" :key="entry">{{ entry }}</div>
-            </li>
-            <li>
-              <div class="m-10 font-mono text-xl" v-for="entry in times" :key="entry">{{ entry }}</div>
-            </li>
-            <!--      Userbilder passen von der Größe her nicht-->
-            <!--      <li>-->
-            <!--        <div class="mb-10" v-for="entry in images" :key="entry"><img v-bind:src="entry" alt="picture"-->
-            <!--                                                                     class="max-h-10 rounded"></div>-->
-            <!--      </li>-->
+  <div class="body-bg2 min-h-screen  pt-12 md:pt-20 pb-6 px-2 md:px-0">
+    <Header />
+    <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
+      <div class="alert text-3xl" role="alert" v-show="!isLoading">
+        Loading data, please wait..
+      </div>
+      <div class="alert error-message text-white" v-show="showError">
+        {{ errorMessage }}
+      </div>
+    </div>
+
+
+    <div class="container  flex justify-center mx-auto pt-5" v-show="isLoading&&!showError">
+      <div class="flex flex-col">
+        <div class=" w-full">
+          <div class="border-b border-gray-200 bg-gray-50 hover:bg-green-600 shadow">
+            <table class="divide-y divide-gray-300 ">
+              <div class="bg-gray-300 m-1 shadow-2xl hover:bg-gray-200">
+                <h1 class="text-center text-3xl font-thin uppercase">
+                  <svg class="h-20 w-20 mx-auto" width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                       stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" />
+                    <line x1="8" y1="21" x2="16" y2="21" />
+                    <line x1="12" y1="17" x2="12" y2="21" />
+                    <line x1="7" y1="4" x2="17" y2="4" />
+                    <path d="M17 4v8a5 5 0 0 1 -10 0v-8" />
+                    <circle cx="5" cy="9" r="2" />
+                    <circle cx="19" cy="9" r="2" />
+                  </svg>
+                  Highscores:
+                </h1>
+                <tbody class="bg-white divide-y divide-gray-300" v-for="(highscore, index) in highscorelist">
+                <tr class="whitespace-nowrap">
+                  <td class="px-6 py-4 text-xl font-bold text-gray-500">
+                    {{ ranks[index] }}
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="text-xl uppercase text-gray-900">
+                      {{ this.highscorelist[index].user.userName }}
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class=" text-black font-mono font-bold score hover:text-3xl"
+                         :class="index > 0 ? 'otherranks' : 'firstrank'">{{ this.highscorelist[index].userScore }}
+                    </div>
+                  </td>
+                  <td class="px-6 py-4  italic text-gray-500">
+                    {{ (this.formatDate(this.highscorelist[index].timeStamp)) }}
+                  </td>
+
+                  <td class="px-6 py-4">
+                    <div class="px-4 py-1 rounded-full"><img
+                        v-bind:src="this.imageRoot+highscorelist[index].user.profileImage"
+                        class="object-cover w-32 h-32 rounded-full mx-auto"
+
+                        alt="Avatar"
+                    /></div>
+                  </td>
+
+                </tr>
+
+                </tbody>
+              </div>
+            </table>
           </div>
         </div>
-      </main>
-    </template>
-    <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
-      <div class="alert text-3xl" role="alert" v-show="isLoading">
-        Please login.
       </div>
     </div>
   </div>
@@ -43,6 +75,7 @@
 import axios from "axios";
 import Header from "@/components/Header";
 import {IMAGE_ROOT} from "@/assets/constants";
+import moment from "moment";
 
 
 export default {
@@ -56,36 +89,45 @@ export default {
       images: [],
       scores: [],
       times: [],
-      places: ["1.", "2.", "3.", "4.", "5."],
-      isLoading: true,
+      ranks: ["1.", "2.", "3.", "4.", "5."],
+      isLoading: false,
+      showError: false,
+      errorMessage: "Oh no.. something didnt work",
+      highscorelist: [],
+      dates: [],
+      imageRoot: IMAGE_ROOT,
     }
   },
   // Gets highscores for the table
   mounted() {
     axios.get('http://localhost:8080/highscore').then(resp => {
       console.log(resp)
-      this.isLoading = false
-
-      // Geht bestimmt alles besser und viel eleganter, weiß nur (bisher) nicht wie
-      for (var i = 0; i < resp.data.length; i++) {
-
-        //push the values into separate arrays
-        this.usernames.push(resp.data[i].user.userName);
-        this.images.push(IMAGE_ROOT + resp.data[i].user.profileImage);
-        this.scores.push(resp.data[i].userScore);
-
-        // Format date to day.month.year
-        var dateObj = new Date(resp.data[i].timeStamp);
-        var month = dateObj.getUTCMonth() + 1;
-        var day = dateObj.getUTCDate();
-        var year = dateObj.getUTCFullYear();
-        var finaleDate = day + "." + month + "." + year
-        this.times.push(finaleDate)
+      this.isLoading = true;
+      this.showError = false;
+      this.highscorelist = resp.data
+      console.log(this.highscore)
+    }).catch((error) => {
+      if (error.response) {
+        // client received an error response (5xx, 4xx)
+        console.log(error.response.data);
+        this.showError = true
+        this.errorMessage = error
+      } else if (error.request) {
+        // client never received a response, or request never left
+        console.log(error.request)
+        this.showError = true
+      } else {
+        // anything else
+        this.showError = true
       }
-    }).catch(e => {
-      console.log('Error', e);
-    });
+    })
   },
-
+  methods: {
+    formatDate(input) {
+      moment.locale('en')
+      return moment(input).fromNow();
+      // moment(input).format('LLL');
+    }
+  }
 }
 </script>
