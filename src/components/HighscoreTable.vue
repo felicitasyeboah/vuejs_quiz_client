@@ -1,8 +1,7 @@
 <template>
 
-  <div class="body-bg2 min-h-screen  pt-12 md:pt-20 pb-6 px-2 md:px-0">
-    <Header />
-    <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
+
+<div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
       <div class="alert text-3xl" role="alert" v-show="isLoading">
         Loading data, please wait..
       </div>
@@ -64,7 +63,7 @@
         </div>
       </div>
     </div>
-  </div>
+
 </template>
 
 <script>

@@ -1,11 +1,8 @@
 <template>
   <div class="w-full body-bg2 min-h-screen bg-gray-50 flex flex-col sm:justify-center items-center pt-6">
     <div class=" p-5 ">
-      User: {{ this.$store.getters.getUserScore }}
-      Opponent: {{ this.$store.getters.getOpponentScore }}
 
       <!--        PlayButton-->
-
       <div v-if="!$store.getters.getIsConnected">
         <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 lg:mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
             id="welcome">Welcome.</h2>
@@ -66,48 +63,59 @@
     <!--      Main game-->
 
     <div v-if="$store.getters.getIsConnected && this.readyToPlay">
-      <div class="score text-xl text-gray-700 text-right pr-3.5">Your score: {{
-          this.$store.getters.getUserScore
-                                                                 }}
+
+      <div class="score text-xl  flex pb-5 justify-end items-end">
+        <div class="text-gray-700">Your score: {{
+            this.$store.getters.getUserScore
+                                   }}
+          <img :src="imageRoot+userImage" alt="userimage" class="mx-auto w-32 h-32 rounded-full">
+
+        </div>
+        <div class="font-sans text-3xl p-3 m-5">vs.</div>
+        <div class="text-gray-700"> {{ this.$store.getters.getOpponentName }}:
+                                    {{ this.$store.getters.getOpponentScore }}
+          <img :src="imageRoot+opponentImage" alt="oppimage" class=" mx-auto w-32 h-32 rounded-full">
+        </div>
       </div>
-      <div class="score text-xl text-gray-700 text-right pr-3.5">{{ this.$store.getters.getOpponentName }}:
-                                                                 {{ this.$store.getters.getOpponentScore }}
-      </div>
+
+
       <div class="flex items-center justify-center">
-        <div class="bg-slate-800 flex flex-col items-center pb-3.5">
+        <div class="bg-slate-800 flex flex-col items-center pb-3.5 m-2">
           <div class="italic">
             {{ this.$store.state.question.category }}
           </div>
         </div>
       </div>
-      <div id="question" class="mb-12 text-center text-5xl">
+
+
+      <div id="question" class="mb-12 text-left text-5xl">
         {{ this.$store.state.question.text }}
       </div>
       <div id="questionsandanswers">
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
         <div id="answer1"
-             :class="{ activ : activeElement == 1}, {correct: readyToCheck &&  correctAnswer==1}, {wrong: readyToCheck && (activeElement ==1 && correctAnswer!=1)}"
+             :class="{ activ : activeElement === 1}, {correct: this.readyToCheck &&  correctAnswer===1}, {wrong: readyToCheck && (activeElement ===1 && correctAnswer!==1)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
              @click="activateResponse(1); sendAnswerText(this.$store.getters.getAnswer1)"> A. {{
             this.$store.getters.getAnswer1
                                                                                            }}
         </div>
         <div id="answer2"
-             :class="{ activ : activeElement == 2}, {correct: readyToCheck &&  correctAnswer==2}, {wrong: readyToCheck && (activeElement ==2 && correctAnswer!=2)}"
+             :class="{ activ : activeElement === 2}, {correct: readyToCheck &&  correctAnswer===2}, {wrong: readyToCheck && (activeElement ===2 && correctAnswer!==2)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
              @click="activateResponse(2); sendAnswerText(this.$store.getters.getAnswer2)"> B. {{
             this.$store.getters.getAnswer2
                                                                                            }}
         </div>
         <div id="answer3"
-             :class="{ activ : activeElement == 3}, {correct: readyToCheck &&  correctAnswer==3}, {wrong: readyToCheck && (activeElement ==3 && correctAnswer!=3)}"
+             :class="{ activ : activeElement === 3}, {correct: readyToCheck &&  correctAnswer===3}, {wrong: readyToCheck && (activeElement ===3 && correctAnswer!==3)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
              @click="activateResponse(3); sendAnswerText(this.$store.getters.getAnswer3)"> C. {{
             this.$store.getters.getAnswer3
                                                                                            }}
         </div>
         <div id="answer4"
-             :class="{ activ : activeElement == 4}, {correct: readyToCheck &&  correctAnswer==4}, {wrong: readyToCheck && (activeElement ==4 && correctAnswer!=4)}"
+             :class="{ activ : this.activeElement === 4}, {correct: this.readyToCheck &&  this.correctAnswer===4}, {wrong: readyToCheck && (activeElement ===4 && correctAnswer!==4)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
              @click="activateResponse(4); sendAnswerText(this.$store.getters.getAnswer4)"> D. {{
             this.$store.getters.getAnswer4
@@ -130,9 +138,11 @@ import Stomp from "stompjs";
 import SockJS from 'sockjs-client';
 import store from "../vuex/store";
 
+
 import {
   DISCONNECT_MESSAGE,
   GAME_MESSAGE,
+  IMAGE_ROOT,
   MESSAGE,
   QUESTION_TIMER_MESSAGE,
   RESULT_MESSAGE,
@@ -172,8 +182,6 @@ export default {
       ws_ip: WS_URL + STOMP_ENDPOINT,
       msg: "token:" + this.token,
       stompClient: null,
-
-
       status: "Wird gesucht",
       opponentFound: false,
       connected: this.$store.state.isConnected,
@@ -187,6 +195,9 @@ export default {
       correctAnswer: 0,
       errorText: "",
       showError: false,
+      opponentImage: "default3.png",
+      userImage: "default4.png",
+      imageRoot: IMAGE_ROOT,
     }
   },
 
@@ -283,7 +294,10 @@ export default {
             //   "userScore":0,"opponentScore":0,"type":"GAME_MESSAGE"}
             console.log("GAME_MESSAGE erhalten")
             this.$store.commit('setUserName', msg.user.userName);
-            this.$store.commit('setOpponentImage', msg.opponent.profileImage);
+            this.opponentImage = msg.opponent.profileImage;
+            //this.$store.commit('setOpponentImage', msg.opponent.profileImage);
+            this.userImage = msg.user.profileImage;
+
             this.$store.commit('setOpponentName', msg.opponent.userName);
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
