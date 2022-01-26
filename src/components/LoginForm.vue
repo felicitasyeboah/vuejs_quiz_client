@@ -1,6 +1,4 @@
 <template>
-  <body class="body-bg2 min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
-  <Header></Header>
   <main class="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
     <div class="alert text-3xl" role="alert" v-show="waitingForAnswer">
       Waiting for an answer.. please wait
@@ -25,10 +23,6 @@
         </button>
       </div>
     </form>
-    <div v-show="isLoggedIn" class="alert alert-success" role="alert">
-      <h1 class="text-2xl">Login Successful.</h1>
-    </div>
-
     <div v-show="!isLoggedIn">
       <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
         <p class="text-black">Don't have an account?
@@ -38,41 +32,46 @@
         </p>
       </div>
     </div>
+
+
+    <div v-show="isLoggedIn" class="alert alert-success" role="alert">
+      <h1 class="font-sans text-3xl">Welcome {{ userNameStorage }}</h1>
+      <h1 class="text-2xl">Login Successful.</h1>
+    </div>
+
+
   </main>
-  </body>
+
 </template>
 
 <script>
 
 import axios from 'axios';
 import {LOGIN_URL} from '@/assets/constants';
-import Header from "@/components/Header";
+
 
 export default {
-  components: {Header},
   data() {
     return {
       userName: '',
-      user: this.$store.user,
       password: '',
       token: null,
-      logSuccess: false,
+      loginSuccess: false,
       isLoggedIn: this.$store.isLoggedIn,
       isAuthenticated: this.$store.state.isAuthenticated,
       errorMessage: 'Something didn\'t work quite right',
       showError: false,
       waitingForAnswer: false,
+      userNameStorage: localStorage.getItem('userName'),
     }
   },
   watch() {
-    this.logSuccess = this.isLoggedIn;
+    this.loginSuccess = this.isLoggedIn;
   },
 
-
   methods: {
-    // Sends data with axios, saves token and username in localstorage
+    // Sends data to server and waits for an answer
     login() {
-      console.log(this.userName, this.password, LOGIN_URL)
       this.waitingForAnswer = true;
       let postData = {
         userName: this.userName,
@@ -86,17 +85,21 @@ export default {
       };
       axios.post(LOGIN_URL, postData, axiosConfiguration)
           .then((response) => {
-            console.log("RESPONSE RECEIVED: ", response);
-            const obj = JSON.parse(response.config.data);
+            // Save received JWT Token and the entered Username to LocalStorage
             localStorage.setItem('token', response.data.token)
-            localStorage.setItem('userName', obj.userName)
+            localStorage.setItem('userName', this.userName)
             this.waitingForAnswer = false;
             location.reload();
-
           }).catch((error) => {
         this.waitingForAnswer = false;
         this.showError = true;
-        this.errorMessage = error;
+        const code = error.response.status;
+        // Wrong password
+        if (code === 401) {
+          this.errorMessage = "Error: No valid authentication credentials. Wrong password or username?"
+        } else {
+          this.errorMessage = error;
+        }
       })
     }
   }

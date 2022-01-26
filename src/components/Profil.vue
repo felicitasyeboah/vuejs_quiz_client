@@ -21,12 +21,16 @@
           <h3 class="text-black text-sm bold font-sans text-2xl">{{ userName }}</h3>
           <p class="mt-2 font-sans font-light text-black bg:bg-green-600"> Zu allem bereit, zu nichts zu
                                                                            gebrauchen..</p>
-          <p class="italic underline mt-2 p-5 text-gray-700" @click="changePage">Show played games</p>
+          <p class="italic underline mt-2 p-5 text-gray-700" @click="changePage" v-show="existingRecords">Show played
+                                                                                                          games</p>
         </div>
       </div>
-
+      <div class="alert error-message text-white" v-show="!existingRecords">
+        {{ errorMessage }}
+      </div>
       <!--LineChart-->
-      <div class="container flex bg-white flex-wrap  mx-auto md:max-w  justify-center rounded card max-w-lg p-5 m-3">
+      <div class="container flex bg-white flex-wrap  mx-auto md:max-w  justify-center rounded card max-w-lg p-5 m-3"
+           v-show="existingRecords">
         <h1 class="text-3xl submit object-center pb-5">Last 5 games:</h1>
         <line-chart class="bg-white" empty="No data" loading="Loading..." id="lastgames-chart"
                     :data="{5:[userScores[0]],4:[userScores[1]],3:[userScores[2]],2:[userScores[3]], 1:[userScores[4]]  }"></line-chart>
@@ -34,7 +38,8 @@
       </div>
 
       <!--Pie-Chart-->
-      <div class="container flex bg-white flex-wrap  mx-auto md:max-w  justify-center rounded card max-w-lg p-5 m-3">
+      <div class="container flex bg-white flex-wrap  mx-auto md:max-w  justify-center rounded card max-w-lg p-5 m-3"
+           v-show="existingRecords">
         <h1 class="text-3xl submit object-center pt-20">{{ userName }} stats:</h1>
         <pie-chart empty="No data" loading="Loading..."
                    :data="[['Won', wonGames],['Lost', lostGames], ['Draw', drawGames]]"></pie-chart>
@@ -42,7 +47,7 @@
         <div class="text-xl p-6 font-mono">Lost: {{ lostGames }}/20</div>
         <div class="text-xl p-6 font-mono">Won: {{ wonGames }}/20</div>
         <div class="text-xl p-6 font-mono ">Draw: {{ drawGames }}/20</div>
-        <h2>
+        <h2 v-show="existingRecords">
           <button @click="changePage"
                   class="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full mb-4 ">
             Game history
@@ -103,7 +108,8 @@ export default {
       drawGames: 0,
       userScores: [],
       showError: false,
-      errorMessage: "Something didnt work.."
+      errorMessage: "Something didnt work..",
+      existingRecords: true,
     }
   },
   mounted() {
@@ -133,8 +139,14 @@ export default {
       }
       this.playedGamesList = response.data.playedGames;
     }).catch((error) => {
-      this.showError = true
-      this.errorMessage = error
+      this.existingRecords = false;
+      const code = error.response.status;
+      if (code === 400) {
+        this.errorMessage = "No records found"
+      } else {
+        this.showError = true;
+        this.errorMessage = error;
+      }
     })
   },
 
