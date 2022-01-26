@@ -109,10 +109,10 @@ export default {
   mounted() {
     //Gets the current User-Picture
     this.userName = localStorage.getItem('userName')
-    axios.get('http://localhost:8080/user').then(resp => {
+    axios.get('http://localhost:8080/user').then(response => {
       this.isLoading = false;
-      this.$store.commit('setUserImage', resp.data.profileImage);
-      this.userImage = resp.data.profileImage
+      this.$store.commit('setUserImage', response.data.profileImage);
+      this.userImage = response.data.profileImage
     }).catch((error) => {
       this.isLoading = false;
       this.showError = true;
@@ -120,18 +120,18 @@ export default {
     })
 
 //Get played-games data for second page
-    axios.get('http://localhost:8080/playedGames').then(resp => {
-      console.log(resp.data)
-      this.wonGames = resp.data.wonGames;
-      this.lostGames = resp.data.lostGames;
-      this.averageScore = resp.data.averageScore;
-      this.drawGames = resp.data.drawGames;
+    axios.get('http://localhost:8080/playedGames').then(response => {
+      console.log(response.data)
+      this.wonGames = response.data.wonGames;
+      this.lostGames = response.data.lostGames;
+      this.averageScore = response.data.averageScore;
+      this.drawGames = response.data.drawGames;
       this.showError = false;
-      for (let i = 0; i < resp.data.playedGames.length; i++) {
+      for (let i = 0; i < response.data.playedGames.length; i++) {
         //push the last 5 values into a separate array - to use them for the line chart
-        this.userScores.push(resp.data.playedGames[i].userScore);
+        this.userScores.push(response.data.playedGames[i].userScore);
       }
-      this.playedGamesList = resp.data.playedGames;
+      this.playedGamesList = response.data.playedGames;
     }).catch((error) => {
       this.showError = true
       this.errorMessage = error

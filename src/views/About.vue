@@ -1,5 +1,5 @@
 <template>
-
+<Header />
   <Testimonials></Testimonials>
 
 </template>
@@ -7,15 +7,11 @@
 
 
 import Testimonials from "@/components/Testimonials";
+import Header from "@/components/Header";
 
 
 export default {
-  components: {Testimonials},
-  data() {
-    return {
-      showTestimonals: false,
-
-    }
-  }
+  components: {Header, Testimonials},
 }
+
 </script>

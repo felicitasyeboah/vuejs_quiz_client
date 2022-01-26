@@ -2,8 +2,11 @@
   <body class="body-bg2 min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
   <Header></Header>
   <main class="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
-    <div v-show="showError" class="alert alert-danger" role="alert">
-      <h1 class="text-2xl text-red-500">{{ errorMessage }}</h1>
+    <div class="alert text-3xl" role="alert" v-show="waitingForAnswer">
+      Waiting for an answer.. please wait
+    </div>
+    <div class="alert error-message text-white" v-show="showError&&!waitingForAnswer">
+      {{ errorMessage }}
     </div>
 
     <form @submit.prevent="login" v-show="!isLoggedIn">
@@ -58,6 +61,7 @@ export default {
       isAuthenticated: this.$store.state.isAuthenticated,
       errorMessage: 'Something didn\'t work quite right',
       showError: false,
+      waitingForAnswer: false,
     }
   },
   watch() {
@@ -69,31 +73,32 @@ export default {
     // Sends data with axios, saves token and username in localstorage
     login() {
       console.log(this.userName, this.password, LOGIN_URL)
+      this.waitingForAnswer = true;
       let postData = {
         userName: this.userName,
         password: this.password
       };
-      let axiosConfig = {
+      let axiosConfiguration = {
         headers: {
           'Content-Type': 'application/json',
           "Access-Control-Allow-Origin": "*",
         }
       };
-      axios.post(LOGIN_URL, postData, axiosConfig)
-          .then((res) => {
-            console.log("RESPONSE RECEIVED: ", res);
-            const obj = JSON.parse(res.config.data);
-            localStorage.setItem('token', res.data.token)
+      axios.post(LOGIN_URL, postData, axiosConfiguration)
+          .then((response) => {
+            console.log("RESPONSE RECEIVED: ", response);
+            const obj = JSON.parse(response.config.data);
+            localStorage.setItem('token', response.data.token)
             localStorage.setItem('userName', obj.userName)
+            this.waitingForAnswer = false;
             location.reload();
-          })
-          .catch((err) => {
-            console.log("AXIOS ERROR: ", err);
-            this.errorMessage = err.message;
-            this.showError = true;
-          })
-    },
 
+          }).catch((error) => {
+        this.waitingForAnswer = false;
+        this.showError = true;
+        this.errorMessage = error;
+      })
+    }
   }
 }
 </script>

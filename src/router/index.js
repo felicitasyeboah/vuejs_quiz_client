@@ -7,26 +7,26 @@ import NotFound from "@/views/NotFound";
 import Login from "@/views/Login";
 import Highscore from "@/views/Highscore";
 import Upload from "@/views/Upload";
-import RegisterUser from "@/components/RegisterUser";
 import GameResult from "@/views/GameResult";
 import Disconnect from "@/views/Disconnect";
+import Registration from "@/views/Registration";
 
 
 const routes = [
     {
-        path: '/home',
+        path: '/',
         name: 'Home',
         component: Home
     },
     {
-        path: '/disconnectFromSocket',
+        path: '/disconnect',
         name: 'Disconnected',
         component: Disconnect
     },
     {
         path: '/register',
         name: 'Registration',
-        component: RegisterUser
+        component: Registration
     },
     {
         path: '/login',
@@ -63,6 +63,7 @@ const routes = [
         name: 'GameResult',
         component: GameResult
     },
+
     {
         path: '/:catchAll(.*)',
         name: 'NotFound',
