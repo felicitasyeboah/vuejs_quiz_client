@@ -2,8 +2,8 @@
   <body class="body-bg2 min-h-screen pt-12 md:pt-20 pb-6 px-2 md:px-0" style="font-family:'Lato',sans-serif;">
   <Header></Header>
   <main class="bg-white max-w-2xl mx-auto p-8 md:p-12 my-10 rounded-lg shadow-2xl">
-    <div v-show="errortext" class="alert alert-danger" role="alert">
-      <h1 class="text-2xl text-red-500">{{ errortext }}</h1>
+    <div v-show="showError" class="alert alert-danger" role="alert">
+      <h1 class="text-2xl text-red-500">{{ errorMessage }}</h1>
     </div>
 
     <form @submit.prevent="login" v-show="!isLoggedIn">
@@ -25,11 +25,7 @@
     <div v-show="isLoggedIn" class="alert alert-success" role="alert">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
-    <button @click="getUser">Get User</button>
-    <button @click="getToken">Get Token</button>
-    <button @click="getName">Get Name</button>
-    <button @click="logout">Delete Token</button>
-    <button @click="name">Give Name</button>
+
     <div v-show="!isLoggedIn">
       <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
         <p class="text-black">Don't have an account?
@@ -60,19 +56,20 @@ export default {
       logSuccess: false,
       isLoggedIn: this.$store.isLoggedIn,
       isAuthenticated: this.$store.state.isAuthenticated,
-      errortext: '',
+      errorMessage: 'Something didn\'t work quite right',
+      showError: false,
     }
   },
   watch() {
     this.logSuccess = this.isLoggedIn;
   },
 
-  // TODO: Methode in store auslagern
+
   methods: {
     // Sends data with axios, saves token and username in localstorage
     login() {
       console.log(this.userName, this.password, LOGIN_URL)
-      var postData = {
+      let postData = {
         userName: this.userName,
         password: this.password
       };
@@ -92,19 +89,11 @@ export default {
           })
           .catch((err) => {
             console.log("AXIOS ERROR: ", err);
-            this.errortext = err.message;
+            this.errorMessage = err.message;
+            this.showError = true;
           })
     },
-    getToken() {
-      console.log(localStorage.getItem('token'));
-    },
-    getName() {
-      console.log(localStorage.getItem('userName'));
-    },
-    logout() {
-      this.$store.dispatch('logout')
-      this.$router.push('/login')
-    }
+
   }
 }
 </script>

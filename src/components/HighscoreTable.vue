@@ -3,7 +3,7 @@
   <div class="body-bg2 min-h-screen  pt-12 md:pt-20 pb-6 px-2 md:px-0">
     <Header />
     <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
-      <div class="alert text-3xl" role="alert" v-show="!isLoading">
+      <div class="alert text-3xl" role="alert" v-show="isLoading">
         Loading data, please wait..
       </div>
       <div class="alert error-message text-white" v-show="showError">
@@ -11,8 +11,7 @@
       </div>
     </div>
 
-
-    <div class="container  flex justify-center mx-auto pt-5" v-show="isLoading&&!showError">
+    <div class="container  flex justify-center mx-auto pt-5" v-show="!isLoading&&!showError">
       <div class="flex flex-col">
         <div class=" w-full">
           <div class="border-b border-gray-200 bg-gray-50 hover:bg-green-600 shadow">
@@ -31,36 +30,33 @@
                   </svg>
                   Highscores:
                 </h1>
-                <tbody class="bg-white divide-y divide-gray-300" v-for="(highscore, index) in highscorelist">
+                <tbody class="bg-white divide-y divide-gray-300" v-for="(highscore, index) in highscoreList">
                 <tr class="whitespace-nowrap">
                   <td class="px-6 py-4 text-xl font-bold text-gray-500">
                     {{ ranks[index] }}
                   </td>
                   <td class="px-6 py-4">
                     <div class="text-xl uppercase text-gray-900">
-                      {{ this.highscorelist[index].user.userName }}
+                      {{ this.highscoreList[index].user.userName }}
                     </div>
                   </td>
                   <td class="px-6 py-4">
                     <div class=" text-black font-mono font-bold score hover:text-3xl"
-                         :class="index > 0 ? 'otherranks' : 'firstrank'">{{ this.highscorelist[index].userScore }}
+                         :class="index > 0 ? 'otherranks' : 'firstrank'">{{ this.highscoreList[index].userScore }}
                     </div>
                   </td>
                   <td class="px-6 py-4  italic text-gray-500">
-                    {{ (this.formatDate(this.highscorelist[index].timeStamp)) }}
+                    {{ (this.formatDate(this.highscoreList[index].timeStamp)) }}
                   </td>
 
                   <td class="px-6 py-4">
                     <div class="px-4 py-1 rounded-full"><img
-                        v-bind:src="this.imageRoot+highscorelist[index].user.profileImage"
+                        v-bind:src="this.imageRoot+highscoreList[index].user.profileImage"
                         class="object-cover w-32 h-32 rounded-full mx-auto"
-
                         alt="Avatar"
                     /></div>
                   </td>
-
                 </tr>
-
                 </tbody>
               </div>
             </table>
@@ -82,51 +78,43 @@ export default {
   components: {Header},
   data() {
     return {
-      highscore: [],
       data: [],
-      results: [],
-      usernames: [],
-      images: [],
-      scores: [],
-      times: [],
       ranks: ["1.", "2.", "3.", "4.", "5."],
-      isLoading: false,
+      isLoading: true,
       showError: false,
       errorMessage: "Oh no.. something didnt work",
-      highscorelist: [],
-      dates: [],
+      highscoreList: [],
       imageRoot: IMAGE_ROOT,
     }
   },
   // Gets highscores for the table
   mounted() {
-    axios.get('http://localhost:8080/highscore').then(resp => {
-      console.log(resp)
-      this.isLoading = true;
+    axios.get('http://localhost:8080/highscore').then(response => {
+      console.log(response)
+      this.isLoading = false;
       this.showError = false;
-      this.highscorelist = resp.data
-      console.log(this.highscore)
+      this.highscoreList = response.data
     }).catch((error) => {
+      this.showError = true
+      this.isLoading = false
       if (error.response) {
         // client received an error response (5xx, 4xx)
-        console.log(error.response.data);
-        this.showError = true
         this.errorMessage = error
       } else if (error.request) {
         // client never received a response, or request never left
         console.log(error.request)
-        this.showError = true
+        this.errorMessage = error
       } else {
         // anything else
-        this.showError = true
+        this.errorMessage = "Unknown error"
       }
     })
   },
   methods: {
+    // Formats from timestamp to "days ago.."
     formatDate(input) {
       moment.locale('en')
       return moment(input).fromNow();
-      // moment(input).format('LLL');
     }
   }
 }

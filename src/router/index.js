@@ -19,7 +19,7 @@ const routes = [
         component: Home
     },
     {
-        path: '/disconnect',
+        path: '/disconnectFromSocket',
         name: 'Disconnected',
         component: Disconnect
     },

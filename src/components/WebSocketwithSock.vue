@@ -10,7 +10,7 @@
         <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 lg:mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
             id="welcome">Welcome.</h2>
 
-        <div id="wrap" @click="connect">
+        <div id="wrap" @click="connectToWebsocket">
           <a class="cta" href="#">
             <span>PLAY</span><span>
       <svg width="66px" height="43px" viewBox="0 0 66 43" xmlns="http://www.w3.org/2000/svg">
@@ -41,20 +41,20 @@
 
           <button
               class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-              @click="disconnect"> No way
+              @click="disconnectFromSocket"> No way
           </button>
           <div v-show="loading"
                class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen z-50 overflow-hidden bg-gray-700 opacity-75 flex flex-col items-center justify-center">
             <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
-            <div v-show="!oppfound">
+            <div v-show="!opponentFound">
               <h2 class="text-center text-white text-3xl font-semibold">Looking for another player..</h2>
               <p class=" text-center text-white">Please wait</p>
               <button
                   class="opacity-1 bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-                  @click="disconnect">Abort
+                  @click="disconnectFromSocket">Abort
               </button>
             </div>
-            <div v-show="oppfound">
+            <div v-show="opponentFound">
               <h2 class="text-center text-white text-3xl font-semibold">Match found! Get ready!</h2>
               <p class=" text-center text-white center text-3xl">{{ this.startTimer }}</p>
             </div>
@@ -86,32 +86,32 @@
       <div id="questionsandanswers">
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
         <div id="answer1"
-             :class="{ activ : active_el == 1}, {correct: checkready &&  correctanswer==1}, {wrong: checkready && (active_el ==1 && correctanswer!=1)}"
+             :class="{ activ : activeElement == 1}, {correct: readyToCheck &&  correctAnswer==1}, {wrong: readyToCheck && (activeElement ==1 && correctAnswer!=1)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(1); sendAnswerText(this.$store.getters.getAnswer1)"> A. {{
+             @click="activateResponse(1); sendAnswerText(this.$store.getters.getAnswer1)"> A. {{
             this.$store.getters.getAnswer1
-                                                                                   }}
+                                                                                           }}
         </div>
         <div id="answer2"
-             :class="{ activ : active_el == 2}, {correct: checkready &&  correctanswer==2}, {wrong: checkready && (active_el ==2 && correctanswer!=2)}"
+             :class="{ activ : activeElement == 2}, {correct: readyToCheck &&  correctAnswer==2}, {wrong: readyToCheck && (activeElement ==2 && correctAnswer!=2)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(2); sendAnswerText(this.$store.getters.getAnswer2)"> B. {{
+             @click="activateResponse(2); sendAnswerText(this.$store.getters.getAnswer2)"> B. {{
             this.$store.getters.getAnswer2
-                                                                                   }}
+                                                                                           }}
         </div>
         <div id="answer3"
-             :class="{ activ : active_el == 3}, {correct: checkready &&  correctanswer==3}, {wrong: checkready && (active_el ==3 && correctanswer!=3)}"
+             :class="{ activ : activeElement == 3}, {correct: readyToCheck &&  correctAnswer==3}, {wrong: readyToCheck && (activeElement ==3 && correctAnswer!=3)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(3); sendAnswerText(this.$store.getters.getAnswer3)"> C. {{
+             @click="activateResponse(3); sendAnswerText(this.$store.getters.getAnswer3)"> C. {{
             this.$store.getters.getAnswer3
-                                                                                   }}
+                                                                                           }}
         </div>
         <div id="answer4"
-             :class="{ activ : active_el == 4}, {correct: checkready &&  correctanswer==4}, {wrong: checkready && (active_el ==4 && correctanswer!=4)}"
+             :class="{ activ : activeElement == 4}, {correct: readyToCheck &&  correctAnswer==4}, {wrong: readyToCheck && (activeElement ==4 && correctAnswer!=4)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activate(4); sendAnswerText(this.$store.getters.getAnswer4)"> D. {{
+             @click="activateResponse(4); sendAnswerText(this.$store.getters.getAnswer4)"> D. {{
             this.$store.getters.getAnswer4
-                                                                                   }}
+                                                                                           }}
         </div>
         <div class="center">
           <button
@@ -166,48 +166,50 @@ export default {
       readyToPlay: false,
       loading: false,
       step2msg: "Ready to look for another player?",
-      received_messages: [],
       token: localStorage.getItem('token'),
       setConnected: false,
       ws_url: WEBSOCKET_IP,
       ws_ip: WS_URL + STOMP_ENDPOINT,
       msg: "token:" + this.token,
       stompClient: null,
-      header: {token: localStorage.getItem('token')},
-      connection: null,
+
+
       status: "Wird gesucht",
-      oppfound: false,
+      opponentFound: false,
       connected: this.$store.state.isConnected,
       timer: this.$store.getters.getTimer,
       givenAnswer: "",
       currentUser: this.$store.state.user,
       resultMsg: null,
       startTimer: 3,
-      checkready: false,
-      active_el: 0,
-      correctanswer: 0,
+      readyToCheck: false,
+      activeElement: 0,
+      correctAnswer: 0,
+      errorText: "",
+      showError: false,
     }
   },
 
   methods: {
 
     checkAnswer() {
-      this.checkready = true;
+      this.readyToCheck = true;
     },
 
-    stepsau() {
+    addStep() {
       this.step = this.step + 1;
       console.log(this.step);
     },
-    connect() {
+    connectToWebsocket() {
       this.socket = new SockJS("http://localhost:8080/websocket");
-      this.stepsau()
+
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
           {},
           frame => {
             console.log(frame);
             this.$store.commit('setSocketIsConnected', true);
+            this.addStep()
             console.log("store" + this.$store.getters.getIsConnected)
             console.log("Status:" + this.connected)
             this.updateSocketStatus(true)
@@ -215,6 +217,8 @@ export default {
           },
           error => {
             console.log(error);
+            this.showError = true,
+                this.errorText = error
             this.connected = false;
           }
       );
@@ -245,18 +249,18 @@ export default {
         const msg = JSON.parse(message.body);
         switch (messageType) {
           case START_TIMER_MESSAGE:
-            this.oppfound = true;
+            this.opponentFound = true;
             // {"timeLeft":2,"type":"START_TIMER_MESSAGE"}
             // this.$store.commit('setStartTimer', msg.timeLeft);
             this.startTimer = msg.timeLeft;
             // if (this.startTimer === 0) {
-            //   this.oppfound = true;
+            //   this.opponentFound = true;
             //   this.readyToPlay = true;
             // }
             break;
           case QUESTION_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
-            this.checkready = false;
+            this.readyToCheck = false;
             this.readyToPlay = true
             console.log("QUESTION_TIMER_MESSAGE erhalten")
             console.log("timeleft:" + msg.timeLeft);
@@ -290,10 +294,10 @@ export default {
             this.$store.commit('setAnswer3', msg.answer3);
             this.$store.commit('setAnswer4', msg.answer4);
             // this.$store.commit('setCorrectAnswer', msg.correctAnswer);
-            this.correctanswer = msg.correctAnswer;
+            this.correctAnswer = msg.correctAnswer;
             break
           case SCORE_MESSAGE:
-            this.checkready = true;
+            this.readyToCheck = true;
             // {"user":{"userName":"Martine","profileImage":"default10.png"},
             // "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             // "userScore":0,"opponentScore":0,"type":"SCORE_MESSAGE"}
@@ -330,10 +334,10 @@ export default {
       }
     },
 
-    activate: function (el) {
-      if (this.active_el == 0) {
-        console.log("activeel:" + this.active_el);
-        this.active_el = el;
+    activateResponse: function (el) {
+      if (this.activeElement == 0) {
+        console.log("activeel:" + this.activeElement);
+        this.activeElement = el;
       }
       console.log("bereits gesetzt")
     },
@@ -359,7 +363,7 @@ export default {
       console.log(body)
     },
 
-    disconnect() {
+    disconnectFromSocket() {
       this.stompClient.disconnect();
       this.updateSocketStatus(false)
     },
@@ -380,17 +384,17 @@ export default {
 
     goToResult() {
       this.$router.push('/result');
-      this.disconnect();
+      this.disconnectFromSocket();
     },
 
     goToErrorPage() {
-      this.disconnect();
-      this.$router.push('/disconnect');
+      this.disconnectFromSocket();
+      this.$router.push('/disconnectFromSocket');
     },
 
     resetSelectedAnswer() {
-      this.checkready = false;
-      this.active_el = 0;
+      this.readyToCheck = false;
+      this.activeElement = 0;
     }
   }
 }
