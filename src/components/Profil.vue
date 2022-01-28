@@ -43,10 +43,10 @@
         <h1 class="text-3xl submit object-center pt-20">{{ userName }} stats:</h1>
         <pie-chart empty="No data" loading="Loading..."
                    :data="[['Won', wonGames],['Lost', lostGames], ['Draw', drawGames]]"></pie-chart>
-        <div class="text-xl p-6 font-mono">Average Score: {{ averageScore }} (last 20 games)</div>
-        <div class="text-xl p-6 font-mono">Lost: {{ lostGames }}/20</div>
-        <div class="text-xl p-6 font-mono">Won: {{ wonGames }}/20</div>
-        <div class="text-xl p-6 font-mono ">Draw: {{ drawGames }}/20</div>
+        <div class="text-xl p-6 font-mono">Average Score: {{ averageScore }} (last {{ gamesTotal }} games)</div>
+        <div class="text-xl p-6 font-mono">Lost: {{ lostGames }}/{{ gamesTotal }}</div>
+        <div class="text-xl p-6 font-mono">Won: {{ wonGames }}/{{ gamesTotal }}</div>
+        <div class="text-xl p-6 font-mono ">Draw: {{ drawGames }}/{{ gamesTotal }}</div>
         <h2 v-show="existingRecords">
           <button @click="changePage"
                   class="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full mb-4 ">
@@ -59,13 +59,14 @@
 
     <!--  Second page with played games-->
     <div v-show="showStats&&!showError">
-      <div class="text-7xl mx-auto font-thin text-center p-5">Last 20 games:</div>
+      <div class="text-7xl mx-auto font-thin text-center p-5">Last {{ this.gamesTotal }} games:</div>
       <div class="container flex flex-wrap md:max-w p-4 justify-center rounded card">
         <div class="bg-white p-8 m-1 bg-white shadow-2xl hover:bg-gray-300" v-for="(game) in playedGamesList">
           <p class="text-center font-thin text-4xl text-grey-darker text-xl font-mono font-bold">
             {{ (this.formatDate(game.timeStamp)) }}</p>
           <div class="text-black font-bold text-xl italic text-right pb-3">You vs. {{ game.opponent.userName }}</div>
-          <img class="max-h-36  rounded-full   block mx-auto " v-bind:src="this.imageRoot+game.opponent.profileImage">
+          <img class="max-h-36  rounded-full   block mx-auto " v-bind:src="this.imageRoot+game.opponent.profileImage"
+               alt="opponentImage">
           <p class="text-grey-darker text-xl font-mono font-bold mt-5">Opponents Score: {{ game.opponentScore }}</p>
           <p class="text-grey-darker text-xl font-mono font-bold">Your score: {{ game.userScore }}</p>
         </div>
@@ -86,12 +87,12 @@
 import axios from "axios";
 import {IMAGE_ROOT} from "@/assets/constants";
 import 'chartkick/chart.js'
-import {authComputed} from '@/vuex/helpers'
 import moment from "moment";
 
 export default {
   computed: {
-    ...authComputed
+    // ...authComputed
+
   },
   name: "Profil",
   data() {
@@ -106,6 +107,7 @@ export default {
       lostGames: 5,
       wonGames: 5,
       drawGames: 0,
+      gamesTotal: 0,
       userScores: [],
       showError: false,
       errorMessage: "Something didnt work..",
@@ -116,6 +118,7 @@ export default {
     //Gets the current User-Picture
     this.userName = localStorage.getItem('userName')
     axios.get('http://localhost:8080/user').then(response => {
+      console.log(response);
       this.isLoading = false;
       this.$store.commit('setUserImage', response.data.profileImage);
       this.userImage = response.data.profileImage
@@ -132,6 +135,7 @@ export default {
       this.lostGames = response.data.lostGames;
       this.averageScore = response.data.averageScore;
       this.drawGames = response.data.drawGames;
+      this.gamesTotal = response.data.playedGames.length;
       this.showError = false;
       for (let i = 0; i < response.data.playedGames.length; i++) {
         //push the last 5 values into a separate array - to use them for the line chart

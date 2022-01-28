@@ -1,15 +1,15 @@
 <template>
-  <Uploader></Uploader>
-  <ImageGallery></ImageGallery>
+  <Uploader />
+  <CurrentUserImage />
 </template>
 
 <script>
 import Uploader from "@/components/Uploader";
-import ImageGallery from "@/components/ImageGallery";
+import CurrentUserImage from "@/components/CurrentUserImage";
 
 export default {
   name: "Upload",
-  components: {ImageGallery, Uploader},
+  components: {CurrentUserImage, Uploader},
   data() {
     return {}
 

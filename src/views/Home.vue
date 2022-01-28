@@ -1,20 +1,19 @@
 <template>
-  <div class="home">
-    <Header />
-    <FAQ></FAQ>
+  <div class="body-bg2 min-h-screen  pt-12 md:pt-20 pb-6 px-2 md:px-0">
+
+    <AppMockup />
   </div>
 </template>
 
 <script>
 
-import Header from "@/components/Header";
-import FAQ from "@/components/FAQ";
+
+import AppMockup from "@/components/AppMockup";
 
 export default {
   name: 'Home',
   components: {
-    FAQ,
-    Header,
+    AppMockup,
   },
   methods: {},
 }

@@ -56,17 +56,21 @@ button {
 .body-bg2 {
     background-image : url("./assets/bg4.jpg");
     background-color : rgba(0, 0, 0, 0.50);
-
     /*background-color: #9921e8;*/
     /*background-image: linear-gradient(315deg, #9921e8 0%, #5f72be 74%);*/
     }
 
 .body-bg3 {
     background-image : url("./assets/bg1.jpg");
-
     /*background-color: #9921e8;*/
     /*background-image: linear-gradient(315deg, #9921e8 0%, #5f72be 74%);*/
     }
+
+/*Home*/
+#mockup {
+    transform : rotate(45deg); /* Equal to rotateZ(45deg) */
+    }
+
 
 /*Login and RegistrationForm*/
 form {
