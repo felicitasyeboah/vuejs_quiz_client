@@ -4,7 +4,7 @@
 
       <!--        PlayButton-->
       <div v-if="!$store.getters.getIsConnected">
-        <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 lg:mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
+        <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
             id="welcome">Welcome.</h2>
 
         <div id="wrap" @click="connectToWebsocket">
@@ -28,8 +28,8 @@
 
       <!--      Looking for other players-->
 
-      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl flex-auto">
-        <h2 class="mb-6 text-center text-5xl font-extrabold pt-10">{{ this.step2msg }}</h2>
+      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container  flex-auto">
+        <h2 class="mb-6 text-center text-5xl font-extrabold pt-20">Ready to look for another player?</h2>
         <div class="between">
           <button
               class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
@@ -82,44 +82,45 @@
       <div class="flex items-center justify-center">
         <div class="bg-slate-800 flex flex-col items-center pb-3.5 m-2">
           <div class="italic">
-            {{ this.$store.state.question.category }}
+            {{ this.category }}
           </div>
         </div>
       </div>
 
 
-      <div id="question" class="mb-12 text-left text-5xl">
-        {{ this.$store.state.question.text }}
+      <div id="question" class="mb-12 text-left text-5xl pl-1.5">
+        <!--        {{ this.$store.state.question.text }}-->
+        {{ this.questionText }}
       </div>
       <div id="questionsandanswers">
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
         <div id="answer1"
              :class="{ activ : activeElement === 1}, {correct: this.readyToCheck &&  correctAnswer===1}, {wrong: readyToCheck && (activeElement ===1 && correctAnswer!==1)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activateResponse(1); sendAnswerText(this.$store.getters.getAnswer1)"> A. {{
-            this.$store.getters.getAnswer1
-                                                                                           }}
+             @click="activateResponse(1); sendAnswerText(this.answer1)"> A. {{
+            this.answer1
+                                                                         }}
         </div>
         <div id="answer2"
              :class="{ activ : activeElement === 2}, {correct: readyToCheck &&  correctAnswer===2}, {wrong: readyToCheck && (activeElement ===2 && correctAnswer!==2)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activateResponse(2); sendAnswerText(this.$store.getters.getAnswer2)"> B. {{
-            this.$store.getters.getAnswer2
-                                                                                           }}
+             @click="activateResponse(2); sendAnswerText(this.answer2)"> B. {{
+            this.answer2
+                                                                         }}
         </div>
         <div id="answer3"
              :class="{ activ : activeElement === 3}, {correct: readyToCheck &&  correctAnswer===3}, {wrong: readyToCheck && (activeElement ===3 && correctAnswer!==3)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activateResponse(3); sendAnswerText(this.$store.getters.getAnswer3)"> C. {{
-            this.$store.getters.getAnswer3
-                                                                                           }}
+             @click="activateResponse(3); sendAnswerText(this.answer3)"> C. {{
+            this.answer3
+                                                                         }}
         </div>
         <div id="answer4"
              :class="{ activ : this.activeElement === 4}, {correct: this.readyToCheck &&  this.correctAnswer===4}, {wrong: readyToCheck && (activeElement ===4 && correctAnswer!==4)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
-             @click="activateResponse(4); sendAnswerText(this.$store.getters.getAnswer4)"> D. {{
-            this.$store.getters.getAnswer4
-                                                                                           }}
+             @click="activateResponse(4); sendAnswerText(this.answer4)"> D. {{
+            this.answer4
+                                                                         }}
         </div>
         <div class="center">
           <button
@@ -155,44 +156,38 @@ import {
 } from "@/assets/constants";
 
 export default {
-  computed: {
-    question() {
-      return this.$store.state.question;
-    }
-  },
+
   name: "WebSocketwithSock",
   data() {
     return {
-      // question: {
-      //   category: this.$store.state.question.category,
-      //   text: this.$store.getters.getQuestionText,
-      //   answer1: null,
-      //   answer2: null,
-      //   answer3: null,
-      //   answer4: null,
-      //   correctAnswer: null,
-      // },
+
+      questionText: null,
+      answer1: null,
+      answer2: null,
+      answer3: null,
+      answer4: null,
+      correctAnswer: 0,
+
       step: 0,
       readyToPlay: false,
       loading: false,
-      step2msg: "Ready to look for another player?",
+
       token: localStorage.getItem('token'),
       setConnected: false,
       ws_url: WEBSOCKET_IP,
       ws_ip: WS_URL + STOMP_ENDPOINT,
       msg: "token:" + this.token,
       stompClient: null,
-      status: "Wird gesucht",
       opponentFound: false,
       connected: this.$store.state.isConnected,
-      timer: this.$store.getters.getTimer,
+      timer: 0,
       givenAnswer: "",
       currentUser: this.$store.state.user,
       resultMsg: null,
       startTimer: 3,
       readyToCheck: false,
       activeElement: 0,
-      correctAnswer: 0,
+
       errorText: "",
       showError: false,
       opponentImage: "default3.png",
@@ -224,7 +219,7 @@ export default {
             console.log("store" + this.$store.getters.getIsConnected)
             console.log("Status:" + this.connected)
             this.updateSocketStatus(true)
-            this.stompClient.subscribe('/user/topic/game', this.msgHandler);
+            this.stompClient.subscribe('/currentUsername/topic/game', this.msgHandler);
           },
           error => {
             console.log(error);
@@ -235,14 +230,11 @@ export default {
       );
     },
     checkWinner() {
-      console.log("current User:" + this.currentUser)
-      console.log("winner" + this.$store.getters.getWinner)
-      console.log(this.$store.getters.getOpponentName)
-      if (this.$store.getters.getWinner === this.$store.getters.getOpponentName) {
+      if (this.winner === this.$store.getters.getOpponentName) {
         this.resultMsg = "You lost";
         this.$store.commit('setResult', 2);
         this.goToResult();
-      } else if (this.$store.getters.getWinner === this.currentUser) {
+      } else if (this.winner === this.currentUser) {
         this.resultMsg = "You have won";
         this.$store.commit('setResult', 1);
         this.goToResult();
@@ -275,8 +267,8 @@ export default {
             this.readyToPlay = true
             console.log("QUESTION_TIMER_MESSAGE erhalten")
             console.log("timeleft:" + msg.timeLeft);
-            this.$store.commit('setTimer', msg.timeLeft);
-            this.setTimer(msg.timeLeft)
+
+            this.timer = msg.timeLeft
             break
           case DISCONNECT_MESSAGE:
             alert("Error - There was a technical issue");
@@ -288,31 +280,35 @@ export default {
             this.resetSelectedAnswer();
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
-            //     "answer4":"Marie Curie","correctAnswer":3,"user":{"userName":"Martine",
+            //     "answer4":"Marie Curie","correctAnswer":3,"currentUsername":{"userName":"Martine",
             //     "profileImage":"default10.png"},
             //   "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             //   "userScore":0,"opponentScore":0,"type":"GAME_MESSAGE"}
             console.log("GAME_MESSAGE erhalten")
             this.$store.commit('setUserName', msg.user.userName);
+
             this.opponentImage = msg.opponent.profileImage;
-            //this.$store.commit('setOpponentImage', msg.opponent.profileImage);
             this.userImage = msg.user.profileImage;
+            this.category = msg.category
+            this.$store.commit('setOpponentImage', msg.opponent.profileImage);
 
             this.$store.commit('setOpponentName', msg.opponent.userName);
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
-            this.$store.commit('setQuestionText', msg.question);
-            this.$store.commit('setCategory', msg.category);
-            this.$store.commit('setAnswer1', msg.answer1);
-            this.$store.commit('setAnswer2', msg.answer2);
-            this.$store.commit('setAnswer3', msg.answer3);
-            this.$store.commit('setAnswer4', msg.answer4);
-            // this.$store.commit('setCorrectAnswer', msg.correctAnswer);
+            this.questionText = msg.question;
+            //this.$store.commit('setQuestionText', msg.question);
+            //this.$store.commit('setCategory', msg.category);
+            this.answer1 = msg.answer1;
+            this.answer2 = msg.answer2;
+            this.answer3 = msg.answer3;
+            this.answer4 = msg.answer4;
+
+
             this.correctAnswer = msg.correctAnswer;
             break
           case SCORE_MESSAGE:
             this.readyToCheck = true;
-            // {"user":{"userName":"Martine","profileImage":"default10.png"},
+            // {"currentUsername":{"userName":"Martine","profileImage":"default10.png"},
             // "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             // "userScore":0,"opponentScore":0,"type":"SCORE_MESSAGE"}
             console.log("SCORE_MESSAGE")
@@ -325,23 +321,21 @@ export default {
             console.log("winner is" + this.$store.getters.getWinner);
             console.log("highscore" + msg.isHighScore)
             // Messagebody:{"isHighScore":false,"winner":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},
-            //   "user":{"userName":"Martine","profileImage":"default10.png"},
+            //   "currentUsername":{"userName":"Martine","profileImage":"default10.png"},
             //   "opponent":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},"" +
             //   "userScore":745,"opponentScore":919,"type":"RESULT_MESSAGE"}
             try {
-              this.$store.commit('setWinner', msg.winner.userName);
+              this.winner = msg.winner.userName;
             } catch (JSONException) {
-              this.$store.commit('setWinner', "none");
-              console.log("no winner")
+              // if there is no winner, set the value to none
+              this.winner = "none";
+
             }
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
             this.$store.commit('setHighscore', msg.isHighScore);
             this.checkWinner();
-            setTimeout(() => {
-              this.goToResult();
-            }, 8000);
-            console.log("RESULT_MESSAGE erhalten")
+
             break
         }
         console.log(message.command)//MESSAGE
@@ -349,7 +343,7 @@ export default {
     },
 
     activateResponse: function (el) {
-      if (this.activeElement == 0) {
+      if (this.activeElement === 0) {
         console.log("activeel:" + this.activeElement);
         this.activeElement = el;
       }
@@ -386,15 +380,11 @@ export default {
       this.connected = this.$store.getters.getIsConnected
     },
 
-    setTimer: function (value) {
-      this.$store.commit('setTimer', value);
-      this.timer = this.$store.getters.getTimer
-    },
+    // setTimer: function (value) {
+    //   this.$store.commit('setTimer', value);
+    //   this.timer = this.$store.getters.getTimer
+    // },
 
-    setQuestionText: function (value) {
-      this.$store.commit('setQuestion', value);
-      this.question.text = this.$store.getters.getQuestionText()
-    },
 
     goToResult() {
       this.$router.push('/result');
@@ -403,7 +393,7 @@ export default {
 
     goToErrorPage() {
       this.disconnectFromSocket();
-      this.$router.push('/disconnectFromSocket');
+      this.$router.push('/disconnect');
     },
 
     resetSelectedAnswer() {

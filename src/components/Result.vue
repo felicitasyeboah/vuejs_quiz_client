@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="$store.state.result==1">
+  <div v-if="$store.state.result===1">
 
     <div id="bodywinner" class="wrapper p-40  d-flex flex-column justify-content-center w-100 h-100 ">
 
@@ -60,14 +60,14 @@
   </div>
 
 
-  <div v-if="$store.state.result==2">
+  <div v-if="$store.state.result===2">
     <div id="bodyloser" class="wrapper p-60 d-flex flex-column justify-content-center w-100 h-100 ">
 
       <div
           class="d-flex flex-column justify-content-center align-items-center hover:shadow-2xl transition duration-500 transform hover:scale-105 cursor-pointer">
 
 
-        <img src="../assets/loser.jpg" alt="random imgee"
+        <img src="../assets/loser.jpg" alt="random image"
              class="w-full object-cover object-center rounded-lg shadow-md">
 
         <div class="relative px-4 -mt-16  ">
@@ -106,14 +106,14 @@
 
 
   </div>
-  <div v-if="$store.state.result==3">
+  <div v-if="$store.state.result===3">
     <div id="bodydraw" class="wrapper p-40  d-flex flex-column justify-content-center w-100 h-100 ">
 
       <div
           class="d-flex flex-column justify-content-center align-items-center hover:shadow-2xl transition duration-500 transform hover:scale-105 cursor-pointer">
 
 
-        <img src="../assets/draw.jpg" alt="random imgee" class="w-full object-cover object-center rounded-lg shadow-md">
+        <img src="../assets/draw.jpg" alt="random image" class="w-full object-cover object-center rounded-lg shadow-md">
 
         <div class="relative px-4 -mt-16  ">
           <div class="bg-white p-6 rounded-lg shadow-lg">
@@ -127,7 +127,7 @@
               </div>
             </div>
             <p class="py-6 text-5xl text-red-900 uppercase tracking-wide font-extrabold">No winner</p>
-            <h4 class="mt-1 text-xl font-semibold uppercase leading-tight truncate">Boring..</h4>
+            <h4 class="mt-1 text-2xl font-semibold uppercase leading-tight truncate">Boring..</h4>
 
             <div class="mt-1">
               Your score:
@@ -165,11 +165,10 @@ export default {
 
   data() {
     return {
-      userName: this.$store.state.username,
       yourscore: 5432,
       oppscore: 2000,
       result: 0,
-      newhighscore: true,
+
     }
   },
   methods: {
