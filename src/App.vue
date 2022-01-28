@@ -17,14 +17,7 @@ export default {
 
   beforeMount() {
     this.$store.commit('initializeStore');
-    if (localStorage.getItem('token') != null) {
-      this.$store.isLoggedIn = true;
-      this.$store.isAuthenticated = true;
-    } else {
-      this.$store.isLoggedIn = false;
-      this.$store.isAuthenticated = false;
-      console.log("updated store is" + this.$store.isLoggedIn)
-    }
+    this.$store.commit('tokenAndNameCheck');
   }
 };
 </script>

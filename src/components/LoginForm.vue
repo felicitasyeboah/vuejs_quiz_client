@@ -7,7 +7,7 @@
       {{ errorMessage }}
     </div>
 
-    <form @submit.prevent="login" v-show="!isLoggedIn">
+    <form @submit.prevent="login" v-show="!this.$store.state.isAuthenticated">
       <section>
         <h3 class="font-bold text-2xl">Welcome to Superquiz!</h3>
         <p class="text-gray-600 pt-2">Sign into your account.</p>
@@ -23,19 +23,17 @@
         </button>
       </div>
     </form>
-    <div v-show="!isLoggedIn">
+    <div v-show="!isAuthenticated">
       <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
         <p class="text-black">Don't have an account?
-          <router-link to="/register" class="font-bold hover:underline">Sign
-                                                                        up
+          <router-link to="/register" class="font-bold hover:underline">Sign up
           </router-link>
         </p>
       </div>
     </div>
-
-
-    <div v-show="isLoggedIn" class="alert alert-success" role="alert">
+    <div v-show="isAuthenticated" class="alert alert-success" role="alert">
       <h1 class="font-sans text-3xl">Welcome {{ userNameStorage }}</h1>
+      <img v-bind:src="this.userImage" class="w-1/2 mx-auto" alt="currentUserImage">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
 
@@ -56,19 +54,23 @@ export default {
       userName: '',
       password: '',
       token: null,
-      loginSuccess: false,
-      isLoggedIn: this.$store.isLoggedIn,
+
       isAuthenticated: this.$store.state.isAuthenticated,
       errorMessage: 'Something didn\'t work quite right',
       showError: false,
       waitingForAnswer: false,
       userNameStorage: localStorage.getItem('userName'),
+      imgRoot: "http://localhost:8080/profileImage/",
+
     }
   },
-  watch() {
-    this.loginSuccess = this.isLoggedIn;
-  },
 
+  computed: {
+    // a computed getter
+    userImage: function () {
+      return this.imgRoot + localStorage.getItem('userName')
+    },
+  },
   methods: {
     // Sends data to server and waits for an answer
     login() {
@@ -88,6 +90,8 @@ export default {
             // Save received JWT Token and the entered Username to LocalStorage
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('userName', this.userName)
+            // check if values for token and userName in localstorage exist and change status
+            this.$store.commit('tokenAndNameCheck');
             this.waitingForAnswer = false;
             location.reload();
           }).catch((error) => {
@@ -101,7 +105,7 @@ export default {
           this.errorMessage = error;
         }
       })
-    }
+    },
   }
 }
 </script>

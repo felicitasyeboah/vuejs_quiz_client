@@ -1,13 +1,19 @@
 <template>
-  <Profil />
+  <div v-if="this.$store.state.isAuthenticated">
+    <Profil />
+  </div>
+  <div v-else>
+    <Login />
+  </div>
 </template>
 
 <script>
 
 import Profil from "@/components/Profil";
+import Login from "@/views/Login";
 
 export default {
-  components: {Profil},
+  components: {Profil, Login},
 }
 </script>
 

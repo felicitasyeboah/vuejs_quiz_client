@@ -9,19 +9,19 @@
               class="text-green-600">.</span></span>
         </a>
 
-        <span v-if="isLoggedIn">Welcome {{ userName }}</span>
+        <span v-if="this.$store.state.isAuthenticated">Welcome {{ this.$store.state.currentUsername }}</span>
         <span v-else class="italic text-left">Welcome   <span
             v-if="!this.$store.state.user">unbekannter User</span></span>
         <div class="text-right">
 
-        <router-link to="/about">About</router-link>
+          <router-link to="/about">About</router-link>
           |
 
-          <span v-if="this.$store.state.user"> |  <router-link to="/highscore">Highscore</router-link></span>
-          <span v-if="this.$store.state.user"> |  <router-link to="/game">Game</router-link></span>
-          <span v-if="this.$store.state.user"> |  <router-link to="/upload">Upload</router-link></span>
-          <span v-if="this.$store.state.user"> |  <router-link to="/user">Profil</router-link></span>
-          <span v-if="this.$store.state.user"> | <a @click="logout">Logout</a></span>
+          <span v-if="this.$store.state.isAuthenticated"> |  <router-link to="/highscore">Highscore</router-link></span>
+          <span v-if="this.$store.state.isAuthenticated"> |  <router-link to="/game">Game</router-link></span>
+          <span v-if="this.$store.state.isAuthenticated"> |  <router-link to="/upload">Upload</router-link></span>
+          <span v-if="this.$store.state.isAuthenticated"> |  <router-link to="/user">Profil</router-link></span>
+          <span v-if="this.$store.state.isAuthenticated"> | <a @click="logout">Logout</a></span>
           <span v-else> |
               <router-link to="/login">Login</router-link> |
               <router-link to="/register">  Not a member?<button type="button"
@@ -46,29 +46,20 @@ export default {
   props: {},
   data() {
     return {
-      isLoggedIn: this.$store.isLoggedIn,
+      isAuthenticated: this.$store.state.isAuthenticated,
       userName: localStorage.getItem('userName'),
+
     }
   },
-  watch: {
-    isLoggedIn: function () {
-      console.log(this.isLoggedIn)
-    }
-  },
+
   methods: {
-    // Logs out user (method in store.js) and reloads nav-Bar
+    // Logs out currentUsername (method in store.js) and reloads nav-Bar
     logout() {
       this.$store.dispatch('logout')
       this.$store.commit('changeStatus', false)
       console.log(this.$store.isLoggedIn)
       console.log(this.$store.state.user)
-      location.reload()
     },
-    // LogginStatus testweise checken, da es nicht ging.. wie es sollte
-    // checkS() {
-    //   this.$store.commit('changeStatus', false)
-    //   console.log(this.$store.isAuthenticated)
-    // }
   },
 }
 </script>
