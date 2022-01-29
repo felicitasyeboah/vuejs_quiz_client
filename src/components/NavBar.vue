@@ -8,8 +8,6 @@
           <span class="mx-auto text-xl font-black leading-none text-gray-900 select-none">superquiz<span
               class="text-green-600">.</span></span>
         </a>
-        <div v-show="this.$store.state.tokenExpired" class="text-2xl bg-red-400 text-white">NO VALID TOKEN</div>
-
 
         <span v-if="this.$store.state.isAuthenticated">Welcome {{ this.$store.state.currentUsername }}</span>
         <span v-else class="italic text-left">Welcome   <span
@@ -38,34 +36,30 @@
 
 
 <script>
+import {authComputed} from '@/vuex/helpers'
 
 export default {
-
+  computed: {
+    ...authComputed
+  },
   name: 'Navbar',
   props: {},
   data() {
     return {
       isAuthenticated: this.$store.state.isAuthenticated,
       userName: localStorage.getItem('userName'),
-      expDate: localStorage.getItem('expirationDate'),
 
     }
-
   },
 
-  mounted() {
-
-    console.log(typeof localStorage.getItem('expirationDate'))
-    console.log(typeof localStorage.getItem('userName'))
-  },
   methods: {
     // Logs out currentUsername (method in store.js) and reloads nav-Bar
     logout() {
       this.$store.dispatch('logout')
-      console.log(this.$store.isAuthenticated)
+      this.$store.commit('changeStatus', false)
+      console.log(this.$store.isLoggedIn)
       console.log(this.$store.state.user)
     },
   },
-
 }
 </script>
