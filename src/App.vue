@@ -12,12 +12,11 @@ export default {
   components: {
     Footer,
     NavBar,
-
   },
 
   beforeMount() {
-    this.$store.commit('initializeStore');
-    this.$store.commit('tokenAndNameCheck');
+    this.$store.dispatch('tokenAndNameCheck');
+    this.$store.dispatch('tokenExpirationCheck');
   }
 };
 </script>

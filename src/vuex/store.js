@@ -1,10 +1,13 @@
 import Vuex from 'vuex'
 
+
 // Create a new store instance. Gets token from localstorage, gets current username from localstorage.
 export default new Vuex.Store({
         state: {
             token: localStorage.getItem('token'),
             user: localStorage.getItem('userName'),
+            JWTExpirationDate: localStorage.getItem('expirationDate'),
+            currentTime: Date.now(),
             currentUsername: localStorage.getItem('userName'),
             isConnected: false,
             isAuthenticated: false,
@@ -16,29 +19,12 @@ export default new Vuex.Store({
             opponentImage: '',
             newHighscore: false,
             result: 0,
+            tokenExpired: false,
         },
         mutations: {
-            initializeStore(state) {
-                if (state.token !== null) {
-
-                    state.isAuthenticated = true
-
-                } else {
-                    state.userName = null
-                    state.token = null
-                    state.isAuthenticated = false
-                }
-            },
-            changeStatus(state, isLoggedIn) {
-                state.isAuthenticated = isLoggedIn
-            },
             setSocketIsConnected: (state, value) => {
                 state.isConnected = value;
-
             },
-
-
-
             setUserImage: (state, value) => {
                 state.currentUserImage = value;
             },
@@ -64,36 +50,55 @@ export default new Vuex.Store({
             setResult: (state, value) => {
                 state.result = value;
             },
-            tokenAndNameCheck() {
-                if (localStorage.getItem('token') !== null && localStorage.getItem('userName') !== null) {
-                    console.log("richtig eingeloggt")
-                    this.state.isAuthenticated = true;
-                    return true;
-                } else {
-                    this.state.isAuthenticated = false;
-                    return false;
-                }
-            }
+            setExpirationDate: (state, value) => {
+                state.JWTExpirationDate = value;
+            },
+
+
         },
         actions: {
             // The current token in localstorage is deleted. Username in localstorage is deleted.
             logout() {
                 localStorage.removeItem('token')
                 localStorage.removeItem('userName')
-                this.isLoggedIn = false;
+                localStorage.removeItem('expirationDate')
+
                 this.state.isAuthenticated = false;
                 console.log("ausgeloggt")
 
             },
+            tokenAndNameCheck() {
+                if (localStorage.getItem('token') !== null && localStorage.getItem('userName') !== null) {
+                    this.state.isAuthenticated = true;
+                    return true;
+                } else {
+                    this.state.isAuthenticated = false;
+                    console.log("authe" + this.state.isAuthenticated)
+                    return false;
+
+                }
+            },
+            tokenExpirationCheck() {
+                if (Date.now() < localStorage.getItem('expirationDate')) {
+                    this.state.tokenExpired = false;
+                    console.log("richtig")
+                } else {
+                    this.state.tokenExpired = true;
+                    this.state.isAuthenticated = false;
+                    console.log("token expired")
+                    console.log("authe" + this.state.isAuthenticated)
+                    return false;
+                }
+            }
 
         },
 
-//     printToken() {
-//     console.log(localStorage.getItem('token'))
-// },
         getters: {
             getStatus: state => {
                 return state.isAuthenticated
+            },
+            getExpirationDate: state => {
+                return state.JWTExpirationDate
             },
             getName: state => {
                 return String(state.currentUsername);
