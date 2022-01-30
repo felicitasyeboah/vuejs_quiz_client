@@ -50,7 +50,7 @@
 
                   <td class="px-6 py-4">
                     <div class="px-4 py-1 rounded-full"><img
-                        v-bind:src="this.imageRoot+highscoreList[index].user.profileImage"
+                        v-bind:src="this.imageRoot+highscoreList[index].user.userName"
                         class="object-cover w-32 h-32 rounded-full mx-auto"
                         alt="Avatar"
                     /></div>

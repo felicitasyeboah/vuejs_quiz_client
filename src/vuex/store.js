@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import {IMAGE_ROOT} from "@/assets/constants";
 
 // Create a new store instance. Gets token from localstorage, gets current username from localstorage.
 export default new Vuex.Store({
@@ -116,7 +117,7 @@ export default new Vuex.Store({
                 return String(state.currentUsername);
             },
             getUserImage: state => {
-                return state.currentUserImage;
+                return IMAGE_ROOT + state.currentUsername;
             },
             getIsConnected: state => {
                 return Boolean(state.isConnected);
