@@ -36,6 +36,7 @@
 
     <div v-show="isLoggedIn" class="alert alert-success" role="alert">
       <h1 class="font-sans text-3xl">Welcome {{ userNameStorage }}</h1>
+      <img v-bind:src="this.userImage" class="w-1/2 mx-auto" alt="currentUserImage">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
 
@@ -63,8 +64,16 @@ export default {
       showError: false,
       waitingForAnswer: false,
       userNameStorage: localStorage.getItem('userName'),
+      imgRoot: "http://localhost:8080/profileImage/",
     }
   },
+  computed: {
+    // a computed getter
+    userImage: function () {
+      return this.imgRoot + localStorage.getItem('userName')
+    },
+  },
+
   watch() {
     this.loginSuccess = this.isLoggedIn;
   },

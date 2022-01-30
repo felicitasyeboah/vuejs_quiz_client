@@ -51,24 +51,7 @@ export default new Vuex.Store({
             setQuestionText: (state, value) => {
                 state.question.text = value;
             },
-            setCategory: (state, value) => {
-                state.question.category = value;
-            },
-            setAnswer1: (state, value) => {
-                state.question.answer1 = value;
-            },
-            setAnswer2: (state, value) => {
-                state.question.answer2 = value;
-            },
-            setAnswer3: (state, value) => {
-                state.question.answer3 = value;
-            },
-            setAnswer4: (state, value) => {
-                state.question.answer4 = value;
-            },
-            setCorrectAnswer: (state, value) => {
-                state.question.correctanswer = value;
-            },
+
             setUserImage: (state, value) => {
                 state.currentUserImage = value;
             },
@@ -76,10 +59,10 @@ export default new Vuex.Store({
                 state.userScore = value;
             },
             setOpponentScore: (state, value) => {
-                state.oppScore = value;
+                state.opponentScore = value;
             },
             setOpponentName: (state, value) => {
-                state.oppName = value;
+                state.opponentName = value;
             },
             setOpponentImage: (state, value) => {
                 state.oppImage = value;

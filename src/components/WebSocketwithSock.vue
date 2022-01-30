@@ -169,9 +169,10 @@ export default {
       answer2: null,
       answer3: null,
       answer4: null,
-
+      correctAnswer: 0,
       questionText: null,
       category: null,
+
       step: 0,
       readyToPlay: false,
       loading: false,
@@ -185,14 +186,14 @@ export default {
       status: "Wird gesucht",
       opponentFound: false,
       connected: this.$store.state.isConnected,
-      timer: this.$store.getters.getTimer,
+      timer: 0,
       givenAnswer: "",
       currentUser: this.$store.state.user,
       resultMsg: null,
       startTimer: 3,
       readyToCheck: false,
       activeElement: 0,
-      correctAnswer: 0,
+
       errorText: "",
       showError: false,
       opponentImage: "default3.png",
@@ -235,14 +236,11 @@ export default {
       );
     },
     checkWinner() {
-      console.log("current User:" + this.currentUser)
-      console.log("winner" + this.$store.getters.getWinner)
-      console.log(this.$store.getters.getOpponentName)
-      if (this.$store.getters.getWinner === this.$store.getters.getOpponentName) {
+      if (this.winner === this.$store.getters.getOpponentName) {
         this.resultMsg = "You lost";
         this.$store.commit('setResult', 2);
         this.goToResult();
-      } else if (this.$store.getters.getWinner === this.currentUser) {
+      } else if (this.winner === this.currentUser) {
         this.resultMsg = "You have won";
         this.$store.commit('setResult', 1);
         this.goToResult();
@@ -252,6 +250,7 @@ export default {
         this.goToResult();
       }
     },
+
 
     msgHandler(message) {
       const messageCommand = message.command;
@@ -275,8 +274,7 @@ export default {
             this.readyToPlay = true
             console.log("QUESTION_TIMER_MESSAGE erhalten")
             console.log("timeleft:" + msg.timeLeft);
-            this.$store.commit('setTimer', msg.timeLeft);
-            this.setTimer(msg.timeLeft)
+            this.timer = msg.timeLeft
             break
           case DISCONNECT_MESSAGE:
             alert("Error - There was a technical issue");
@@ -332,10 +330,10 @@ export default {
             //   "opponent":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},"" +
             //   "userScore":745,"opponentScore":919,"type":"RESULT_MESSAGE"}
             try {
-              this.$store.commit('setWinner', msg.winner.userName);
+              this.winner = msg.winner.userName;
             } catch (JSONException) {
-              this.$store.commit('setWinner', "none");
-              console.log("no winner")
+              // if there is no winner, set the value to none
+              this.winner = "none";
             }
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
