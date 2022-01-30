@@ -19,25 +19,38 @@ export default new Vuex.Store({
         },
         mutations: {
             initializeStore(state) {
-                if (state.token !== null) {
-
+                if (localStorage.getItem('token')) {
+                    state.token = localStorage.getItem('token')
                     state.isAuthenticated = true
-
+                    state.userName = localStorage.getItem('userName')
                 } else {
-                    state.userName = null
-                    state.token = null
+                    state.userName = ''
+                    state.token = ''
                     state.isAuthenticated = false
                 }
             },
             changeStatus(state, isLoggedIn) {
                 state.isAuthenticated = isLoggedIn
             },
+            setToken(state, token) {
+                state.token = token
+                state.isAuthenticated = true
+            },
+
             setSocketIsConnected: (state, value) => {
                 state.isConnected = value;
 
             },
+            setTimer: (state, integer) => {
+                state.timeLeft = integer;
 
-
+            },
+            setStartTimer: (state, integer) => {
+                state.StartTimeLeft = integer;
+            },
+            setQuestionText: (state, value) => {
+                state.question.text = value;
+            },
 
             setUserImage: (state, value) => {
                 state.currentUserImage = value;
@@ -52,9 +65,11 @@ export default new Vuex.Store({
                 state.opponentName = value;
             },
             setOpponentImage: (state, value) => {
-                state.opponentImage = value;
+                state.oppImage = value;
             },
-
+            setWinner: (state, value) => {
+                state.winner = value;
+            },
             setHighscore: (state, bool) => {
                 state.newHighscore = bool;
             },
@@ -64,6 +79,8 @@ export default new Vuex.Store({
             setResult: (state, value) => {
                 state.result = value;
             },
+
+
             tokenAndNameCheck() {
                 if (localStorage.getItem('token') !== null && localStorage.getItem('userName') !== null) {
                     console.log("richtig eingeloggt")

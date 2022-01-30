@@ -4,7 +4,7 @@
 
       <!--        PlayButton-->
       <div v-if="!$store.getters.getIsConnected">
-        <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
+        <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 lg:mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
             id="welcome">Welcome.</h2>
 
         <div id="wrap" @click="connectToWebsocket">
@@ -28,8 +28,8 @@
 
       <!--      Looking for other players-->
 
-      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container  flex-auto">
-        <h2 class="mb-6 text-center text-5xl font-extrabold pt-20">Ready to look for another player?</h2>
+      <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl flex-auto">
+        <h2 class="mb-6 text-center text-5xl font-extrabold pt-10">{{ this.step2msg }}</h2>
         <div class="between">
           <button
               class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
@@ -132,6 +132,7 @@
     </div>
   </div>
 
+
 </template>
 
 <script>
@@ -156,28 +157,33 @@ import {
 } from "@/assets/constants";
 
 export default {
-
+  computed: {
+    question() {
+      return this.$store.state.question;
+    }
+  },
   name: "WebSocketwithSock",
   data() {
     return {
-
-      questionText: null,
       answer1: null,
       answer2: null,
       answer3: null,
       answer4: null,
       correctAnswer: 0,
+      questionText: null,
+      category: null,
 
       step: 0,
       readyToPlay: false,
       loading: false,
-
+      step2msg: "Ready to look for another player?",
       token: localStorage.getItem('token'),
       setConnected: false,
       ws_url: WEBSOCKET_IP,
       ws_ip: WS_URL + STOMP_ENDPOINT,
       msg: "token:" + this.token,
       stompClient: null,
+      status: "Wird gesucht",
       opponentFound: false,
       connected: this.$store.state.isConnected,
       timer: 0,
@@ -219,7 +225,7 @@ export default {
             console.log("store" + this.$store.getters.getIsConnected)
             console.log("Status:" + this.connected)
             this.updateSocketStatus(true)
-            this.stompClient.subscribe('/currentUsername/topic/game', this.msgHandler);
+            this.stompClient.subscribe('/user/topic/game', this.msgHandler);
           },
           error => {
             console.log(error);
@@ -245,6 +251,7 @@ export default {
       }
     },
 
+
     msgHandler(message) {
       const messageCommand = message.command;
       const messageType = message.headers.type;
@@ -267,7 +274,6 @@ export default {
             this.readyToPlay = true
             console.log("QUESTION_TIMER_MESSAGE erhalten")
             console.log("timeleft:" + msg.timeLeft);
-
             this.timer = msg.timeLeft
             break
           case DISCONNECT_MESSAGE:
@@ -280,35 +286,34 @@ export default {
             this.resetSelectedAnswer();
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
-            //     "answer4":"Marie Curie","correctAnswer":3,"currentUsername":{"userName":"Martine",
+            //     "answer4":"Marie Curie","correctAnswer":3,"user":{"userName":"Martine",
             //     "profileImage":"default10.png"},
             //   "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             //   "userScore":0,"opponentScore":0,"type":"GAME_MESSAGE"}
             console.log("GAME_MESSAGE erhalten")
             this.$store.commit('setUserName', msg.user.userName);
-
             this.opponentImage = msg.opponent.profileImage;
+            //this.$store.commit('setOpponentImage', msg.opponent.profileImage);
             this.userImage = msg.user.profileImage;
-            this.category = msg.category
-            this.$store.commit('setOpponentImage', msg.opponent.profileImage);
 
             this.$store.commit('setOpponentName', msg.opponent.userName);
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
-            this.questionText = msg.question;
             //this.$store.commit('setQuestionText', msg.question);
-            //this.$store.commit('setCategory', msg.category);
+            this.questionText = msg.question;
+            this.category = msg.category;
+            // this.$store.commit('setCategory', msg.category);
             this.answer1 = msg.answer1;
             this.answer2 = msg.answer2;
             this.answer3 = msg.answer3;
             this.answer4 = msg.answer4;
 
-
+            // this.$store.commit('setCorrectAnswer', msg.correctAnswer);
             this.correctAnswer = msg.correctAnswer;
             break
           case SCORE_MESSAGE:
             this.readyToCheck = true;
-            // {"currentUsername":{"userName":"Martine","profileImage":"default10.png"},
+            // {"user":{"userName":"Martine","profileImage":"default10.png"},
             // "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             // "userScore":0,"opponentScore":0,"type":"SCORE_MESSAGE"}
             console.log("SCORE_MESSAGE")
@@ -321,7 +326,7 @@ export default {
             console.log("winner is" + this.$store.getters.getWinner);
             console.log("highscore" + msg.isHighScore)
             // Messagebody:{"isHighScore":false,"winner":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},
-            //   "currentUsername":{"userName":"Martine","profileImage":"default10.png"},
+            //   "user":{"userName":"Martine","profileImage":"default10.png"},
             //   "opponent":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},"" +
             //   "userScore":745,"opponentScore":919,"type":"RESULT_MESSAGE"}
             try {
@@ -329,13 +334,15 @@ export default {
             } catch (JSONException) {
               // if there is no winner, set the value to none
               this.winner = "none";
-
             }
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
             this.$store.commit('setHighscore', msg.isHighScore);
             this.checkWinner();
-
+            setTimeout(() => {
+              this.goToResult();
+            }, 8000);
+            console.log("RESULT_MESSAGE erhalten")
             break
         }
         console.log(message.command)//MESSAGE
@@ -343,7 +350,7 @@ export default {
     },
 
     activateResponse: function (el) {
-      if (this.activeElement === 0) {
+      if (this.activeElement == 0) {
         console.log("activeel:" + this.activeElement);
         this.activeElement = el;
       }
@@ -380,11 +387,15 @@ export default {
       this.connected = this.$store.getters.getIsConnected
     },
 
-    // setTimer: function (value) {
-    //   this.$store.commit('setTimer', value);
-    //   this.timer = this.$store.getters.getTimer
-    // },
+    setTimer: function (value) {
+      this.$store.commit('setTimer', value);
+      this.timer = this.$store.getters.getTimer
+    },
 
+    setQuestionText: function (value) {
+      this.$store.commit('setQuestion', value);
+      this.question.text = this.$store.getters.getQuestionText()
+    },
 
     goToResult() {
       this.$router.push('/result');
@@ -393,7 +404,7 @@ export default {
 
     goToErrorPage() {
       this.disconnectFromSocket();
-      this.$router.push('/disconnect');
+      this.$router.push('/disconnectFromSocket');
     },
 
     resetSelectedAnswer() {
