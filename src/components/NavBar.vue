@@ -3,7 +3,7 @@
   <nav class="Vdark-2 shadow-xl">
     <section class="w-full px-8 text-gray-700 bg-white">
       <div class="relative flex items-center h-16 justify-between">
-        <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        <a href="https://www.youtube.com/watch?v=rfbb4yRBH64"
            class="flex items-center mb-5 font-medium text-gray-900 lg:w-auto lg:items-center lg:justify-center md:mb-0">
           <span class="mx-auto text-xl font-black leading-none text-gray-900 select-none">superquiz<span
               class="text-green-600">.</span></span>
@@ -15,7 +15,7 @@
         <div class="text-right">
 
           <router-link to="/about">About</router-link>
-          |
+
 
           <span v-if="this.$store.state.isAuthenticated"> |  <router-link to="/highscore">Highscore</router-link></span>
           <span v-if="this.$store.state.isAuthenticated"> |  <router-link to="/game">Game</router-link></span>
