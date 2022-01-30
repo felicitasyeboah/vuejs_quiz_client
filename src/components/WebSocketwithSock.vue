@@ -158,11 +158,6 @@ import {
 } from "@/assets/constants";
 
 export default {
-  computed: {
-    question() {
-      return this.$store.state.question;
-    }
-  },
   name: "WebSocketwithSock",
   data() {
     return {
@@ -178,13 +173,13 @@ export default {
       readyToPlay: false,
       loading: false,
       step2msg: "Ready to look for another player?",
-      token: localStorage.getItem('token'),
+
       setConnected: false,
       ws_url: WEBSOCKET_IP,
       ws_ip: WS_URL + STOMP_ENDPOINT,
-      msg: "token:" + this.token,
+
       stompClient: null,
-      status: "Wird gesucht",
+
       opponentFound: false,
       connected: this.$store.state.isConnected,
       timer: 0,
@@ -198,7 +193,7 @@ export default {
       errorText: "",
       showError: false,
       opponentImage: "default3.png",
-      userImage: "default4.png",
+
       imageRoot: IMAGE_ROOT,
     }
   },
@@ -293,9 +288,7 @@ export default {
             //   "userScore":0,"opponentScore":0,"type":"GAME_MESSAGE"}
             console.log("GAME_MESSAGE erhalten")
             this.$store.commit('setUserName', msg.user.userName);
-            this.opponentImage = msg.opponent.profileImage;
-            //this.$store.commit('setOpponentImage', msg.opponent.profileImage);
-            this.userImage = msg.user.profileImage;
+
 
             this.$store.commit('setOpponentName', msg.opponent.userName);
             this.$store.commit('setOpponentScore', msg.opponentScore);
