@@ -259,10 +259,6 @@ export default {
             // {"timeLeft":2,"type":"START_TIMER_MESSAGE"}
             // this.$store.commit('setStartTimer', msg.timeLeft);
             this.startTimer = msg.timeLeft;
-            // if (this.startTimer === 0) {
-            //   this.opponentFound = true;
-            //   this.readyToPlay = true;
-            // }
             break;
           case QUESTION_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
@@ -289,20 +285,15 @@ export default {
             console.log("GAME_MESSAGE erhalten")
             this.$store.commit('setUserName', msg.user.userName);
 
-
             this.$store.commit('setOpponentName', msg.opponent.userName);
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
-            //this.$store.commit('setQuestionText', msg.question);
             this.questionText = msg.question;
             this.category = msg.category;
-            // this.$store.commit('setCategory', msg.category);
             this.answer1 = msg.answer1;
             this.answer2 = msg.answer2;
             this.answer3 = msg.answer3;
             this.answer4 = msg.answer4;
-
-            // this.$store.commit('setCorrectAnswer', msg.correctAnswer);
             this.correctAnswer = msg.correctAnswer;
             break
           case SCORE_MESSAGE:
@@ -314,6 +305,7 @@ export default {
             break
           case SCORE_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"SCORE_TIMER_MESSAGE"}
+              this.timer = "wait"
             console.log("SCORE_TIMER_MESSAGE")
             break
           case RESULT_MESSAGE:
@@ -377,15 +369,6 @@ export default {
       this.connected = this.$store.getters.getIsConnected
     },
 
-    setTimer: function (value) {
-      this.$store.commit('setTimer', value);
-      this.timer = this.$store.getters.getTimer
-    },
-
-    setQuestionText: function (value) {
-      this.$store.commit('setQuestion', value);
-      this.question.text = this.$store.getters.getQuestionText()
-    },
 
     goToResult() {
       this.$router.push('/result');
@@ -394,7 +377,7 @@ export default {
 
     goToErrorPage() {
       this.disconnectFromSocket();
-      this.$router.push('/disconnectFromSocket');
+      this.$router.push('/disconnect');
     },
 
     resetSelectedAnswer() {

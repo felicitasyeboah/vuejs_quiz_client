@@ -11,7 +11,7 @@
             <span class="text-red-500">Oops!</span> Connection error
           </p>
           <p class="mb-8 text-center text-gray-500 md:text-lg">
-            Your opponent has left the game
+            Technical problem or your opponent has left the game
           </p>
           <span class="text-teal-600 text-md font-semibold"> <span class="text-sm text-gray-600"><button
               class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
