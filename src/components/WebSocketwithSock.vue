@@ -68,13 +68,14 @@
         <div class="text-gray-700">Your score: {{
             this.$store.getters.getUserScore
                                    }}
-          <img :src="imageRoot+userImage" alt="userimage" class="mx-auto w-32 h-32 rounded-full">
+          <img :src="this.$store.getters.getUserImage" alt="userimage" class="mx-auto w-32 h-32 rounded-full">
 
         </div>
         <div class="font-sans text-3xl p-3 m-5">vs.</div>
         <div class="text-gray-700"> {{ this.$store.getters.getOpponentName }}:
                                     {{ this.$store.getters.getOpponentScore }}
-          <img :src="imageRoot+opponentImage" alt="oppimage" class=" mx-auto w-32 h-32 rounded-full">
+          <img :src="imageRoot+this.$store.getters.getOpponentName" alt="oppimage"
+               class=" mx-auto w-32 h-32 rounded-full">
         </div>
       </div>
 
@@ -339,10 +340,6 @@ export default {
             this.$store.commit('setUserScore', msg.userScore);
             this.$store.commit('setHighscore', msg.isHighScore);
             this.checkWinner();
-            setTimeout(() => {
-              this.goToResult();
-            }, 8000);
-            console.log("RESULT_MESSAGE erhalten")
             break
         }
         console.log(message.command)//MESSAGE
@@ -350,7 +347,7 @@ export default {
     },
 
     activateResponse: function (el) {
-      if (this.activeElement == 0) {
+      if (this.activeElement === 0) {
         console.log("activeel:" + this.activeElement);
         this.activeElement = el;
       }
