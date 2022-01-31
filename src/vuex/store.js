@@ -103,6 +103,18 @@ export default new Vuex.Store({
                 console.log("ausgeloggt")
 
             },
+            removeUser() {
+                localStorage.removeItem('userName');
+            },
+            removeToken() {
+                localStorage.removeItem('token');
+            },
+            getTime() {
+                return Date().getTime() / 1000;
+            },
+            unAuth() {
+                this.state.isAuthenticated = false;
+            }
 
         },
 
@@ -111,7 +123,7 @@ export default new Vuex.Store({
 // },
         getters: {
             getStatus: state => {
-                return state.isAuthenticated
+                return Boolean(state.isAuthenticated);
             },
             getName: state => {
                 return String(state.currentUsername);
@@ -121,9 +133,6 @@ export default new Vuex.Store({
             },
             getIsConnected: state => {
                 return Boolean(state.isConnected);
-            },
-            getTimer: state => {
-                return Number(state.timeLeft);
             },
             getUserScore: state => {
                 return Number(state.userScore)
@@ -146,6 +155,7 @@ export default new Vuex.Store({
             getToken: state => {
                 return String(state.token)
             },
+
         }
 
     }

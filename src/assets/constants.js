@@ -14,6 +14,7 @@ export const STOMP_ENDPOINT = "/websocket"
 export const CONNECTED = "CONNECTED"
 export const MESSAGE = "MESSAGE"
 export const DISCONNECT = "DISCONNECT"
+export const SESSION_EXPIRED_MESSAGE = "SESSION_EXPIRED_MESSAGE"
 //Message types
 export const GAME_MESSAGE = "GAME_MESSAGE"
 export const SCORE_MESSAGE = "SCORE_MESSAGE"

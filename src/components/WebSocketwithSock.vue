@@ -72,8 +72,8 @@
 
         </div>
         <div class="font-sans text-3xl p-3 m-5">vs.</div>
-        <div class="text-gray-700"> {{ this.$store.getters.getOpponentName }}:
-                                    {{ this.$store.getters.getOpponentScore }}
+        <div class="text-gray-700"> {{ this.$store.getters.getOpponentName  }}:
+                                    {{ this.$store.getters.getOpponentScore  }}
           <img :src="imageRoot+this.$store.getters.getOpponentName" alt="oppimage"
                class=" mx-auto w-32 h-32 rounded-full">
         </div>
@@ -83,7 +83,7 @@
       <div class="flex items-center justify-center">
         <div class="bg-slate-800 flex flex-col items-center pb-3.5 m-2">
           <div class="italic">
-            {{ this.category }}
+            {{ this.category  }}
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@
 
       <div id="question" class="mb-12 text-left text-5xl pl-1.5">
         <!--        {{ this.$store.state.question.text }}-->
-        {{ this.questionText }}
+        {{ this.questionText  }}
       </div>
       <div id="questionsandanswers">
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
@@ -151,6 +151,7 @@ import {
   RESULT_MESSAGE,
   SCORE_MESSAGE,
   SCORE_TIMER_MESSAGE,
+  SESSION_EXPIRED_MESSAGE,
   START_TIMER_MESSAGE,
   STOMP_ENDPOINT,
   WEBSOCKET_IP,
@@ -272,6 +273,11 @@ export default {
             alert("Error - There was a technical issue");
             this.goToErrorPage()
             break
+          case SESSION_EXPIRED_MESSAGE:
+            alert("There was a problem - you cannot play against yourself");
+            this.goToErrorPage()
+            this.$store.dispatch('logout')
+            break
           case GAME_MESSAGE:
             this.gamestart = true;
             this.loading = false;
@@ -305,7 +311,7 @@ export default {
             break
           case SCORE_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"SCORE_TIMER_MESSAGE"}
-              this.timer = "wait"
+            this.timer = "wait"
             console.log("SCORE_TIMER_MESSAGE")
             break
           case RESULT_MESSAGE:
