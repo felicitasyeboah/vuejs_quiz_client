@@ -101,9 +101,7 @@ export default {
           }).catch((error) => {
         this.waitingForAnswer = false;
         this.showError = true;
-        const code = error.response.status;
-        // Wrong password
-        if (code === 401) {
+        if (error.response.status && error.response.status === 401) {
           this.errorMessage = "Error: No valid authentication credentials. Wrong password or username?"
         } else {
           this.errorMessage = error;
@@ -112,6 +110,8 @@ export default {
     }
   }
 }
+
+
 </script>
 
 <style>

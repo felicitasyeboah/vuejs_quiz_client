@@ -8,16 +8,36 @@
 import NavBar from "@/components/NavBar.vue";
 import Footer from "@/components/Footer";
 
+
 export default {
   components: {
     Footer,
     NavBar,
+  },
+  data() {
 
   },
-
   beforeMount() {
-    this.$store.commit('initializeStore');
-    this.$store.commit('tokenAndNameCheck');
-  }
+    if (localStorage.getItem('token') !== null) {
+      this.$store.commit('initializeStore');
+      try {
+        this.$store.commit('decodeJWT');
+        this.$store.dispatch('checkTokenDate');
+      } catch {
+        console.log("Please try again..")
+        const er = "Token problem"
+        this.$store.commit('setError', er)
+      }
+
+      if (this.$store.state.tokenValid) {
+        this.$store.commit('tokenAndNameCheck');
+      } else {
+        this.$store.dispatch('logout');
+      }
+    } else {
+      alert("kein token vorhanden")
+    }
+  },
+
 };
 </script>

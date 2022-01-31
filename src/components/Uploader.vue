@@ -38,12 +38,10 @@
 
 import axios from "axios";
 import {UPLOAD_URL} from "@/assets/constants";
-import {authComputed} from "@/vuex/helpers";
+
 
 export default {
-  computed: {
-    ...authComputed
-  },
+
   name: "Uploader",
   data() {
     return {

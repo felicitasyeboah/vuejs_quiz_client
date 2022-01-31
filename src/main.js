@@ -20,9 +20,6 @@ axios.interceptors.request.use(
         return config;
     },
     error => {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
         Promise.reject(error)
     });
 
@@ -31,18 +28,11 @@ axios.interceptors.request.use(
 axios.interceptors.response.use((response) => {
     return response
 }, function (error) {
-
-    alert("oh no, ein technik-problem und jetzt sollte ausgeloggt werden")
-
-    this.$store.dispatch('unAuth')
-    alert("axios " + error)
+    if (error.response.status === 401) {
+        alert("Sorry, there’s a problem with the credentials you’re using to sign in")
+        console.log(error.response.data);
+    } else {
+        console.log("Technical problem")
+    }
 });
 
-
-// // If there is a token in local storage, it adds it to every request
-// axios.interceptors.request.use(req => {
-//     // `req` is the Axios request config, so you can modify
-//     // the `headers`.
-//     req.headers = {'Authorization': 'Bearer ' + localStorage.getItem('token')}
-//     return req;
-// });
