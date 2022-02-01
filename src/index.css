@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Oxygen&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Orbitron&family=Oswald:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron&family=Oswald:wght@300&family=Permanent+Marker&display=swap");
 
 /*Important tailwind stuff and rest CSS*/
 /* ./src/index.css */
@@ -338,6 +338,11 @@ li {
 
     color       : black;
     text-shadow : 0 0 20px rgba(3, 201, 169, 1), 0 0 20px rgba(22, 160, 133, 1);
+    }
+
+.scoretimer {
+    font-family : "Permanent Marker", serif;
+    color       : darkseagreen;
     }
 
 .time {

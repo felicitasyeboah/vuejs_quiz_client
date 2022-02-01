@@ -8,11 +8,11 @@
           <span class="mx-auto text-xl font-black leading-none text-gray-900 select-none">superquiz<span
               class="text-green-600">.</span></span>
         </a>
-        <div class="bg-red-400 text-white"> {{ this.$store.state.errorText }}</div>
+        <div class="bg-red-400 text-white"> {{ this.errorText }}</div>
 
-        <span v-if="this.$store.state.isAuthenticated">Welcome {{ this.$store.state.currentUsername }}</span>
+        <span v-if="this.isAuthenticated">Welcome {{ this.userName }}</span>
         <span v-else class="italic text-left">Welcome   <span
-            v-if="!this.$store.state.user">unbekannter User</span></span>
+            v-if="!this.isAuthenticated">unbekannter User</span></span>
         <div class="text-right">
           <span><router-link to="/about">About</router-link></span>
           <span v-if="this.isAuthenticated">
@@ -42,23 +42,22 @@ export default {
     isAuthenticated: function () {
       return this.$store.state.isAuthenticated
     },
+    errorText: function () {
+      return this.$store.state.errorText
+    },
+    userName: function () {
+      return localStorage.getItem('userName')
+    }
   },
 
   name: 'Navbar',
   props: {},
-  data() {
-    return {
-      userName: localStorage.getItem('userName'),
-      errorText: this.$store.state.navBarErrorText,
 
-    }
-  },
 
   methods: {
     // Logs out currentUsername (method in store.js) and reloads nav-Bar
     logout() {
       this.$store.dispatch('logout')
-      this.$store.commit('changeStatus', false)
       console.log(this.$store.isLoggedIn)
       console.log(this.$store.state.user)
     },

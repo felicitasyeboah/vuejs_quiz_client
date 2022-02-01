@@ -1,6 +1,11 @@
 <template>
   <div v-if="this.$store.state.isAuthenticated">
-    <Profil />
+    <div v-if="!this.existingRecords">
+      <UserInformation />
+    </div>
+    <div v-else>
+      <Profil />
+    </div>
   </div>
   <div v-else>
     <Login />
@@ -11,9 +16,19 @@
 
 import Profil from "@/components/Profil";
 import Login from "@/views/Login";
+import UserInformation from "@/components/UserInformation";
 
 export default {
-  components: {Profil, Login},
+  components: {UserInformation, Profil, Login},
+  // data() {
+  //   return {
+  //     existingRecords: true,
+
+  computed: {
+    existingRecords: function () {
+      return this.$store.state.existingRecords
+    },
+  }
 }
 </script>
 

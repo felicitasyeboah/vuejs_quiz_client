@@ -3,7 +3,7 @@ import {IMAGE_ROOT} from "@/assets/constants";
 import jwt_decode from "jwt-decode";
 
 // Create a new store instance. Gets token from localstorage, gets current username from localstorage.
-export default new Vuex.Store({
+export const store = new Vuex.Store({
         state: {
             token: localStorage.getItem('token'),
             user: localStorage.getItem('userName'),
@@ -24,9 +24,10 @@ export default new Vuex.Store({
             decoded: null,
             expirationDate: null,
             tokenValid: true,
-
+            registrationError: false,
             navBarErrorText: '',
             errorText: '',
+            existingRecords: true,
         },
         mutations: {
             initializeStore(state) {
@@ -40,9 +41,7 @@ export default new Vuex.Store({
                     state.isAuthenticated = false
                 }
             },
-            changeStatus(state, isLoggedIn) {
-                state.isAuthenticated = isLoggedIn
-            },
+
             setToken(state, token) {
                 state.token = token
                 state.isAuthenticated = true
@@ -81,6 +80,12 @@ export default new Vuex.Store({
             },
             setError: (state, value) => {
                 state.errorText = value;
+            },
+            setRecords: (state) => {
+                state.existingRecords = false;
+            },
+            setRecordsTrue: (state) => {
+                state.existingRecords = true;
             },
 
             decodeJWT() {

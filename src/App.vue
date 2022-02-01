@@ -14,9 +14,7 @@ export default {
     Footer,
     NavBar,
   },
-  data() {
 
-  },
   beforeMount() {
     if (localStorage.getItem('token') !== null) {
       this.$store.commit('initializeStore');
@@ -28,7 +26,6 @@ export default {
         const er = "Token problem"
         this.$store.commit('setError', er)
       }
-
       if (this.$store.state.tokenValid) {
         this.$store.commit('tokenAndNameCheck');
       } else {
