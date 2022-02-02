@@ -69,13 +69,13 @@ export default {
   computed: {
     // a computed getter
     userImage: function () {
-      return IMAGE_ROOT + localStorage.getItem('userName')
+      return IMAGE_ROOT + sessionStorage.getItem('userName')
     },
     isAuthenticated: function () {
       return this.$store.state.isAuthenticated
     },
     userNameStorage: function () {
-      return localStorage.getItem('userName')
+      return sessionStorage.getItem('userName')
     }
   },
 
@@ -97,10 +97,10 @@ export default {
       axios.post(LOGIN_URL, postData, axiosConfiguration)
           .then((response) => {
             this.$store.commit('setImportantError', false);
-            // Save received JWT Token and the entered Username to LocalStorage
-            localStorage.setItem('token', response.data.token)
-            localStorage.setItem('userName', this.userName)
-            // check if values for token and userName in localstorage exist and change status
+            // Save received JWT Token and the entered Username to sessionStorage
+            sessionStorage.setItem('token', response.data.token)
+            sessionStorage.setItem('userName', this.userName)
+            // check if values for token and userName in sessionStorage exist and change status
             this.$store.commit('tokenAndNameCheck');
             this.waitingForAnswer = false;
             this.$store.commit('setError', null)

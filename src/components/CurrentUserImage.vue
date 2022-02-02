@@ -21,7 +21,7 @@ export default {
   computed: {
     // a computed getter
     userImage: function () {
-      return this.imgRoot + localStorage.getItem('userName')
+      return this.imgRoot + sessionStorage.getItem('userName')
     }
   },
 }

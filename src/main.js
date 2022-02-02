@@ -12,7 +12,7 @@ createApp(App).use(router).use(store).use(VueChartkick).mount('#app')
 // Add a request interceptor, takes the JWT from Storage and adds it to every request made by axios
 axios.interceptors.request.use(
     config => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
             config.headers['Authorization'] = 'Bearer ' + token;
         }

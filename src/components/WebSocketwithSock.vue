@@ -211,7 +211,7 @@ export default {
     //Sends the JWT - before searching for opponents but after connecting
     sendToken() {
       const body = {
-        'token': localStorage.getItem('token')
+        'token': sessionStorage.getItem('token')
       };
       alert("send token")
       this.stompClient.send("/app/game", {}, JSON.stringify(body));

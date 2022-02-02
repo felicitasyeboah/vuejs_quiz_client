@@ -47,7 +47,7 @@ export default {
       return this.$store.state.errorText
     },
     userName: function () {
-      return localStorage.getItem('userName')
+      return sessionStorage.getItem('userName')
     }
   },
 

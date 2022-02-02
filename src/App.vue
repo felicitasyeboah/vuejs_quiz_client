@@ -16,7 +16,7 @@ export default {
   },
 
   beforeMount() {
-    if (localStorage.getItem('token') !== null) {
+    if (sessionStorage.getItem('token') !== null) {
       this.$store.commit('initializeStore');
       try {
         this.$store.commit('decodeJWT');

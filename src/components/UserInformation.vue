@@ -23,13 +23,13 @@ import {IMAGE_ROOT} from "@/assets/constants";
 export default {
   computed: {
     userImage: function () {
-      return IMAGE_ROOT + localStorage.getItem('userName')
+      return IMAGE_ROOT + sessionStorage.getItem('userName')
     },
     errorText: function () {
       return this.$store.state.errorText
     },
     userName: function () {
-      return localStorage.getItem('userName')
+      return sessionStorage.getItem('userName')
     }
   },
 }

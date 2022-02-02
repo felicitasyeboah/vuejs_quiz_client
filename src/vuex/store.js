@@ -2,13 +2,13 @@ import Vuex from 'vuex'
 import {IMAGE_ROOT} from "@/assets/constants";
 import jwt_decode from "jwt-decode";
 
-// Create a new store instance. Gets token from localstorage, gets current username from sessionstorage.
+// Create a new store instance. Gets token from sessionStorage, gets current username from sessionStorage.
 export const store = new Vuex.Store({
         state: {
-            token: localStorage.getItem('token'),
-            user: localStorage.getItem('userName'),
-            currentUsername: localStorage.getItem('userName'),
-            tokenExpirationDate: localStorage.getItem('expirationDate'),
+            token: sessionStorage.getItem('token'),
+            user: sessionStorage.getItem('userName'),
+            currentUsername: sessionStorage.getItem('userName'),
+            tokenExpirationDate: sessionStorage.getItem('expirationDate'),
             isConnected: false,
             isAuthenticated: false,
             currentUser: '',
@@ -35,9 +35,9 @@ export const store = new Vuex.Store({
         mutations: {
 
             initializeStore(state) {
-                if (localStorage.getItem('token')) {
-                    state.token = localStorage.getItem('token')
-                    state.userName = localStorage.getItem('userName')
+                if (sessionStorage.getItem('token')) {
+                    state.token = sessionStorage.getItem('token')
+                    state.userName = sessionStorage.getItem('userName')
                 } else {
                     state.userName = null
                     state.token = null
@@ -89,17 +89,17 @@ export const store = new Vuex.Store({
 
             //Decode the JWT-Token to get the expiration date (and maybe check if the token is well-formed - in the future?)
             decodeJWT() {
-                this.decoded = jwt_decode(localStorage.getItem('token'));
+                this.decoded = jwt_decode(sessionStorage.getItem('token'));
                 // Multiply to get value in milliseconds (and to match date.now) plus add a security-margin of 3 minutes (180000 milliseconds) and save
-                // the value to localstorage
+                // the value to sessionStorage
                 this.expirationDate = ((this.decoded.exp * 1000) + 180000)
-                localStorage.setItem('expirationDate', this.expirationDate)
-                console.log("exp date from ls:" + localStorage.getItem('expirationDate'))
+                sessionStorage.setItem('expirationDate', this.expirationDate)
+                console.log("exp date from ls:" + sessionStorage.getItem('expirationDate'))
             },
 
-// Checks if there are values saved in the localstorage
+// Checks if there are values saved in the sessionStorage
             tokenAndNameCheck() {
-                if (localStorage.getItem('token') !== null && localStorage.getItem('userName') !== null) {
+                if (sessionStorage.getItem('token') !== null && sessionStorage.getItem('userName') !== null) {
                     console.log("richtig eingeloggt")
                     this.state.isAuthenticated = true;
                     return true;
@@ -110,23 +110,23 @@ export const store = new Vuex.Store({
             }
         },
         actions: {
-            // The current token in localstorage is deleted. Username in localstorage is deleted.
+            // The current token in sessionStorage is deleted. Username in sessionStorage is deleted.
             logout() {
-                localStorage.removeItem('expirationDate')
-                localStorage.removeItem('token');
-                localStorage.removeItem('userName');
+                sessionStorage.removeItem('expirationDate')
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('userName');
                 this.isLoggedIn = false;
                 this.state.isAuthenticated = false;
                 console.log("ausgeloggt")
             },
-// Checks the token expiration date
+            // Checks the token expiration date
             checkTokenDate() {
-                if (localStorage.getItem('expirationDate') < Date.now()) {
+                if (sessionStorage.getItem('expirationDate') < Date.now()) {
                     //
                     this.state.tokenValid = false;
                     this.state.errorText = "TOKEN EXPIRED";
                     alert("Token expired")
-                    localStorage.removeItem('expirationDate')
+                    sessionStorage.removeItem('expirationDate')
                     this.state.isAuthenticated = false;
                 } else {
                     console.log("token still valid")

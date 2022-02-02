@@ -97,10 +97,10 @@ import moment from "moment";
 export default {
   computed: {
     userName: function () {
-      return localStorage.getItem('userName')
+      return sessionStorage.getItem('userName')
     },
     userImage: function () {
-      return IMAGE_ROOT + localStorage.getItem('userName')
+      return IMAGE_ROOT + sessionStorage.getItem('userName')
     },
     // existingRecords: function() {
     //   return this.$store.state.existingRecords
