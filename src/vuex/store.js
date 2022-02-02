@@ -5,13 +5,15 @@ import jwt_decode from "jwt-decode";
 // Create a new store instance. Gets token from sessionStorage, gets current username from sessionStorage.
 export const store = new Vuex.Store({
         state: {
+            // Just to be safe
             token: sessionStorage.getItem('token'),
             user: sessionStorage.getItem('userName'),
             currentUsername: sessionStorage.getItem('userName'),
             tokenExpirationDate: sessionStorage.getItem('expirationDate'),
+            currentUser: '',
             isConnected: false,
             isAuthenticated: false,
-            currentUser: '',
+            //Game
             userScore: 0,
             opponentName: "Player2",
             opponentScore: 0,
@@ -66,8 +68,8 @@ export const store = new Vuex.Store({
             setOpponentImage: (state, value) => {
                 state.oppImage = value;
             },
-            setNewHighscore: (state, bool) => {
-                state.newHighscore = bool;
+            setNewHighscore: (state, value) => {
+                state.newHighscore = value;
             },
             setResult: (state, value) => {
                 state.result = value;
@@ -94,13 +96,11 @@ export const store = new Vuex.Store({
                 // the value to sessionStorage
                 this.expirationDate = ((this.decoded.exp * 1000) + 180000)
                 sessionStorage.setItem('expirationDate', this.expirationDate)
-                console.log("exp date from ls:" + sessionStorage.getItem('expirationDate'))
             },
 
 // Checks if there are values saved in the sessionStorage
             tokenAndNameCheck() {
                 if (sessionStorage.getItem('token') !== null && sessionStorage.getItem('userName') !== null) {
-                    console.log("richtig eingeloggt")
                     this.state.isAuthenticated = true;
                     return true;
                 } else {
@@ -125,11 +125,9 @@ export const store = new Vuex.Store({
                     //
                     this.state.tokenValid = false;
                     this.state.errorText = "TOKEN EXPIRED";
-                    alert("Token expired")
                     sessionStorage.removeItem('expirationDate')
                     this.state.isAuthenticated = false;
                 } else {
-                    console.log("token still valid")
                     this.state.tokenValid = true;
                 }
             },

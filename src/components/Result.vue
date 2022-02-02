@@ -14,10 +14,10 @@
         Grats
       </span>
               <div v-show="this.newHighscore" class="font-extrabold pl-6"><span
-                  class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-600 text-white rounded">New</span>HIGHSCORE:
-                                                                                                                                                                  {{
+                  class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-600 text-white rounded mr-2">New</span>HIGHSCORE:
+                                                                                                                                                                       {{
                   this.$store.getters.getUserScore
-                                                                                                                                                                  }}
+                                                                                                                                                                       }}
 
               </div>
               <div v-show="!this.newHighscore"
@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  
+
   <!--Game lost-->
   <div v-if="$store.state.result===2">
     <div id="bodyloser" class="wrapper p-60 d-flex flex-column justify-content-center w-100 h-100 ">
@@ -64,11 +64,11 @@
         Ouch
       </span>
               <div v-show="this.newHighscore" class="font-extrabold pl-6"><span
-                  class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-600 text-white rounded">New</span>HIGHSCORE:
+                  class="inline-block py-1.5 px-2.5 leading-none text-center whitespace-nowrap align-baseline font-bold bg-blue-600 text-white rounded mr-1 mr-2">New</span>HIGHSCORE:
 
-                                                                                                                                                                  {{
+                                                                                                                                                                            {{
                   this.$store.getters.getUserScore
-                                                                                                                                                                  }}
+                                                                                                                                                                            }}
 
               </div>
               <div class="ml-2 text-gray-600 uppercase text-xs font-semibold tracking-wider">

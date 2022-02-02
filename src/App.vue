@@ -18,22 +18,16 @@ export default {
   beforeMount() {
     if (sessionStorage.getItem('token') !== null) {
       this.$store.commit('initializeStore');
+      this.$store.commit('tokenAndNameCheck');
       try {
         this.$store.commit('decodeJWT');
         this.$store.dispatch('checkTokenDate');
       } catch {
         console.log("Please try again..")
-        const er = "Token problem"
-        this.$store.commit('setError', er)
       }
-      if (this.$store.state.tokenValid) {
-        this.$store.commit('tokenAndNameCheck');
       } else {
         this.$store.dispatch('logout');
       }
-    } else {
-      alert("kein token vorhanden")
-    }
   },
 
 };
