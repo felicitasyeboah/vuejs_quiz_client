@@ -68,17 +68,16 @@
         <div class="text-gray-700">Your score: {{
             this.$store.getters.getUserScore
                                    }}
-          <img :src="this.$store.getters.getUserImage" alt="userimage" class="mx-auto w-32 h-32 rounded-full">
+          <img v-bind:src="this.$store.getters.getUserImage" alt="userimage" class="mx-auto w-32 h-32 rounded-full">
 
         </div>
         <div class="font-sans text-3xl p-3 m-5">vs.</div>
         <div class="text-gray-700"> {{ this.$store.getters.getOpponentName }}:
                                     {{ this.$store.getters.getOpponentScore }}
-          <img :src="imageRoot+this.$store.getters.getOpponentName" alt="opponentimage"
+          <img v-bind:src="imageRoot+this.$store.getters.getOpponentName" alt="opponentimage"
                class=" mx-auto w-32 h-32 rounded-full">
         </div>
       </div>
-
 
       <div class="flex items-center justify-center">
         <div class="bg-slate-800 flex flex-col items-center pb-3.5 m-2">
