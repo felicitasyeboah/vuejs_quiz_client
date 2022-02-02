@@ -234,6 +234,7 @@ export default {
     connectToWebsocket() {
       this.socket = new SockJS("http://localhost:8080/websocket");
       this.stompClient = Stomp.over(this.socket);
+      this.stompClient.debug = null
       this.stompClient.connect(
           {},
           frame => {
@@ -340,7 +341,6 @@ export default {
             this.checkWinner();
             break
         }
-        console.log(message.command)//MESSAGE
       }
     },
 
