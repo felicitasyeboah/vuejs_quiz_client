@@ -212,7 +212,6 @@ export default {
       const body = {
         'token': sessionStorage.getItem('token')
       };
-      alert("send token")
       this.stompClient.send("/app/game", {}, JSON.stringify(body));
       this.loading = true;
     },
