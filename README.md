@@ -1,6 +1,6 @@
 # Semesterprojekt Pattern und Frameworks 2021 - Gruppe B
 #
-# Android Client für das Quiz
+# Vue Web-Client für das Quiz
 #
 # Gruppenmitglieder:
 # Martine Weidig (258425) - verantwortlich für den Vue.js-Client
