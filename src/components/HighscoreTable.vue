@@ -1,6 +1,4 @@
 <template>
-
-
 <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
       <div class="alert text-3xl" role="alert" v-show="isLoading">
         Loading data, please wait..
