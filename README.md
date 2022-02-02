@@ -5,14 +5,14 @@
 # Gruppenmitglieder:
 # Martine Weidig (258425) - verantwortlich für den Vue.js-Client
 # Felicitas Yeboah (290784) - verantwortlich für den Android-Client
-# Christian Kobialka (306759) - verantwortlich für den Spring-Serve
+# Christian Kobialka (306759) - verantwortlich für den Spring-Server
 #
 
 
 # vueclient
 
 Anleitung sollte dabei sein -
-Finaler Commit 
+Finaler Commit 22:56
 
 ## Project setup
 
