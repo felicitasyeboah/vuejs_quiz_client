@@ -20,46 +20,6 @@
 
 export default {
   name: "AppMockup",
-  data() {
-    return {
-      token: localStorage.getItem('token'),
-      decoded: null,
-      expDate: localStorage.getItem('expirationDate'),
-      dateNow: Date.now(),
-
-
-    }
-  },
-  mounted() {
-    // this.decoded = jwt_decode(this.token);
-    // console.log(localStorage.getItem('expirationDate'))
-    // const moment = require('moment');
-    //
-    // const timestamp = 1643647682000;
-    // const formatted = moment(timestamp).format('LLLL');
-    //
-    // console.log(formatted); // "02/24/2018"
-    //
-    // //  29. January 2022 16:20:55 1643646055 Monday, 31. January 2022 16:20:55
-    //
-    // if (this.dateNow < localStorage.getItem('expirationDate')) {
-    //   console.log("kleiner")
-    // } else {
-    //   console.log("groesser")
-    // }
-    //
-    //
-    // console.log(this.$store.state.token)
-    // console.log(this.$store.state.isAuthenticated)
-
-  },
-  methods: {
-
-    nameCheck() {
-      this.$store.commit('tokenAndNameCheck');
-
-    }
-  }
 }
 </script>
 

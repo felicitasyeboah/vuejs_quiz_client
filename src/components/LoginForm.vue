@@ -4,10 +4,10 @@
       Waiting for an answer.. please wait
     </div>
     <div class="alert error-message text-white" v-show="showError&&!waitingForAnswer">
-      {{ errorMessage }}
+      {{ errorText }}
     </div>
 
-    <form @submit.prevent="login" v-show="!this.$store.state.isAuthenticated">
+    <form @submit.prevent="login" v-show="!isAuthenticated">
       <section>
         <h3 class="font-bold text-2xl">Welcome to Superquiz!</h3>
         <p class="text-gray-600 pt-2">Sign into your account.</p>
@@ -23,7 +23,7 @@
         </button>
       </div>
     </form>
-    <div v-show="!isAuthenticated">
+    <div v-show="!isAuthenticated&&!waitingForAnswer">
       <div class="max-w-lg mx-auto text-center mt-12 mb-6 ">
         <p class="text-black">Don't have an account?
           <router-link to="/register" class="font-bold hover:underline">Sign
@@ -34,11 +34,12 @@
     </div>
 
 
-    <div v-show="isAuthenticated" class="alert alert-success" role="alert">
-      <h1 class="font-sans text-3xl">Welcome {{ userNameStorage }}</h1>
+    <div v-if="isAuthenticated&&!importantError" class="alert alert-success" role="alert">
+      <h1 class="font-sans text-3xl">Welcome {{ this.userNameStorage }}</h1>
       <img v-bind:src="this.userImage" class="w-1/2 mx-auto" alt="currentUserImage">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
+
 
 
   </main>
@@ -48,7 +49,7 @@
 <script>
 
 import axios from 'axios';
-import {LOGIN_URL} from '@/assets/constants';
+import {IMAGE_ROOT, LOGIN_URL} from '@/assets/constants';
 
 
 export default {
@@ -57,21 +58,25 @@ export default {
       userName: '',
       password: '',
       token: null,
-
-      isAuthenticated: this.$store.state.isAuthenticated,
-      errorMessage: 'Something didn\'t work quite right',
+      errorText: 'Error: Wrong password or username?',
       showError: false,
       waitingForAnswer: false,
-      userNameStorage: localStorage.getItem('userName'),
       imgRoot: "http://localhost:8080/profileImage/",
+      importantError: this.$store.state.importantError,
 
     }
   },
   computed: {
     // a computed getter
     userImage: function () {
-      return this.imgRoot + localStorage.getItem('userName')
+      return IMAGE_ROOT + localStorage.getItem('userName')
     },
+    isAuthenticated: function () {
+      return this.$store.state.isAuthenticated
+    },
+    userNameStorage: function () {
+      return localStorage.getItem('userName')
+    }
   },
 
 
@@ -91,24 +96,24 @@ export default {
       };
       axios.post(LOGIN_URL, postData, axiosConfiguration)
           .then((response) => {
+            this.$store.commit('setImportantError', false);
             // Save received JWT Token and the entered Username to LocalStorage
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('userName', this.userName)
             // check if values for token and userName in localstorage exist and change status
             this.$store.commit('tokenAndNameCheck');
             this.waitingForAnswer = false;
-            location.reload();
+            this.$store.commit('setError', null)
+            this.showError = false;
+            location.reload()
           }).catch((error) => {
         this.waitingForAnswer = false;
         this.showError = true;
-        if (error.response.status && error.response.status === 401) {
-          this.errorMessage = "Error: No valid authentication credentials. Wrong password or username?"
-        } else {
-          this.errorMessage = error;
-        }
+        console.log(error)
       })
     }
   }
+
 }
 
 

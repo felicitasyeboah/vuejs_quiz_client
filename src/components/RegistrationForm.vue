@@ -32,8 +32,12 @@
       </div>
       <p>{{ info }}</p>
     </form>
-    <div class="alert alert-success" role="alert" v-show="registrationSuccess">
+
+    <div class="alert alert-success" role="alert" v-show="!this.importantError&&this.registrationSuccess">
       Thank you for registering. Your registration was successful. You may now login.
+    </div>
+    <div v-show="this.importantError&&!this.registrationSuccess">
+      {{ errorText }}
     </div>
     <div class="max-w-lg mx-auto text-center mt-12 mb-6">
       <p class="text-black">Already a user?
@@ -58,9 +62,11 @@ export default {
       passwordError: null,
       info: null,
       registrationSuccess: false,
-      errorMessage: "Unknown Error",
+      errorMessage: "Request-Error - the Username already exists. ",
       showError: false,
       waitingForAnswer: false,
+      errorText: "User exists",
+      importantError: this.$store.state.importantError,
     }
   },
   methods: {
@@ -87,16 +93,12 @@ export default {
               this.waitingForAnswer = false;
               this.info = response;
               this.registrationSuccess = true;
+              this.$store.commit('setImportantError', false);
             }).catch((error) => {
+          this.registrationSuccess = false;
           this.waitingForAnswer = false;
           this.showError = true;
-          const code = error.response.status;
-          console.log(code)
-          if (code === 400) {
-            this.errorMessage = "A user with this username already exists"
-          } else {
-            this.errorMessage = error;
-          }
+          console.log(error)
         })
       }
     }

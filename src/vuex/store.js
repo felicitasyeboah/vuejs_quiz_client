@@ -3,7 +3,7 @@ import {IMAGE_ROOT} from "@/assets/constants";
 import jwt_decode from "jwt-decode";
 
 // Create a new store instance. Gets token from localstorage, gets current username from localstorage.
-export default new Vuex.Store({
+export const store = new Vuex.Store({
         state: {
             token: localStorage.getItem('token'),
             user: localStorage.getItem('userName'),
@@ -11,7 +11,6 @@ export default new Vuex.Store({
             tokenExpirationDate: localStorage.getItem('expirationDate'),
             isConnected: false,
             isAuthenticated: false,
-            currentUserImage: '',
             currentUser: '',
             userScore: 0,
             opponentName: "Player2",
@@ -24,11 +23,17 @@ export default new Vuex.Store({
             decoded: null,
             expirationDate: null,
             tokenValid: true,
-
+            registrationError: false,
             navBarErrorText: '',
             errorText: '',
+            importantError: false,
+            existingRecords: true,
+            existingHighscore: true,
         },
+
+        // mutations - to change states the store
         mutations: {
+
             initializeStore(state) {
                 if (localStorage.getItem('token')) {
                     state.token = localStorage.getItem('token')
@@ -40,20 +45,14 @@ export default new Vuex.Store({
                     state.isAuthenticated = false
                 }
             },
-            changeStatus(state, isLoggedIn) {
-                state.isAuthenticated = isLoggedIn
-            },
-            setToken(state, token) {
-                state.token = token
-                state.isAuthenticated = true
-            },
 
             setSocketIsConnected: (state, value) => {
                 state.isConnected = value;
-
             },
-            setUserImage: (state, value) => {
-                state.currentUserImage = value;
+
+            //mutations to store the values returned by the websocket globally
+            setUserName: (state, value) => {
+                state.currentUser = value;
             },
             setUserScore: (state, value) => {
                 state.userScore = value;
@@ -67,35 +66,38 @@ export default new Vuex.Store({
             setOpponentImage: (state, value) => {
                 state.oppImage = value;
             },
-            setWinner: (state, value) => {
-                state.winner = value;
-            },
-            setHighscore: (state, bool) => {
+            setNewHighscore: (state, bool) => {
                 state.newHighscore = bool;
-            },
-            setUserName: (state, value) => {
-                state.currentUser = value;
             },
             setResult: (state, value) => {
                 state.result = value;
             },
+
+            // ErrorHandling
             setError: (state, value) => {
                 state.errorText = value;
             },
+            setExistingRecords: (state, value) => {
+                state.existingRecords = value;
+            },
+            setImportantError: (state, value) => {
+                state.importantError = value;
+            },
+            setExistingHighscore: (state, value) => {
+                state.existingHighscore = value;
+            },
 
+            //Decode the JWT-Token to get the expiration date (and maybe check if the token is well-formed - in the future?)
             decodeJWT() {
-                //Decode the JWT-Token to get the expiration date
                 this.decoded = jwt_decode(localStorage.getItem('token'));
                 // Multiply to get value in milliseconds (and to match date.now) plus add a security-margin of 3 minutes (180000 milliseconds) and save
                 // the value to localstorage
                 this.expirationDate = ((this.decoded.exp * 1000) + 180000)
-                console.log(this.date)
-                console.log("berechn datum:" + this.expirationDate)
                 localStorage.setItem('expirationDate', this.expirationDate)
                 console.log("exp date from ls:" + localStorage.getItem('expirationDate'))
             },
 
-
+// Checks if there are values saved in the localstorage
             tokenAndNameCheck() {
                 if (localStorage.getItem('token') !== null && localStorage.getItem('userName') !== null) {
                     console.log("richtig eingeloggt")
@@ -117,7 +119,7 @@ export default new Vuex.Store({
                 this.state.isAuthenticated = false;
                 console.log("ausgeloggt")
             },
-
+// Checks the token expiration date
             checkTokenDate() {
                 if (localStorage.getItem('expirationDate') < Date.now()) {
                     //
@@ -133,16 +135,7 @@ export default new Vuex.Store({
             },
         },
 
-//     printToken() {
-//     console.log(localStorage.getItem('token'))
-// },
         getters: {
-            getStatus: state => {
-                return Boolean(state.isAuthenticated);
-            },
-            getName: state => {
-                return String(state.currentUsername);
-            },
             getUserImage: state => {
                 return IMAGE_ROOT + state.currentUsername;
             },
@@ -158,19 +151,9 @@ export default new Vuex.Store({
             getOpponentName: state => {
                 return String(state.opponentName)
             },
-            getCurrentUser: state => {
-                return String(state.currentUser)
-            },
             getWinner: state => {
                 return String(state.winner)
             },
-            getResult: state => {
-                return Number(state.result)
-            },
-            getToken: state => {
-                return String(state.token)
-            },
-
         }
 
     }

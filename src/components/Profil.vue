@@ -7,19 +7,23 @@
     <div class="alert error-message text-white" v-show="showError">
       {{ errorMessage }}
     </div>
+    <button @click="getGamesData" v-show="showError"
+            class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200">
+      Try again
+    </button>
 
     <div v-show="!isLoading&&!showStats&&!showError">
 
       <!--Userprofile-->
-      <div class="text-7xl mx-auto font-thin text-center p-5">{{ this.$store.getters.getName }}:</div>
+      <div class="text-7xl mx-auto font-thin text-center p-5">{{ this.userName }}:</div>
       <div class="container flex bg-white flex-wrap  mx-auto md:max-w  justify-center rounded card max-w-lg p-5 m-3">
 
-        <img :src="this.$store.getters.getUserImage " alt="userimage"
+        <img v-bind:src="this.userImage" alt="userimage"
              class="rounded-full border-solid border-white  pt-10 h-1/2">
 
 
         <div class="text-center px-3 pb-6 pt-2 p-10">
-          <h3 class="text-black text-sm bold font-sans text-2xl">{{ this.$store.getters.getName }}</h3>
+          <h3 class="text-black text-sm bold font-sans text-2xl">{{ this.userName }}</h3>
           <p class="mt-2 font-sans font-light text-black bg:bg-green-600"> Zu allem bereit, zu nichts zu
                                                                            gebrauchen..</p>
           <p class="italic underline mt-2 p-5 text-gray-700" @click="changePage" v-show="existingRecords">Show played
@@ -41,7 +45,7 @@
       <!--Pie-Chart-->
       <div class="container flex bg-white flex-wrap  mx-auto md:max-w  justify-center rounded card max-w-lg p-5 m-3"
            v-show="existingRecords">
-        <h1 class="text-3xl submit object-center pt-20">{{ this.$store.getters.getName }} stats:</h1>
+        <h1 class="text-3xl submit object-center pt-20">{{ this.userName }} stats:</h1>
         <pie-chart empty="No data" loading="Loading..."
                    :data="[['Won', wonGames],['Lost', lostGames], ['Draw', drawGames]]"></pie-chart>
         <div class="text-xl p-6 font-mono">Average Score: {{ averageScore }} (last {{ gamesTotal }} games)</div>
@@ -92,15 +96,22 @@ import moment from "moment";
 
 export default {
   computed: {
-    // ...authComputed
-
+    userName: function () {
+      return localStorage.getItem('userName')
+    },
+    userImage: function () {
+      return IMAGE_ROOT + localStorage.getItem('userName')
+    },
+    // existingRecords: function() {
+    //   return this.$store.state.existingRecords
+    // }
   },
   name: "Profil",
   data() {
     return {
-      userName: this.$store.state.username,
+
       showStats: false,
-      userImage: this.$store.state.currentUserImage,
+      existingRecords: false,
       isLoading: true,
       playedGamesList: [],
       imageRoot: IMAGE_ROOT,
@@ -112,40 +123,56 @@ export default {
       userScores: [],
       showError: false,
       errorMessage: "Something didnt work..",
-      existingRecords: true,
+
 
     }
   },
   mounted() {
-//Get played-games data for second page
-    axios.get('http://localhost:8080/playedGames').then(response => {
-      console.log(response.data)
-      this.isLoading = false;
-      this.wonGames = response.data.wonGames;
-      this.lostGames = response.data.lostGames;
-      this.averageScore = response.data.averageScore;
-      this.drawGames = response.data.drawGames;
-      this.gamesTotal = response.data.playedGames.length;
-      this.showError = false;
-      for (let i = 0; i < response.data.playedGames.length; i++) {
-        //push the last 5 values into a separate array - to use them for the line chart
-        this.userScores.push(response.data.playedGames[i].userScore);
-      }
-      this.playedGamesList = response.data.playedGames;
-    }).catch((error) => {
-      this.isLoading = false;
-      this.showError = true;
-      this.existingRecords = false;
-      const code = error.response.status;
-      if (code === 400) {
-        this.errorMessage = "No records found"
-      } else {
-        this.errorMessage = error;
-      }
-    })
+    this.getGamesData()
+    console.log(this.existingRecords)
   },
-
   methods: {
+    // Sends data to server and waits for an answer
+    getGamesData() {
+      axios.get('http://localhost:8080/playedGames')
+          .then((response) => {
+            console.log(response)
+            try {
+              this.gamesTotal = response.data.playedGames.length;
+
+              this.$store.commit('setExistingRecords', true);
+              this.isLoading = false;
+              this.wonGames = response.data.wonGames;
+              this.lostGames = response.data.lostGames;
+              this.averageScore = response.data.averageScore;
+              this.drawGames = response.data.drawGames;
+            } catch (JSONException) {
+              // if there are no played games, dont show the play-stats and the history
+
+              this.$store.commit('setExistingRecords', false);
+            }
+            this.showError = false;
+            this.existingRecords = true;
+            for (let i = 0; i < response.data.playedGames.length; i++) {
+              //push the last 5 values into a separate array - to use them for the line chart
+              this.userScores.push(response.data.playedGames[i].userScore);
+            }
+            this.playedGamesList = response.data.playedGames;
+            this.waitingForAnswer = false;
+            this.$store.commit('setError', null)
+          }).catch((error) => {
+        console.log(error)
+        this.isLoading = false;
+        this.showError = true;
+        this.waitingForAnswer = false;
+        this.showError = true;
+        this.existingRecords = false;
+        this.errorMessage = "Error: Could not retrieve entries"
+        alert("no entries")
+      })
+//Get played-games data for second page
+
+    },
     // Change from profile to gamestats and back
     changePage() {
       this.showStats = !this.showStats;
