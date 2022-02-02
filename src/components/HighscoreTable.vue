@@ -11,7 +11,7 @@
     <div class="container  flex justify-center mx-auto pt-5" v-show="!isLoading&&!showError">
       <div class="flex flex-col">
         <div class=" w-full">
-          <div class="border-b border-gray-200 bg-gray-50 hover:bg-green-600 shadow">
+          <div class="border-b border-gray-200 bg-gray-50  shadow">
             <table class="divide-y divide-gray-300 ">
               <div class="bg-gray-300 m-1 shadow-2xl hover:bg-gray-200">
                 <h1 class="text-center text-3xl font-thin uppercase">

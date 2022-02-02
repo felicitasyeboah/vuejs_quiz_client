@@ -24,7 +24,7 @@ axios.interceptors.request.use(
     });
 
 
-//Add a response interceptor
+//Add a response interceptor, should response to the main errors
 axios.interceptors.response.use((response) => {
     return response
 }, function (error) {

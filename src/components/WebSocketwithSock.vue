@@ -4,7 +4,7 @@
 
       <!--        PlayButton-->
       <div v-if="!$store.getters.getIsConnected">
-        <h2 class="mb-6 text-center text-7xl font-extrabold pt-10 lg:mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
+        <h2 class="mb-6 text-white text-center text-7xl font-extrabold pt-10 lg:mb-20 md:text-xl sm:text-xl mb-10 md:mt-0.5"
             id="welcome">Welcome.</h2>
 
         <div id="wrap" @click="connectToWebsocket">
@@ -29,7 +29,7 @@
       <!--      Looking for other players-->
 
       <div v-if="$store.getters.getIsConnected&&!this.readyToPlay" class="container max-w-5xl flex-auto">
-        <h2 class="mb-6 text-center text-5xl font-extrabold pt-10">{{ this.step2msg }}</h2>
+        <h2 class="mb-6 text-center text-5xl font-extrabold pt-10 text-white">Ready to look for another player?</h2>
         <div class="between">
           <button
               class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
@@ -178,7 +178,7 @@ export default {
       step: 0,
       readyToPlay: false,
       loading: false,
-      step2msg: "Ready to look for another player?",
+
 
       setConnected: false,
       ws_url: WEBSOCKET_IP,
