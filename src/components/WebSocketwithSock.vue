@@ -83,8 +83,8 @@
 
       <div class="flex items-center justify-center">
         <div class="bg-slate-800 flex flex-col items-center pb-3.5 m-2">
-          <div class="italic">
-            {{ this.category  }}
+          <div class="italic font-bold">
+            {{ this.category }}
           </div>
         </div>
       </div>
@@ -96,7 +96,8 @@
       </div>
       <div id="questionsandanswers">
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
-        <div class="scoretimer center border-0 text-3xl pb-0">{{ scoreTimer }}</div>
+        <div class="scoretimer mx-auto border-0 text-5xl pb-1 center" v-show="showScoretimer">{{ scoreTimer }}</div>
+
         <div id="answer1"
              :class="{ activ : activeElement === 1}, {correct: this.readyToCheck &&  correctAnswer===1}, {wrong: readyToCheck && (activeElement ===1 && correctAnswer!==1)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
@@ -126,6 +127,7 @@
                                                                          }}
         </div>
         <div class="center">
+
           <button
               class="text-right bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
               @click="checkWinner"> Leave game
@@ -194,6 +196,7 @@ export default {
       startTimer: 3,
       readyToCheck: false,
       activeElement: 0,
+      showScoretimer: false,
 
       errorText: "",
       showError: false,
@@ -267,6 +270,8 @@ export default {
             break;
           case QUESTION_TIMER_MESSAGE:
             // {"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
+            this.scoreTimer = 0;
+            this.showScoretimer = false;
             this.readyToCheck = false;
             this.readyToPlay = true
             console.log("QUESTION_TIMER_MESSAGE erhalten")
@@ -319,6 +324,7 @@ export default {
             console.log("SCORE_MESSAGE")
             break
           case SCORE_TIMER_MESSAGE:
+            this.showScoretimer = true;
             this.scoreTimer = msg.timeLeft;
             // {"timeLeft":1,"type":"SCORE_TIMER_MESSAGE"}
             this.timer = "wait"
@@ -339,7 +345,7 @@ export default {
             }
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
-            this.$store.commit('setHighscore', msg.isHighScore);
+            this.$store.commit('setNewHighscore', msg.isHighScore);
             this.checkWinner();
             break
         }
@@ -365,7 +371,7 @@ export default {
       console.log(JSON.stringify(body))
       this.stompClient.send("/app/game", {}, JSON.stringify(body));
     },
-
+//Send the JWT before searching for opponents
     sendToken() {
       const body = {
         'token': localStorage.getItem('token')
@@ -375,7 +381,7 @@ export default {
       this.loading = true;
       console.log(body)
     },
-
+//Disconnect from the Websocket
     disconnectFromSocket() {
       this.stompClient.disconnect();
       this.updateSocketStatus(false)
@@ -395,7 +401,7 @@ export default {
       this.disconnectFromSocket();
       this.$router.push('/error');
     },
-
+//
     resetSelectedAnswer() {
       this.readyToCheck = false;
       this.activeElement = 0;

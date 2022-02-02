@@ -9,7 +9,7 @@ import 'chartkick/chart.js'
 
 createApp(App).use(router).use(store).use(VueChartkick).mount('#app')
 
-// Add a request interceptor
+// Add a request interceptor, takes the JWT from Storage and adds it to every request made by axios
 axios.interceptors.request.use(
     config => {
         const token = localStorage.getItem('token');
@@ -28,43 +28,27 @@ axios.interceptors.request.use(
 axios.interceptors.response.use((response) => {
     return response
 }, function (error) {
+
+    //401 Unauthorized - occurs if the token is expired - user should be logged out
     if (error.response.status === 401) {
         alert("Sorry, there’s a problem with your credentials..")
+        this.$store.commit('setImportantError', true);
         console.log(error.response.data);
         console.log(store.state.token)
         store.dispatch('logout')
+
+        //400 Bad Request - can occur if user tries to register an username that already exists or if there a no records
+        //for a username
     } else if (error.response.status === 400) {
-        alert("Username already in db")
-        this.$store.commit('setImportantErrorTrue');
+        this.$store.commit('setImportantError', true);
+
+        //417 Expectation Failed -error can occur if uploaded image is too big/wrong format
+    } else if (error.response.status === 417) {
+        alert("File too big or wrong format")
     } else {
+        alert("Unkown technical problem")
         console.log("Technical problem")
-        store.dispatch('logout')
     }
 });
 
-// axios.interceptors.response.use((response) => {
-//     return response
-// }, function (error) {
-//     if (error.response) {
-//         // client received an error response (5xx, 4xx)
-//         this.errorMessage = error
-//         console.log(error.response.data.status)
-//         this.code= error.response.data.status
-//         switch (error.response.data.status) {
-//             case "400":
-//                 alert("No valid token")
-//                 store.dispatch('logout')
-//                 break;
-//             case "401":
-//                 alert("No entries found")
-//                 break;
-//         }
-//     } else if (error.request) {
-//         // client never received a response, or request never left
-//         console.log(error.request)
-//         this.errorMessage = error
-//         alert("servergedoens")
-//     } else {
-//         // anything else
-//         this.errorMessage = "Unknown error"
-//         console.log("Technical problem")
+

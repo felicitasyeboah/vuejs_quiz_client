@@ -334,7 +334,7 @@ li {
 
 #clock {
     font-family : "Orbitron", sans-serif;
-
+    height      : 100px;
 
     color       : black;
     text-shadow : 0 0 20px rgba(3, 201, 169, 1), 0 0 20px rgba(22, 160, 133, 1);
@@ -342,7 +342,8 @@ li {
 
 .scoretimer {
     font-family : "Permanent Marker", serif;
-    color       : darkseagreen;
+    color       : black;
+    height      : 80px;
     }
 
 .time {

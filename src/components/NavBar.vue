@@ -11,6 +11,7 @@
         <div class="bg-red-400 text-white"> {{ this.errorText }}</div>
 
         <span v-if="this.isAuthenticated">Welcome {{ this.userName }}</span>
+
         <span v-else class="italic text-left">Welcome   <span
             v-if="!this.isAuthenticated">unbekannter User</span></span>
         <div class="text-right">

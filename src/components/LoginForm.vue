@@ -4,7 +4,7 @@
       Waiting for an answer.. please wait
     </div>
     <div class="alert error-message text-white" v-show="showError&&!waitingForAnswer">
-      {{ errorMessage }}
+      {{ errorText }}
     </div>
 
     <form @submit.prevent="login" v-show="!isAuthenticated">
@@ -34,12 +34,12 @@
     </div>
 
 
-    <div v-if="isAuthenticated" class="alert alert-success" role="alert">
+    <div v-if="isAuthenticated&&!importantError" class="alert alert-success" role="alert">
       <h1 class="font-sans text-3xl">Welcome {{ this.userNameStorage }}</h1>
       <img v-bind:src="this.userImage" class="w-1/2 mx-auto" alt="currentUserImage">
       <h1 class="text-2xl">Login Successful.</h1>
     </div>
-    Please wait
+
 
 
   </main>
@@ -58,11 +58,11 @@ export default {
       userName: '',
       password: '',
       token: null,
-
-      errorMessage: 'Something didn\'t work quite right',
+      errorText: 'Error: Wrong password or username?',
       showError: false,
       waitingForAnswer: false,
       imgRoot: "http://localhost:8080/profileImage/",
+      importantError: this.$store.state.importantError,
 
     }
   },
@@ -96,6 +96,7 @@ export default {
       };
       axios.post(LOGIN_URL, postData, axiosConfiguration)
           .then((response) => {
+            this.$store.commit('setImportantError', false);
             // Save received JWT Token and the entered Username to LocalStorage
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('userName', this.userName)
@@ -103,18 +104,16 @@ export default {
             this.$store.commit('tokenAndNameCheck');
             this.waitingForAnswer = false;
             this.$store.commit('setError', null)
-
+            this.showError = false;
+            location.reload()
           }).catch((error) => {
         this.waitingForAnswer = false;
         this.showError = true;
-        if (error.response.status && error.response.status === 401) {
-          this.errorMessage = "Error: No valid authentication credentials. Wrong password or username?"
-        } else {
-          this.errorMessage = error;
-        }
+        console.log(error)
       })
     }
   }
+
 }
 
 

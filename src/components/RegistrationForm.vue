@@ -93,6 +93,7 @@ export default {
               this.waitingForAnswer = false;
               this.info = response;
               this.registrationSuccess = true;
+              this.$store.commit('setImportantError', false);
             }).catch((error) => {
           this.registrationSuccess = false;
           this.waitingForAnswer = false;

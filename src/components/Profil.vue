@@ -139,7 +139,8 @@ export default {
             console.log(response)
             try {
               this.gamesTotal = response.data.playedGames.length;
-              this.$store.commit('setRecordsTrue')
+
+              this.$store.commit('setExistingRecords', true);
               this.isLoading = false;
               this.wonGames = response.data.wonGames;
               this.lostGames = response.data.lostGames;
@@ -147,7 +148,8 @@ export default {
               this.drawGames = response.data.drawGames;
             } catch (JSONException) {
               // if there are no played games, dont show the play-stats and the history
-              this.$store.commit('setRecords')
+
+              this.$store.commit('setExistingRecords', false);
             }
             this.showError = false;
             this.existingRecords = true;
