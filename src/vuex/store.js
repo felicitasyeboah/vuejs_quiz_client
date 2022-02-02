@@ -27,7 +27,9 @@ export const store = new Vuex.Store({
             registrationError: false,
             navBarErrorText: '',
             errorText: '',
+            importantError: false,
             existingRecords: true,
+            existingHighscore: true,
         },
         mutations: {
             initializeStore(state) {
@@ -86,6 +88,16 @@ export const store = new Vuex.Store({
             },
             setRecordsTrue: (state) => {
                 state.existingRecords = true;
+            },
+            setImportantErrorTrue: (state) => {
+                state.importantError = true;
+            },
+            setImportantErrorFalse: (state) => {
+                state.importantError = false;
+            },
+
+            checkHighscoreRecords: (state) => {
+                state.existingHighscore = !state.existingHighscore;
             },
 
             decodeJWT() {

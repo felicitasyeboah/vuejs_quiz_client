@@ -34,9 +34,8 @@ axios.interceptors.response.use((response) => {
         console.log(store.state.token)
         store.dispatch('logout')
     } else if (error.response.status === 400) {
-        alert("fehler immer noch")
-        store.commit('setRecords')
-        store.commit('setError', "error")
+        alert("Username already in db")
+        this.$store.commit('setImportantErrorTrue');
     } else {
         console.log("Technical problem")
         store.dispatch('logout')

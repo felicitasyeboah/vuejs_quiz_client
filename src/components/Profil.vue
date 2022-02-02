@@ -136,12 +136,19 @@ export default {
     getGamesData() {
       axios.get('http://localhost:8080/playedGames')
           .then((response) => {
-            this.isLoading = false;
-            this.wonGames = response.data.wonGames;
-            this.lostGames = response.data.lostGames;
-            this.averageScore = response.data.averageScore;
-            this.drawGames = response.data.drawGames;
-            this.gamesTotal = response.data.playedGames.length;
+            console.log(response)
+            try {
+              this.gamesTotal = response.data.playedGames.length;
+              this.$store.commit('setRecordsTrue')
+              this.isLoading = false;
+              this.wonGames = response.data.wonGames;
+              this.lostGames = response.data.lostGames;
+              this.averageScore = response.data.averageScore;
+              this.drawGames = response.data.drawGames;
+            } catch (JSONException) {
+              // if there are no played games, dont show the play-stats and the history
+              this.$store.commit('setRecords')
+            }
             this.showError = false;
             this.existingRecords = true;
             for (let i = 0; i < response.data.playedGames.length; i++) {

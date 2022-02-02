@@ -50,7 +50,6 @@
 
 import axios from 'axios';
 import {IMAGE_ROOT, LOGIN_URL} from '@/assets/constants';
-import {store} from "@/vuex/store";
 
 
 export default {
@@ -104,7 +103,7 @@ export default {
             this.$store.commit('tokenAndNameCheck');
             this.waitingForAnswer = false;
             this.$store.commit('setError', null)
-            store.commit('setRecordsTrue')
+
           }).catch((error) => {
         this.waitingForAnswer = false;
         this.showError = true;
