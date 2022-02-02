@@ -93,10 +93,12 @@ export default {
       this.isLoading = false;
       this.showError = false;
       this.highscoreList = response.data
+      this.$store.commit('setExistingHighscore', true)
     }).catch((error) => {
       this.showError = true
       this.isLoading = false
       this.$store.commit('setError', error)
+      this.$store.commit('setExistingHighscore', false)
       // if (error.response) {
       //   // client received an error response (5xx, 4xx)
       //   this.errorMessage = error
