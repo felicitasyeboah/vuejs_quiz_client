@@ -76,7 +76,6 @@ export default {
       this.passwordError = this.password.length > 5 ?
           '' : 'Password must be at least 6 characters long'
       if (!this.passwordError) {
-        console.log(this.userName, this.password, REG_URL)
         this.waitingForAnswer = true;
         let postData = {
           userName: this.userName,
