@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import {IMAGE_ROOT} from "@/assets/constants";
 import jwt_decode from "jwt-decode";
 
-// Create a new store instance. Gets token from localstorage, gets current username from localstorage.
+// Create a new store instance. Gets token from localstorage, gets current username from sessionstorage.
 export const store = new Vuex.Store({
         state: {
             token: localStorage.getItem('token'),

@@ -62,7 +62,6 @@
     </div>
 
     <!--      Main game-->
-
     <div v-if="$store.getters.getIsConnected && this.readyToPlay">
 
       <div class="score text-xl  flex pb-5 justify-end items-end">
@@ -73,9 +72,9 @@
 
         </div>
         <div class="font-sans text-3xl p-3 m-5">vs.</div>
-        <div class="text-gray-700"> {{ this.$store.getters.getOpponentName  }}:
-                                    {{ this.$store.getters.getOpponentScore  }}
-          <img :src="imageRoot+this.$store.getters.getOpponentName" alt="oppimage"
+        <div class="text-gray-700"> {{ this.$store.getters.getOpponentName }}:
+                                    {{ this.$store.getters.getOpponentScore }}
+          <img :src="imageRoot+this.$store.getters.getOpponentName" alt="opponentimage"
                class=" mx-auto w-32 h-32 rounded-full">
         </div>
       </div>
@@ -83,21 +82,22 @@
 
       <div class="flex items-center justify-center">
         <div class="bg-slate-800 flex flex-col items-center pb-3.5 m-2">
+          <!--          The category of the displayed question-->
           <div class="italic font-bold">
             {{ this.category }}
           </div>
         </div>
       </div>
 
-
+      <!--The active question-->
       <div id="question" class="mb-12 text-left text-5xl pl-1.5">
-        <!--        {{ this.$store.state.question.text }}-->
-        {{ this.questionText  }}
+        {{ this.questionText }}
       </div>
       <div id="questionsandanswers">
+        <!--        The main and the between-questions-timer-->
         <div class="time pb-3.5 center border-0" id="clock">{{ timer }}</div>
         <div class="scoretimer mx-auto border-0 text-5xl pb-1 center" v-show="showScoretimer">{{ scoreTimer }}</div>
-
+        <!--The answers-->
         <div id="answer1"
              :class="{ activ : activeElement === 1}, {correct: this.readyToCheck &&  correctAnswer===1}, {wrong: readyToCheck && (activeElement ===1 && correctAnswer!==1)}"
              class="answer mb-6 p-3 mr-3 ml-3 text-center font-thin text-4xl  h-2/3 text-gray-700 hover:bg-gray-300 shadow-xl bg-gray-100 hover:text-gray-500 cursor-pointer"
@@ -127,10 +127,10 @@
                                                                          }}
         </div>
         <div class="center">
-
+          <!--Button to leave the game-->
           <button
               class="text-right bg-red-600 hover:bg-red-800 text-white font-bold py-2 rounded shadow-lg hover:shadow-xl transition duration-200"
-              @click="checkWinner"> Leave game
+              @click="leave"> Leave game
           </button>
         </div>
       </div>
@@ -208,17 +208,34 @@ export default {
 
   methods: {
 
-    checkAnswer() {
-      this.readyToCheck = true;
+    //Sends the JWT - before searching for opponents but after connecting
+    sendToken() {
+      const body = {
+        'token': localStorage.getItem('token')
+      };
+      alert("send token")
+      this.stompClient.send("/app/game", {}, JSON.stringify(body));
+      this.loading = true;
+      console.log(body)
     },
 
-    addStep() {
-      this.step = this.step + 1;
-      console.log(this.step);
+    //Websocket-Stuff
+    //Disconnects from the Websocket
+    disconnectFromSocket() {
+      this.stompClient.disconnect();
+      this.updateSocketStatus(false)
     },
+
+    //Updates the SocketStatus
+    updateSocketStatus: function (value) {
+      this.$store.commit('setSocketIsConnected', value);
+      this.connected = this.$store.getters.getIsConnected
+    },
+
+    //Main Websocket-Method
+    //Connects to the websocket and subscribes to get messages
     connectToWebsocket() {
       this.socket = new SockJS("http://localhost:8080/websocket");
-
       this.stompClient = Stomp.over(this.socket);
       this.stompClient.connect(
           {},
@@ -239,37 +256,27 @@ export default {
           }
       );
     },
-    checkWinner() {
-      if (this.winner === this.$store.getters.getOpponentName) {
-        this.resultMsg = "You lost";
-        this.$store.commit('setResult', 2);
-        this.goToResult();
-      } else if (this.winner === this.currentUser) {
-        this.resultMsg = "You have won";
-        this.$store.commit('setResult', 1);
-        this.goToResult();
-      } else {
-        this.resultMsg = "Draw";
-        this.$store.commit('setResult', 3);
-        this.goToResult();
-      }
-    },
 
-
+    // Handles the incoming websocket-messages
     msgHandler(message) {
       const messageCommand = message.command;
       const messageType = message.headers.type;
       if (messageCommand === MESSAGE) {
         const msg = JSON.parse(message.body);
         switch (messageType) {
+
+            //Different timers
           case START_TIMER_MESSAGE:
-            this.opponentFound = true;
+            //Timer before the games starts
             // {"timeLeft":2,"type":"START_TIMER_MESSAGE"}
             // this.$store.commit('setStartTimer', msg.timeLeft);
+            this.opponentFound = true;
             this.startTimer = msg.timeLeft;
             break;
+
           case QUESTION_TIMER_MESSAGE:
-            // {"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
+            //Main Timer for the questions
+            //{"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
             this.scoreTimer = 0;
             this.showScoretimer = false;
             this.readyToCheck = false;
@@ -278,33 +285,48 @@ export default {
             console.log("timeleft:" + msg.timeLeft);
             this.timer = msg.timeLeft
             break
+
+          case SCORE_TIMER_MESSAGE:
+            //Timer for between the questions
+            //{"timeLeft":1,"type":"SCORE_TIMER_MESSAGE"}
+            this.showScoretimer = true;
+            this.scoreTimer = msg.timeLeft;
+            this.timer = "wait"
+            console.log("SCORE_TIMER_MESSAGE")
+            break
+
+            //Different errors
           case DISCONNECT_MESSAGE:
+            //Second player leaves game - must close the tab
             alert("Error - There was a technical issue");
-            this.goToErrorPage()
+            this.goToDisconnectPage()
             break
           case INVALID_TOKEN_MESSAGE:
+            //JWT is expired before the game starts
             alert("Token expired");
             this.goToErrorPage()
             this.$store.dispatch('logout')
             break
           case SESSION_EXPIRED_MESSAGE:
+            //Both players have the same username
             alert("There was a problem - you cannot play against yourself");
             this.goToErrorPage()
             this.$store.dispatch('logout')
             break
+
+            //Game messages
           case GAME_MESSAGE:
-            this.gamestart = true;
-            this.loading = false;
-            this.resetSelectedAnswer();
+            //Message with the main information
             // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
             //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
             //     "answer4":"Marie Curie","correctAnswer":3,"user":{"userName":"Martine",
             //     "profileImage":"default10.png"},
             //   "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             //   "userScore":0,"opponentScore":0,"type":"GAME_MESSAGE"}
-            console.log("GAME_MESSAGE erhalten")
+            this.gamestart = true;
+            this.loading = false;
+            this.resetSelectedAnswer();
             this.$store.commit('setUserName', msg.user.userName);
-
             this.$store.commit('setOpponentName', msg.opponent.userName);
             this.$store.commit('setOpponentScore', msg.opponentScore);
             this.$store.commit('setUserScore', msg.userScore);
@@ -316,23 +338,18 @@ export default {
             this.answer4 = msg.answer4;
             this.correctAnswer = msg.correctAnswer;
             break
+
+            //Results
           case SCORE_MESSAGE:
-            this.readyToCheck = true;
+            //The current scores after each question
             // {"user":{"userName":"Martine","profileImage":"default10.png"},
             // "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
             // "userScore":0,"opponentScore":0,"type":"SCORE_MESSAGE"}
-            console.log("SCORE_MESSAGE")
+            this.readyToCheck = true;
             break
-          case SCORE_TIMER_MESSAGE:
-            this.showScoretimer = true;
-            this.scoreTimer = msg.timeLeft;
-            // {"timeLeft":1,"type":"SCORE_TIMER_MESSAGE"}
-            this.timer = "wait"
-            console.log("SCORE_TIMER_MESSAGE")
-            break
+
           case RESULT_MESSAGE:
-            console.log("winner is" + this.$store.getters.getWinner);
-            console.log("highscore" + msg.isHighScore)
+            // The final result after 3 questions
             // Messagebody:{"isHighScore":false,"winner":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},
             //   "user":{"userName":"Martine","profileImage":"default10.png"},
             //   "opponent":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},"" +
@@ -353,63 +370,86 @@ export default {
       }
     },
 
+    //Game elements
+    //Makes the selected answer visible
     activateResponse: function (el) {
       if (this.activeElement === 0) {
-        console.log("activeel:" + this.activeElement);
         this.activeElement = el;
       }
       console.log("bereits gesetzt")
     },
 
+    //Helper Methods to display elements on the right time
+    checkAnswer() {
+      this.readyToCheck = true;
+    },
+    addStep() {
+      this.step = this.step + 1;
+    },
+
+    //Allows player to leave the game and start a new one
+    leave() {
+      this.disconnectFromSocket();
+      this.$router.push('Game')
+    },
+
+    //Deselects the last answer
+    resetSelectedAnswer() {
+      this.readyToCheck = false;
+      this.activeElement = 0;
+    },
+
+    //Sends the selected answer and the needed time to the server
     sendAnswerText(value) {
       this.givenAnswer = value;
-      console.log(this.givenAnswer)
       const body = {
         'answer': this.givenAnswer,
         "time needed": this.timer
       };
-      console.log(JSON.stringify(body))
       this.stompClient.send("/app/game", {}, JSON.stringify(body));
     },
-//Send the JWT before searching for opponents
-    sendToken() {
-      const body = {
-        'token': localStorage.getItem('token')
-      };
-      alert("send token")
-      this.stompClient.send("/app/game", {}, JSON.stringify(body));
-      this.loading = true;
-      console.log(body)
-    },
-//Disconnect from the Websocket
-    disconnectFromSocket() {
-      this.stompClient.disconnect();
-      this.updateSocketStatus(false)
-    },
-    updateSocketStatus: function (value) {
-      this.$store.commit('setSocketIsConnected', value);
-      this.connected = this.$store.getters.getIsConnected
+
+    //Checks for the winner and sets the result as .. result
+    checkWinner() {
+      if (this.winner === this.$store.getters.getOpponentName) {
+        this.resultMsg = "You lost";
+        this.$store.commit('setResult', 2);
+        this.goToResult();
+      } else if (this.winner === this.currentUser) {
+        this.resultMsg = "You have won";
+        this.$store.commit('setResult', 1);
+        this.goToResult();
+      } else {
+        this.resultMsg = "Draw";
+        this.$store.commit('setResult', 3);
+        this.goToResult();
+      }
     },
 
-
+    //Result and errors
+    //Takes the user to the result page
     goToResult() {
-      this.$router.push('/result');
       this.disconnectFromSocket();
+      this.$router.push('/result');
     },
 
+    //Takes the user to a generic error page
     goToErrorPage() {
       this.disconnectFromSocket();
       this.$router.push('/error');
     },
-//
-    resetSelectedAnswer() {
-      this.readyToCheck = false;
-      this.activeElement = 0;
-    }
+
+    //Takes the user to a specific error page if the other player has disconnected
+    goToDisconnectPage() {
+      this.disconnectFromSocket();
+      this.$router.push('/disconnect');
+    },
   }
 }
 </script>
+
 <style scoped>
+/*Some specific CSS stuff for the big start-game-button*/
 span {
   transform : skewX(15deg)
   }
