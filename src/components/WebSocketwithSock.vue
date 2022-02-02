@@ -143,7 +143,6 @@
 <script>
 import Stomp from "stompjs";
 import SockJS from 'sockjs-client';
-import store from "../vuex/store";
 
 
 import {
@@ -216,7 +215,6 @@ export default {
       alert("send token")
       this.stompClient.send("/app/game", {}, JSON.stringify(body));
       this.loading = true;
-      console.log(body)
     },
 
     //Websocket-Stuff
@@ -240,11 +238,8 @@ export default {
       this.stompClient.connect(
           {},
           frame => {
-            console.log(frame);
             this.$store.commit('setSocketIsConnected', true);
             this.addStep()
-            console.log("store" + this.$store.getters.getIsConnected)
-            console.log("Status:" + this.connected)
             this.updateSocketStatus(true)
             this.stompClient.subscribe('/user/topic/game', this.msgHandler);
           },
@@ -268,31 +263,24 @@ export default {
             //Different timers
           case START_TIMER_MESSAGE:
             //Timer before the games starts
-            // {"timeLeft":2,"type":"START_TIMER_MESSAGE"}
-            // this.$store.commit('setStartTimer', msg.timeLeft);
             this.opponentFound = true;
             this.startTimer = msg.timeLeft;
             break;
 
           case QUESTION_TIMER_MESSAGE:
             //Main Timer for the questions
-            //{"timeLeft":1,"type":"QUESTION_TIMER_MESSAGE"}
             this.scoreTimer = 0;
             this.showScoretimer = false;
             this.readyToCheck = false;
             this.readyToPlay = true
-            console.log("QUESTION_TIMER_MESSAGE erhalten")
-            console.log("timeleft:" + msg.timeLeft);
             this.timer = msg.timeLeft
             break
 
           case SCORE_TIMER_MESSAGE:
             //Timer for between the questions
-            //{"timeLeft":1,"type":"SCORE_TIMER_MESSAGE"}
             this.showScoretimer = true;
             this.scoreTimer = msg.timeLeft;
             this.timer = "wait"
-            console.log("SCORE_TIMER_MESSAGE")
             break
 
             //Different errors
@@ -317,12 +305,6 @@ export default {
             //Game messages
           case GAME_MESSAGE:
             //Message with the main information
-            // {"category":"Wissenschaft","question":"Von wem stammt die Relativitätstheorie?",
-            //     "answer1":"Stephen Hawking","answer2":"Nikola Tesla","answer3":"Albert Einstein",
-            //     "answer4":"Marie Curie","correctAnswer":3,"user":{"userName":"Martine",
-            //     "profileImage":"default10.png"},
-            //   "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
-            //   "userScore":0,"opponentScore":0,"type":"GAME_MESSAGE"}
             this.gamestart = true;
             this.loading = false;
             this.resetSelectedAnswer();
@@ -342,18 +324,11 @@ export default {
             //Results
           case SCORE_MESSAGE:
             //The current scores after each question
-            // {"user":{"userName":"Martine","profileImage":"default10.png"},
-            // "opponent":{"userName":"CandyMountain","profileImage":"default3.png"},
-            // "userScore":0,"opponentScore":0,"type":"SCORE_MESSAGE"}
             this.readyToCheck = true;
             break
 
           case RESULT_MESSAGE:
             // The final result after 3 questions
-            // Messagebody:{"isHighScore":false,"winner":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},
-            //   "user":{"userName":"Martine","profileImage":"default10.png"},
-            //   "opponent":{"userName":"CandyMountain","profileImage":"50fa2d0c-70ed-4839-89c3-de5dfe246ff4.jpg"},"" +
-            //   "userScore":745,"opponentScore":919,"type":"RESULT_MESSAGE"}
             try {
               this.winner = msg.winner.userName;
             } catch (JSONException) {

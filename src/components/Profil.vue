@@ -70,7 +70,7 @@
           <p class="text-center font-thin text-4xl text-grey-darker text-xl font-mono font-bold">
             {{ (this.formatDate(game.timeStamp)) }}</p>
           <div class="text-black font-bold text-xl italic text-right pb-3">You vs. {{ game.opponent.userName }}</div>
-          <img class="max-h-36  rounded-full   block mx-auto " v-bind:src="this.imageRoot+game.opponent.userName"
+          <img class="max-h-36 rounded-full block mx-auto" v-bind:src="this.imageRoot+game.opponent.userName"
                alt="opponentImage">
           <p class="text-grey-darker text-xl font-mono font-bold mt-5">Opponents Score: {{ game.opponentScore }}</p>
           <p class="text-grey-darker text-xl font-mono font-bold">Your score: {{ game.userScore }}</p>
@@ -116,30 +116,25 @@ export default {
       playedGamesList: [],
       imageRoot: IMAGE_ROOT,
       averageScore: 0,
-      lostGames: 5,
-      wonGames: 5,
+      lostGames: 0,
+      wonGames: 0,
       drawGames: 0,
       gamesTotal: 0,
       userScores: [],
       showError: false,
       errorMessage: "Something didnt work..",
-
-
     }
   },
   mounted() {
     this.getGamesData()
-    console.log(this.existingRecords)
   },
   methods: {
-    // Sends data to server and waits for an answer
+    //Get played-games data
     getGamesData() {
       axios.get('http://localhost:8080/playedGames')
           .then((response) => {
-            console.log(response)
             try {
               this.gamesTotal = response.data.playedGames.length;
-
               this.$store.commit('setExistingRecords', true);
               this.isLoading = false;
               this.wonGames = response.data.wonGames;
@@ -148,7 +143,6 @@ export default {
               this.drawGames = response.data.drawGames;
             } catch (JSONException) {
               // if there are no played games, dont show the play-stats and the history
-
               this.$store.commit('setExistingRecords', false);
             }
             this.showError = false;
@@ -170,13 +164,14 @@ export default {
         this.errorMessage = "Error: Could not retrieve entries"
         alert("no entries")
       })
-//Get played-games data for second page
-
     },
+
     // Change from profile to gamestats and back
     changePage() {
       this.showStats = !this.showStats;
     },
+
+    //Format the timestamp to a nicer format
     formatDate(input) {
       moment.locale('de')
       return moment(input).format('LLL');

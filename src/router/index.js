@@ -11,7 +11,7 @@ import GameResult from "@/views/GameResult";
 import Disconnect from "@/views/Disconnect";
 import Registration from "@/views/Registration";
 
-
+//Routing - connects the pages with the paths/url
 const routes = [
     {
         path: '/',

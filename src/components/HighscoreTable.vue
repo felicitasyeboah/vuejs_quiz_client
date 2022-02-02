@@ -87,7 +87,6 @@ export default {
   // Gets highscores for the table
   mounted() {
     axios.get('http://localhost:8080/highscore').then(response => {
-
       this.isLoading = false;
       this.showError = false;
       this.highscoreList = response.data
@@ -97,21 +96,7 @@ export default {
       this.isLoading = false
       this.$store.commit('setError', error)
       this.$store.commit('setExistingHighscore', false)
-      // if (error.response) {
-      //   // client received an error response (5xx, 4xx)
-      //   this.errorMessage = error
-      //   console.log(error.response.data.status)
-      // } else if (error.request) {
-      //   // client never received a response, or request never left
-      //   console.log(error.request)
-      //   this.errorMessage = error
-      // } else {
-      //   // anything else
-      //   this.errorMessage = "Unknown error"
-      //   this.$store.commit('setError',error)
-      this.$store.dispatch('logout')
     })
-
   },
   methods: {
     // Formats from timestamp to "days ago.."

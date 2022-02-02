@@ -14,7 +14,8 @@ export default {
     Footer,
     NavBar,
   },
-
+//Check if there is a value in the storage - if so, check if the token is still valid..
+// made more sense with localstorage and long living tokens
   beforeMount() {
     if (sessionStorage.getItem('token') !== null) {
       this.$store.commit('initializeStore');
@@ -29,6 +30,5 @@ export default {
         this.$store.dispatch('logout');
       }
   },
-
 };
 </script>

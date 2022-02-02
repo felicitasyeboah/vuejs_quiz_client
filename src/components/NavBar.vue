@@ -8,10 +8,8 @@
           <span class="mx-auto text-xl font-black leading-none text-gray-900 select-none">superquiz<span
               class="text-green-600">.</span></span>
         </a>
-        <div class="bg-red-400 text-white"> {{ this.errorText }}</div>
-
+        <div class="bg-red-400 text-white"></div>
         <span v-if="this.isAuthenticated">Welcome {{ this.userName }}</span>
-
         <span v-else class="italic text-left">Welcome   <span
             v-if="!this.isAuthenticated">unbekannter User</span></span>
         <div class="text-right">
@@ -39,28 +37,18 @@
 
 
 export default {
+  name: 'Navbar',
   computed: {
     isAuthenticated: function () {
       return this.$store.state.isAuthenticated
-    },
-    errorText: function () {
-      return this.$store.state.errorText
     },
     userName: function () {
       return sessionStorage.getItem('userName')
     }
   },
-
-  name: 'Navbar',
-  props: {},
-
-
   methods: {
-    // Logs out currentUsername (method in store.js) and reloads nav-Bar
     logout() {
       this.$store.dispatch('logout')
-      console.log(this.$store.isLoggedIn)
-      console.log(this.$store.state.user)
     },
   },
 }
