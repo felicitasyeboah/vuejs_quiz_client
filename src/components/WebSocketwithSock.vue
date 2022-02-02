@@ -68,13 +68,13 @@
         <div class="text-gray-700">Your score: {{
             this.$store.getters.getUserScore
                                    }}
-          <img :src="this.$store.getters.getUserImage" alt="userimage" class="mx-auto w-32 h-32 rounded-full">
+          <img v-bind:src="this.$store.getters.getUserImage" alt="userimage" class="mx-auto w-32 h-32 rounded-full">
 
         </div>
         <div class="font-sans text-3xl p-3 m-5">vs.</div>
         <div class="text-gray-700"> {{ this.$store.getters.getOpponentName }}:
                                     {{ this.$store.getters.getOpponentScore }}
-          <img :src="imageRoot+this.$store.getters.getOpponentName" alt="opponentimage"
+          <img v-bind:src="imageRoot+this.$store.getters.getOpponentName" alt="opponentimage"
                class=" mx-auto w-32 h-32 rounded-full">
         </div>
       </div>
@@ -234,7 +234,7 @@ export default {
     connectToWebsocket() {
       this.socket = new SockJS("http://localhost:8080/websocket");
       this.stompClient = Stomp.over(this.socket);
-      this.stompClient.debug = null
+
       this.stompClient.connect(
           {},
           frame => {

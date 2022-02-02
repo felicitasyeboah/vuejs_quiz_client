@@ -79,6 +79,7 @@ export default {
     }
   },
 
+
   methods: {
     // Sends data to server and waits for an answer
     login() {
@@ -104,7 +105,7 @@ export default {
             this.waitingForAnswer = false;
             this.$store.commit('setError', null)
             this.showError = false;
-            //location.reload()
+            location.reload()
           }).catch((error) => {
         this.waitingForAnswer = false;
         this.showError = true;
