@@ -79,7 +79,6 @@
         </div>
       </div>
 
-
       <div class="flex items-center justify-center">
         <div class="bg-slate-800 flex flex-col items-center pb-3.5 m-2">
           <!--          The category of the displayed question-->
@@ -234,7 +233,7 @@ export default {
     connectToWebsocket() {
       this.socket = new SockJS("http://localhost:8080/websocket");
       this.stompClient = Stomp.over(this.socket);
-
+      this.stompClient.debug = null
       this.stompClient.connect(
           {},
           frame => {
