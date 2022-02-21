@@ -3,9 +3,9 @@
 # Vue Web-Client für das Quiz
 #
 # Gruppenmitglieder:
-# Martine Weidig (258425) - verantwortlich für den Vue.js-Client
-# Felicitas Yeboah (290784) - verantwortlich für den Android-Client
-# Christian Kobialka (306759) - verantwortlich für den Spring-Server
+# MW - verantwortlich für den Vue.js-Client
+# Felicitas Yeboah - verantwortlich für den Android-Client
+# C.K. - verantwortlich für den Spring-Server
 #
 
 
